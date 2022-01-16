@@ -14,4 +14,8 @@ import java.security.Key;
 public class JwtTokenUtil {
     Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     String jws = Jwts.builder().setSubject("Joe").signWith(key).compact();
+
+    public String getJws() {
+        return this.jws;
+    }
 }
