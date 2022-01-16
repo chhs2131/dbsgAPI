@@ -58,5 +58,6 @@ public class TestController {
     public String makeJwtToken() throws Exception {
         Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         String jws = Jwts.builder().setSubject("Joe").signWith(key).compact();
+        return jws;
     }
 }
