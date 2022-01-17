@@ -7,10 +7,13 @@ spring:
   datasource:
     hikari:
       #driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      jdbc-url: jdbc:mysql://34.135.81.32:3306/stockServer
+      #jdbc-url: jdbc:mysql://34.135.81.32:3306/stockServer
+      jdbc-url: jdbc:mysql://server.dbsg.co.kr:3306/stockServer
       #jdbc-url: jdbc:log4jdbc:mysql://34.135.81.32:3306/stockServer?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
-      username: admin
-      password: P@ssVV0rd
+      username: everywhere
+      password: everypw
+      #username: admin
+      #password: P@ssVV0rd
       connection-test-query: SELECT 1
       driver-class-name: com.mysql.cj.jdbc.Driver
   mvc:

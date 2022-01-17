@@ -22,7 +22,7 @@ public class KakaoController {
     @RequestMapping(value="/login/kakaoLoginUrl", method= RequestMethod.GET)
     @ApiOperation(value="백엔드 테스트용", notes="카카오 AuthCode 취득을 위한 URI 반환")
     public String kakaoLoginUrl() throws Exception {
-        String kakaoLoginUrl = "https://kauth.kakao.com/oauth/authorize?client_id=e0b6130240281c4b18e88e405545754f&redirect_uri=http://1.243.131.200:8080/login/kakao&response_type=code";
+        String kakaoLoginUrl = "https://kauth.kakao.com/oauth/authorize?client_id=e0b6130240281c4b18e88e405545754f&redirect_uri=http://server.dbsg.co.kr:8080/login/kakao&response_type=code";
         return kakaoLoginUrl;
     }
 
@@ -38,9 +38,8 @@ public class KakaoController {
             , paramType = "AuthCode"
             , defaultValue = "")
     public MemberDto kakaoLogin(String code) throws Exception {
-        KakaoOAuthDto kakaoOAuthDto = kakaoService.getToken(code);  //Token을 받아옵니다.
-        String accessToken = kakaoOAuthDto.getAccessToken();
-        return getMemberDto(accessToken, kakaoOAuthDto);
+        KakaoOAuthDto kakaoOAuthDto = kakaoService.getToken(code);  //kakao로부터 OAuth 정보를 받아옵니다.
+        return getMemberDto(kakaoOAuthDto);
     }
 
     @RequestMapping(value={"/login/kakaoAccessToken"}, method=RequestMethod.GET)
@@ -55,18 +54,19 @@ public class KakaoController {
     public MemberDto kakaoLoginAccessToken(String accessToken) throws Exception {
         KakaoOAuthDto kakaoOAuthDto = new KakaoOAuthDto();
         kakaoOAuthDto.setAccessToken(accessToken);
-        return getMemberDto(accessToken, kakaoOAuthDto);
+        return getMemberDto(kakaoOAuthDto);
     }
 
-    private MemberDto getMemberDto(String accessToken, KakaoOAuthDto kakaoOAuthDto) throws Exception {
+    private MemberDto getMemberDto(KakaoOAuthDto kakaoOAuthDto) throws Exception {
+        //accessToken을 통해 각각의 서버(카카오, dbsg)에서 정보를 가져옵니다. (신규계정일 경우 등록)
+        String accessToken = kakaoOAuthDto.getAccessToken();
         KakaoApiUserDto kakaoApiUserDto = kakaoService.getKakaoUid(accessToken);  //카카오 계정정보를 받아옵니다.
         KakaoMemberDto kakaoMemberDto = kakaoService.selectKakaoMember(kakaoApiUserDto.getId());  //DB에 기등록된 사용자인지 확인합니다.
 
         MemberDto memberDto = new MemberDto();
         if(kakaoMemberDto == null) { //DB에 등록되지 않았으면 신규등록합니다.
-            System.out.println("신규등록진행");
             memberDto = kakaoService.insertKakaoMember(kakaoOAuthDto, kakaoApiUserDto);
-        } else {
+        } else { //기존계정이 있는경우 정보를 불러옵니다.
             long userNo = kakaoMemberDto.getUserNo();
             memberDto = kakaoService.selectMember(userNo);
         }

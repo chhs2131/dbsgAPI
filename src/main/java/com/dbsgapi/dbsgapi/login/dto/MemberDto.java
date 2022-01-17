@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class MemberDto {
-    @ApiParam(value="DBSG서버에서 관리하는 유저 고유식별번호", required=true)
+    @ApiParam(value="DBSG서버에서 관리하는 유저식별번호(uuid)", required=true)
     private long userNo;
     @ApiParam(value="유저 권한")
     private String roleName;
