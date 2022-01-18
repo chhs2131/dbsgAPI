@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.List;
 import com.dbsgapi.dbsgapi.common.JwtUtil;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @Controller
 public class TestController {
@@ -119,6 +121,14 @@ public class TestController {
     @ResponseBody
     public String makeJwtTokenb(String jws) throws Exception {
         //jws 값 정상인지 판단하기
-        return jwtUtil.accessJws(jws);
+        String token = jwtUtil.validateHeader(jws);
+        return jwtUtil.accessJws(token);
+    }
+
+    @GetMapping("/testJWTc")
+    @ResponseBody
+    public boolean makeJwtTokenc(String jws) throws Exception {
+        //jws 값 정상인지 판단하기
+        return jwtUtil.validateToken(jws);
     }
 }
