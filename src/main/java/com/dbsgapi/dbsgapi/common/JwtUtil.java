@@ -30,11 +30,10 @@ public class JwtUtil {
     private SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long tokenValidTime = 60 * 30 * 1000L;    // 토큰 유효시간 1달
 
-    public String createJws() throws Exception {
+    public String createJws(String user_no) throws Exception {
         Date now = new Date();
         Claims claims = Jwts.claims().setSubject("userPk");
-        claims.put("user_no", new BigInteger("12455244214224"));
-        claims.put("role_name", "user");
+        claims.put("user_no", user_no);
 
         String jws = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)헤더타입 지정
@@ -118,6 +117,13 @@ public class JwtUtil {
     private String extractToken(String header) {
         return header.substring("Bearer ".length());
     }
+
+    // 발생가능예외
+    //    UnsupportedJwtException : 예상하는 형식과 다른 형식이거나 구성의 JWT일 때
+    //    MalformedJwtException : JWT가 올바르게 구서오디지 않았을 때
+    //    ExpiredJwtException : JWT를 생성할 때 지정한 유효기간이 초과되었을 때
+    //    SignatureException : JWT의 기존 서명을 확인하지 못했을 때
+    //    IllegalArgumentException
 
     // 필터의 진행
     // HTTP 헤더에서 JWT 토큰값 가져오기

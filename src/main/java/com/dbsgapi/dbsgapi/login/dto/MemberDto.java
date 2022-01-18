@@ -13,4 +13,6 @@ public class MemberDto {
     private String enabled;
     @ApiParam(value="가입일자")
     private String registDate;
+    @ApiParam(value="Client측에 토큰값을 전달하기 위한 부분")
+    private String jwt;
 }

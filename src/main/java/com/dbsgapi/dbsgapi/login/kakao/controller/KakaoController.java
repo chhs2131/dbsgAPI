@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.login.kakao.controller;
 
+import com.dbsgapi.dbsgapi.common.JwtUtil;
 import com.dbsgapi.dbsgapi.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.login.kakao.dto.KakaoApiUserDto;
 import com.dbsgapi.dbsgapi.login.kakao.dto.KakaoMemberDto;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(value = "KakaoController", description = "카카오 OAuth 로그인을 위한 API")
 public class KakaoController {
+    private JwtUtil jwtUtil = new JwtUtil();
+
     @Autowired
     private KakaoService kakaoService;
 
@@ -71,6 +74,9 @@ public class KakaoController {
             memberDto = kakaoService.selectMember(userNo);
         }
 
+        //JWT 토큰을 추가하고 Return 한다.
+        String token = jwtUtil.createJws(Long.toString(memberDto.getUserNo()));
+        memberDto.setJwt(token);
         return memberDto;
     }
 }

@@ -114,7 +114,7 @@ public class TestController {
     @ResponseBody
     public String makeJwtTokena() throws Exception {
         //jws 발급받기
-        return jwtUtil.createJws();
+        return jwtUtil.createJws("123456");
     }
 
     @GetMapping("/testJWTb")
