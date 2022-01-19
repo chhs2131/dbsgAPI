@@ -23,6 +23,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String token = null;
         try {
             String authHeader = jwtUtil.resolveToken((HttpServletRequest) request);
+            log.debug("authHeader : " + authHeader);
             token = jwtUtil.validateHeader(authHeader);
             log.debug("JWT : " + token);
 

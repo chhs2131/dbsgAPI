@@ -2,6 +2,7 @@ package com.dbsgapi.dbsgapi.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,6 +17,13 @@ import com.dbsgapi.dbsgapi.interceptor.LoggerInterceptor;
 
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("~~");
+        // CORS 적용안함 설정. 이 한줄을 작성안하면 모든 도메인 허용하는 듯하다
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //로그를 출력하지 않을 파일 (정적파일들)
