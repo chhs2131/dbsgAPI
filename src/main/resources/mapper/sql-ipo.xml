@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dbsgapi.dbsgapi.ipo.mapper.IpoMapper">
+    <select id="selectIpos" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoDto">
+        SELECT ipo_index,
+               stock_name,
+               stock_code,
+               dart_code,
+               stock_exchange,
+               DATE_FORMAT(ipo_forecast_date, '%Y-%m-%d') ipo_forecast_date,
+               DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
+               DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
+               DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
+               DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
+               lock_up_percent,
+               ipo_institutional_acceptance_rate,
+               ipo_price,
+               ipo_price_low,
+               ipo_price_high,
+               number_of_ipo_shares,
+               number_of_individual_ipo_shares,
+               max_individual_ipo_shares,
+               underwriter,
+               put_back_option_who,
+               put_back_option_price,
+               put_back_option_deadline,
+               tag
+        FROM ipo
+    </select>
+
+</mapper>

@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // @RequestMapping 별 권한제어
         http.authorizeRequests()
-                .antMatchers("/api/**").hasAnyRole("ADMIN", "USER", "GUEST")
+                .antMatchers("/api/v1/member/**").hasAnyRole("ADMIN", "USER", "GUEST")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 

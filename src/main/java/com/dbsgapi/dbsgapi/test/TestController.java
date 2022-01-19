@@ -4,6 +4,8 @@ import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,55 +63,6 @@ public class TestController {
         return returnValue;
     }
 
-    @GetMapping("/testJWT")
-    @ResponseBody
-    public String makeJwtToken() throws Exception {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        String jws = Jwts.builder().setSubject("Joe").signWith(key).compact();
-        return jws;
-    }
-
-    @GetMapping("/testJWT2")
-    @ResponseBody
-    public String makeJwtToken2() throws Exception {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        Date now = new Date();
-
-        String jws = Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)헤더타입 지정
-                .setIssuer("fresh") // (2)토큰발급자 설정
-                .setIssuedAt(now) // (3)발급시간 설정(date)
-                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(30).toMillis())) // (4)만료시간 설정
-                .claim("id", "아이디") // (5)비공개 클레임 설정
-                .claim("email", "ajufresh@gmail.com")
-                .signWith(key) // (6)해상 알고리즘 및 시크릿KEY 지정
-                .compact(); // 설정값을 바탕으로 JWT를 압축 (JWS형식)
-
-
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
-            //OK, we can trust this JWT
-            return "[good jws] " + jws;
-        } catch (JwtException e) {
-            //don't trust the JWT!
-            return "[bad jws] " + jws + "[Error] " + e;
-        }
-    }
-
-    @GetMapping("/testJWT3")
-    @ResponseBody
-    public String makeJwtToken2(String compactJws) throws Exception {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(compactJws);
-            //OK, we can trust this JWT
-            return "[good jws] " + compactJws;
-        } catch (JwtException e) {
-            //don't trust the JWT!
-            return "[bad jws] " + compactJws + "[Error] " + e;
-        }
-    }
-
     @GetMapping("/testJWTa")
     @ResponseBody
     public String makeJwtTokena() throws Exception {
@@ -130,5 +83,15 @@ public class TestController {
     public boolean makeJwtTokenc(String jws) throws Exception {
         //jws 값 정상인지 판단하기
         return jwtUtil.validateToken(jws);
+    }
+
+    @GetMapping("/testResponse")
+    public ResponseEntity responseEntity() throws Exception {
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/testResponseString")
+    public ResponseEntity<String> responseEntity2() throws Exception {
+        return new ResponseEntity<String>("HelloWorld!",HttpStatus.OK);
     }
 }
