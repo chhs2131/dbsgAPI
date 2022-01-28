@@ -1,6 +1,6 @@
 package com.dbsgapi.dbsgapi.ipo.dto;
 
-import lombok.Data;
+        import lombok.Data;
 
 @Data
 public class IpoDto {
@@ -21,9 +21,6 @@ public class IpoDto {
     private int ipoPrice;
     private int ipoPriceLow;
     private int ipoPriceHigh;
-    private int numberOfIpoShares;
-    private int numberOfIndividualIpoShares;
-    private int maxIndividualIpoShares;
 
     private String underwriter;
     private String putBackOptionWho;
