@@ -17,6 +17,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,10 @@ public class TestController {
         log.info("Info 정보성 로그");
         log.warn("Warnning 경고");
         log.error("Error 에러");
-        return "test";
+
+        Date date_now = new Date(System.currentTimeMillis());// 년월일시분초 14자리 포멧
+        SimpleDateFormat fourteen_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return "test.ServerTime: " + date_now;
     }
 
     @GetMapping("/testPage")
