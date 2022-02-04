@@ -1,6 +1,7 @@
 package com.dbsgapi.dbsgapi.ipo.controller;
 
 import com.dbsgapi.dbsgapi.ipo.dto.IpoDto;
+import com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.ipo.service.IpoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,9 @@ public class IpoApiController {
     @Autowired
     private IpoService ipoService;
 
-    //@CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value="", method = RequestMethod.GET)
-    public ResponseEntity<List<IpoDto>> getIpoList() throws Exception {
-        List<IpoDto> listIpo = ipoService.selectIpos();
+    public ResponseEntity<List<IpoSummaryDto>> getIpoList() throws Exception {
+        List<IpoSummaryDto> listIpo = ipoService.selectIpos();
         log.debug(listIpo.toString());
         return new ResponseEntity<>(listIpo, HttpStatus.OK);
     }

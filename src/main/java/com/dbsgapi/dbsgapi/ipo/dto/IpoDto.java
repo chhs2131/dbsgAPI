@@ -1,14 +1,17 @@
 package com.dbsgapi.dbsgapi.ipo.dto;
 
-        import lombok.Data;
+import lombok.Data;
 
 @Data
 public class IpoDto {
     private long ipoIndex;
     private String stockName;
+    private String stockExchange;
+    private String stockKinds;
     private long stockCode;
     private long dartCode;
-    private String stockExchange;
+    private long profit;
+    private long sales;
 
     private String ipoForecastDate;
     private String ipoStartDate;
