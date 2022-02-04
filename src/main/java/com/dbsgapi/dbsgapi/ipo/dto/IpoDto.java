@@ -10,7 +10,7 @@ public class IpoDto {
     private String stockKinds;
     private long stockCode;
     private long dartCode;
-    private long profit;
+    private long profits;
     private long sales;
 
     private String ipoForecastDate;
@@ -24,6 +24,7 @@ public class IpoDto {
     private int ipoPrice;
     private int ipoPriceLow;
     private int ipoPriceHigh;
+    private int ipoMinDeposit;
 
     private String underwriter;
     private String putBackOptionWho;
