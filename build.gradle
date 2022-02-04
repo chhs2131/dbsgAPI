@@ -61,7 +61,9 @@ dependencies {
             'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
 
     //REST
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    // implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.5'
+
 }
 
 test {

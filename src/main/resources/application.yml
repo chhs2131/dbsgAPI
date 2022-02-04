@@ -22,3 +22,9 @@ spring:
 Mybatis:
   configuration:
     map-underscore-to-camel-case: true
+springdoc:
+  #옵션설명: https://springdoc.org/properties.html
+  swagger-ui:
+    path: /doc
+  #packages-to-scan: *
+  paths-to-match: /api/v1/**, /login/**
