@@ -14,6 +14,7 @@
                underwriter,
                tag
         FROM ipo
+        ORDER BY ipo_index DESC
+        LIMIT 100;
     </select>
-
 </mapper>
