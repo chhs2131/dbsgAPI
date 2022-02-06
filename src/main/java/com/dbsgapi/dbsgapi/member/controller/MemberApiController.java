@@ -2,27 +2,89 @@ package com.dbsgapi.dbsgapi.member.controller;
 
 import com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.ipo.service.IpoService;
+import com.dbsgapi.dbsgapi.login.dto.MemberDto;
+import com.dbsgapi.dbsgapi.login.kakao.dto.KakaoOAuthDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
+/*
+	@RequestMapping(value="/api/board", method=RequestMethod.GET)
+	public List<BoardDto> openBoardList() throws Exception {
+		return boardService.selectBoardList();
+	}
+
+	@RequestMapping(value="/api/board/write", method=RequestMethod.POST)
+	public void insertBoard(@RequestBody BoardDto board) throws Exception {
+		boardService.insertBoard(board);
+	}
+
+	@RequestMapping(value="/api/board/{boardIdx}", method=RequestMethod.GET)
+	public BoardDto openBoardDetail(@PathVariable("boardIdx") int boardIdx) throws Exception {
+		return boardService.selectBoardDetail(boardIdx);
+	}
+
+	@RequestMapping(value="/api/board/{boardIdx}", method=RequestMethod.PUT)
+	public void updateBoard(@RequestBody BoardDto board) throws Exception {
+		boardService.updateBoard(board);
+	}
+
+	@RequestMapping(value="/api/board/{boardIdx}", method=RequestMethod.DELETE)
+	public void deleteBoard(BoardDto board) throws Exception {
+		boardService.deleteBoard(board.getBoardIdx());
+	}
+ */
+
+
 @Slf4j
 @RestController
-@Tag(name = "Member", description = "유저별로 귀속된 데이터를 관리하는 API")
+@Tag(name = "Member", description = "(아직 제작중임!!) 유저별로 귀속된 데이터를 관리하는 API")
 @RequestMapping("/api/v1/member")
 public class MemberApiController {
+
+
+    // uuid를 파라미터로 넘기는건 아닌것같음.  jwt를 통해 받아와야될듯.
+
+
     // 즐겨찾기 리스트 가져오기
+    @RequestMapping(value={"/favorite"}, method=RequestMethod.GET)
+    @Operation(summary="즐겨찾기 리스트 가져오기", description="uuid를 전달하고 사용자가 즐겨찾기한 종목들의 index값을 가져옵니다.")
+    public String getFavoriteList(@Parameter(description="DBSG 회원번호") String uuid) throws Exception {
+        return "favorite test" + uuid;
+    }
+
     // 즐겨찾기 단일 가져오기 (등록여부 확인용)
+    @RequestMapping(value={"/favorite/{favoriteIndex}"}, method=RequestMethod.GET)
+    @Operation(summary="즐겨찾기 항목 상세조회", description="uuid와 해당 종목의 index값을 전달하여 특정 종목의 즐겨찾기 여부를 조회합니다.")
+    public String getFavorite(@Parameter(description="DBSG 회원번호") String uuid, String kind, String kind_no, @PathVariable String favoriteIndex) throws Exception {
+        return "favorite test" + uuid;
+    }
+
     // 즐겨찾기 추가하기
+    @RequestMapping(value={"/favorite/insert"}, method=RequestMethod.POST)
+    @Operation(summary="즐겨찾기 신규등록", description="uuid와 해당 종목의 index값을 전달하여 새로운 즐겨찾기를 등록합니다.")
+    public String insertFavorite(@Parameter(description="DBSG 회원번호") String uuid, String kind, String kind_no) throws Exception {
+        return "favorite test" + uuid;
+    }
+
     // 즐겨찾기 삭제하기
+    @RequestMapping(value={"/favorite/{favoriteIndex}"}, method=RequestMethod.DELETE)
+    @Operation(summary="즐겨찾기 삭제", description="uuid와 해당 종목의 index값을 KEY로 즐겨찾기를 취소합니다.")
+    public String deleteFavorite(@Parameter(description = "DBSG 회원번호") String uuid, @PathVariable String favoriteIndex) throws Exception {
+        return "favorite test" + uuid;
+    }
+
     // 즐겨찾기 수정하기 (필요없음)
 
     // 알람 리스트 가져오기

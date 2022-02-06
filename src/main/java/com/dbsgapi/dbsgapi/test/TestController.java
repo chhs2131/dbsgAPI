@@ -4,10 +4,12 @@ import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -97,5 +99,12 @@ public class TestController {
     @GetMapping("/testResponseString")
     public ResponseEntity<String> responseEntity2() throws Exception {
         return new ResponseEntity<String>("HelloWorld!",HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/testHeader", headers = "HEADER")
+    public ResponseEntity<String> messageForHeader(@RequestHeader HttpHeaders header) {
+        // https://mungto.tistory.com/440
+        // HEADER 이라는 헤더KEY를 추가하면 해당 헤더에있는 KEY를 반환한다.
+        return ResponseEntity.ok().body(header.getFirst("HEADER") + " .. [header body]" + header.toString());
     }
 }

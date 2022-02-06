@@ -1,14 +1,9 @@
 package com.dbsgapi.dbsgapi.security;
 
-import javax.sql.DataSource;
-
 import com.dbsgapi.dbsgapi.common.JwtUtil;
 import com.dbsgapi.dbsgapi.filter.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -55,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @RequestMapping 별 권한제어
         http.authorizeRequests()
                 .antMatchers("/api/v1/member/**").hasAnyRole("ADMIN", "USER", "GUEST")
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/templates/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 
         http.addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
