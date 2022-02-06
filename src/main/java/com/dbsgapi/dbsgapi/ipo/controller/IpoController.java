@@ -1,0 +1,104 @@
+package com.dbsgapi.dbsgapi.ipo.controller;
+
+import com.dbsgapi.dbsgapi.ipo.dto.IpoDto;
+import com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto;
+import com.dbsgapi.dbsgapi.ipo.service.IpoService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+
+@Slf4j
+@Controller
+public class IpoController {
+    @Autowired
+    IpoService ipoService;
+
+    @RequestMapping(value = {"/ipo/ipoDashboard.do","/" })
+    public ModelAndView openIpoDashboard() throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/page/ipoDashboard");
+
+        return mv;
+    }
+
+    @RequestMapping("/ipo/ipoInform.do")
+    public ModelAndView openIpoInform() throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/page/ipoInform");
+
+        return mv;
+    }
+
+    @RequestMapping("/ipo/ipoAdmin.do")
+    public ModelAndView openIpoAdmin() throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/page/ipoAdmin");
+
+        return mv;
+    }
+
+    @RequestMapping("/ipo/ipoList.do")
+    public ModelAndView openIpoList() throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/page/ipoList");
+
+        return mv;
+    }
+    @RequestMapping("/ipo/ipoList.ajax")
+    @ResponseBody
+    public List<IpoSummaryDto> ipoListAjax() throws Exception {
+        List<IpoSummaryDto> list = ipoService.selectIpos();
+        return list;
+    }
+
+//    @RequestMapping("/ipo/ipoEditer.do")
+//    public ModelAndView openIpoEditer(@RequestParam int ipoIndex) throws Exception {
+//        ModelAndView mv = new ModelAndView("/admin/page/ipoEditer");
+//        log.warn("Start ipo Editer Controller");
+//        IpoDto ipo = ipoService.selectIpoDetail(ipoIndex);
+//
+//        mv.addObject("ipo", ipo);
+//        return mv;
+//    }
+
+    @RequestMapping("/ipo/ipoWrite.do")
+    public ModelAndView openIpoWrite() throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/page/ipoWrite");
+        return mv;
+    }
+
+//    @RequestMapping(value="/ipo", method=RequestMethod.POST)
+//    public String insertIpo(IpoDto ipo) throws Exception {
+//        log.warn("start POST controller => " + ipo);
+//        ipoService.insertIpo(ipo);
+//
+//        return "redirect:/ipo/ipoList.do";
+//    }
+//
+//    @RequestMapping(value="/ipo/{ipoIndex}", method=RequestMethod.PUT)
+//    public String updateIpo(IpoDto ipo) throws Exception {
+//        log.warn("start put controller => " + ipo);
+//        ipoService.updateIpo(ipo);
+//
+//        return "redirect:/ipo/"+Integer.toString(ipo.getIpoIndex());
+//    }
+//
+//    @RequestMapping(value="/ipo/{ipoIndex}", method=RequestMethod.DELETE)
+//    public String deleteIpo(IpoDto ipo) throws Exception {
+//        ipoService.deleteIpo(ipo.getIpoIndex());
+//
+//        return "redirect:/ipo/ipoList.do";
+//    }
+//
+//    @RequestMapping(value="/ipo/{ipoIndex}", method= RequestMethod.GET)
+//    public ModelAndView openIpoDetail(@PathVariable("ipoIndex") int ipoIndex) throws Exception {
+//        ModelAndView mv = new ModelAndView("/admin/page/ipoDetail");
+//
+//        IpoDto ipo = ipoService.selectIpoDetail(ipoIndex);
+//        mv.addObject("ipo", ipo);
+//
+//        log.warn("IpoDetail Result <= " + mv);
+//
+//        return mv;
+//    }
+}

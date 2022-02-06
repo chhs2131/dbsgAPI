@@ -55,6 +55,12 @@ public class TestController {
         return mv;
     }
 
+    @GetMapping("/testLayoutPage")
+    public ModelAndView testLayoutPage() throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/layout/default_layout");
+        return mv;
+    }
+
     @GetMapping("/testService")
     @ResponseBody
     public String testService() throws Exception {

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorator="layout/default_layout"
+>
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${ipo.stockName}"></title>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="container" layout:fragment="content">
+		
+		<h1>
+			[<span id="ipoState">상태</span>]
+			<input type="text" th:value="${ipo.stockName}" style="border: 0 solid;" readonly>
+		</h1>
+		<hr/>
+
+		<form id="frm" name="frm" method="post">
+			<div class="row">
+				<div class="card" style="width: 30%; margin: 1%;">
+					<div class="card-body">
+						<h5 class="card-title">공모 시작일 <span id="startDday" style="color: red; font-weight:bold"></span></h5>
+						<p class="card-text">
+							<input type="date" id="ipoStartDate" style="background-color: rgba( 255, 255, 255, 0 ); border: 0 solid;" th:value="${ipo.ipoStartDate}" readonly>
+						</p> 
+					</div>
+				</div>
+				
+				<div class="card" style="width: 30%; margin: 1%;">
+					<div class="card-body">
+						<h5 class="card-title">환불 진행일 <span id="refundDday" style="color: red; font-weight:bold"></span></h5>
+						<p class="card-text">
+							<input type="date" id="ipoRefundDate"  style="background-color: rgba( 255, 255, 255, 0 ); border: 0 solid;" th:value="${ipo.ipoRefundDate}" readonly>
+						</p>
+					</div>
+				</div>
+				<div class="card" style="width: 30%; margin: 1%;">
+					<div class="card-body">
+						<h5 class="card-title">신규 상장일 <span id="debutDday"  style="color: red; font-weight:bold"></span></h5>
+						<p class="card-text">
+							<input type="date" id="ipoDebutDate"  style="background-color: rgba( 255, 255, 255, 0 ); border: 0 solid;" th:value="${ipo.ipoDebutDate}" readonly>
+						</p>
+					</div>
+				</div>
+			</div>
+			<br/>
+			<div class="row">
+				<div class="col-lg-3">
+					<div class="input-group mb-3">
+						<span class="input-group-text">시장구분</span>
+						<input type="text" class="form-control" th:value="${ipo.stockExchange}" readonly>
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">종목코드</span>
+						<input type="text" class="form-control" th:value="${ipo.stockCode}" readonly>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="input-group mb-3">
+						<span class="input-group-text">확정 공모가</span>
+						<input type="text" id="ipoPrice" class="form-control" th:value="${ipo.ipoPrice}" readonly>
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">상장일 종가</span>
+						<input type="text" id="debutPrice" class="form-control" th:value="${ipo.debutPrice}" readonly>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text">업종</span>
+						<input type="text" class="form-control" th:value="${ipo.sector}" readonly>
+					</div>
+					
+					<div class="input-group mb-3">
+						<span class="input-group-text">주간사</span>
+						<input type="text" class="form-control" th:value="${ipo.underwriter}" readonly>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text">기관경쟁률</span>
+						<input type="text" id="ipoInstitutionalAcceptanceRate" class="form-control" th:value="${ipo.ipoInstitutionalAcceptanceRate}+' :1'" readonly>
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">청약경쟁률</span>
+						<input type="text" class="form-control" th:value="${ipo.ipoRetailAcceptanceRate}+' :1'" readonly>
+					</div>
+				</div>
+				<div class="col-lg-6">
+				
+					<div class="input-group mb-3">
+						<span class="input-group-text">의무보유확약</span>
+						<input type="text" class="form-control" th:value="${ipo.lockUpPercent}+' %'" readonly>
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">발행주식수</span>
+						<input type="text" class="form-control" id="numberOfIpoShares" data-formatter="numberFormatter" th:value="${ipo.numberOfIpoShares}" readonly>
+					</div>
+				</div>
+			</div>
+
+			<input type="hidden" id="ipoIndex" name="ipoIndex" th:value="${ipo.ipoIndex}">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+ 			<input type="hidden" name="_method" id="method">
+		</form>
+
+		<a href="#this" id="list" class="btn btn-warning">목록</a>
+		<a sec:authorize="hasRole('ADMIN')" href="#this" id="edit" class="btn btn-warning">수정</a>
+		<a sec:authorize="hasRole('ADMIN')" href="#this" id="delete" class="btn btn-warning">삭제</a>
+	</div>
+	
+	<th:block layout:fragment="script">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var ipoIndex = $("#ipoIndex").val();
+			var theForm = document.frm;
+			
+			$("#list").on("click", function () {
+				location.href = "/ipo/ipoList.do";
+			});
+
+			$("#edit").on("click", function () {
+				var frm = $("#frm")[0];
+				frm.action = "/ipo/ipoEditer.do";
+				frm.submit();
+			});
+			
+			$("#delete").on("click", function() {
+				$("#method").val("delete");
+				var frm=$("#frm")[0];
+				frm.action = "/ipo/"+ipoIndex;
+				frm.submit();
+			}); 		
+
+			checkState();
+					
+			numberFormatterId("numberOfIpoShares");
+			numberFormatterId("ipoPrice");
+			numberFormatterId("debutPrice");
+		});
+		
+		
+		function viewButton(value) {
+			//html format을 바꿔줌. 이건 버튼형식으로 바꿔주는것. (치환)
+			return '<button type="button" class="btn btn-secondary btn-sm" style="padding-top:0">' + value + '</button>'
+		};
+	
+	
+		function numberFormatter(value) {
+			//매 3번째 글자마다 쉼표를 추가함 (예를들어 1000은 => 1,000)
+			if (value === 0) return 0;
+			const reg = /(^[+-]?\d+)(\d{3})/;
+			let n = (value + '');
+			while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+			return n;
+		};
+		function numberFormatterId(id) {
+			var documentObject = document.getElementById(id);
+			var value = numberFormatter(documentObject.value);
+			
+			//매 3번째 글자마다 쉼표를 추가함 (예를들어 1000은 => 1,000)
+			if (value === 0) return 0;
+			const reg = /(^[+-]?\d+)(\d{3})/;
+			let n = (value + '');
+			while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+			
+			documentObject.value = n;
+		};
+		
+		function checkState() {
+			//변수선언
+			var docIpoState = document.getElementById("ipoState");
+			var docStartDay = document.getElementById("startDday");
+			var docRefundDay = document.getElementById("refundDday");
+			var docDebutDay = document.getElementById("debutDday");
+			
+			//일정 Dday 업데이트
+			var startDday = checkDday($("#ipoStartDate").val());
+			var refundDday = checkDday($("#ipoRefundDate").val());
+			var debutDday = checkDday($("#ipoDebutDate").val());
+			
+			docStartDay.innerHTML = stringDday(startDday);
+			docRefundDay.innerHTML = stringDday(refundDday);
+			docDebutDay.innerHTML = stringDday(debutDday);
+			
+			//타이틀 값 업데이트
+			var nowState;
+				
+			if(startDday > 0)
+				nowState = "공모예정";
+			else if(startDday == 0)
+				nowState = "청약시작";
+			else if(startDday == -1)
+				nowState = "마감임박";
+			else if(refundDday > 0)
+				nowState = "배정대기";
+			else if(refundDday == 0)
+				nowState = "환불진행";
+			else if(debutDday > 0)
+				nowState = "상장대기";
+			else if(debutDday <= 0)
+				nowState = "상장";
+			docIpoState.innerHTML = nowState;
+		};
+		
+		function checkDday(dday) {
+			var dday_arr = dday.split("-");
+			var now = new Date();
+			var year = now.getFullYear();
+			var month = now.getMonth() + 1;
+			var day = now.getDate();
+			
+			var sDate = new Date(dday_arr[0], dday_arr[1], dday_arr[2]);
+			var eDate = new Date(year, month, day);
+			
+			var result = (eDate.getTime() - sDate.getTime()) / (1000*60*60*24) * -1;
+			return result;	
+		}
+		function stringDday(result) {
+			if(result < 0) {
+				return '';
+			}else if(result == 0) {
+				return "(당일)"
+			}
+			return "(" + result + "일전)";	
+		}
+	</script>
+	</th:block>
+</body>
+</html>

@@ -87,7 +87,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
 
         //configuration.addAllowedOrigin("*");
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://www.dbsg.co.kr"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://www.dbsg.co.kr",
+                "http://test.dbsg.co.kr:8080", "http://server.dbsg.co.kr:8080", "http://localhost:8080", "http://localhost:63342"));
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);  // 해당항목 사용시 반드시 허용할 사이트를 지정해야함. (안그러면 오류남)
