@@ -17,4 +17,94 @@
         ORDER BY ipo_index DESC
         LIMIT 100;
     </select>
+
+    <select id="selectIpo" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoDto">
+        SELECT ipo_index,
+               stock_name,
+               stock_kinds,
+               stock_exchange,
+               DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
+               DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
+               DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
+               DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
+               underwriter,
+               tag
+        FROM 	ipo
+        WHERE 	ipo_index = #{ipoIndex}
+    </select>
+
+    <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+        SELECT comment_index,
+               ipo_index,
+               comment,
+               writer,
+               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date
+        FROM 	ipo_comment
+        WHERE 	ipo_index = #{ipoIndex}
+    </select>
+
+    <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
+        SELECT  ipo_index,
+                DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
+                update_date,
+                number_of_ipo_shares,
+                nh_ind_total,
+                nh_ind_can,
+                korea_ind_total,
+                korea_ind_can,
+                shinhan_ind_total,
+                shinhan_ind_can,
+                hana_ind_total,
+                hana_ind_can,
+                kiwoom_ind_total,
+                kiwoom_ind_can,
+                mirae_ind_total,
+                mirae_ind_can,
+                kb_ind_total,
+                kb_ind_can,
+                kakaopay_ind_total,
+                kakaopay_ind_can,
+                daishin_ind_total,
+                daishin_ind_can,
+                bookook_ind_total,
+                bookook_ind_can,
+                samsung_ind_total,
+                samsung_ind_can,
+                toss_ind_total,
+                toss_ind_can,
+                hanwha_ind_total,
+                hanwha_ind_can,
+                eugene_ind_total,
+                eugene_ind_can,
+                ebest_ind_total,
+                ebest_ind_can,
+                db_ind_total,
+                db_ind_can,
+                hi_ind_total,
+                hi_ind_can,
+                yuanta_ind_total,
+                yuanta_ind_can,
+                meritz_ind_total,
+                meritz_ind_can,
+                kyobo_ind_total,
+                kyobo_ind_can,
+                sk_ind_total,
+                sk_ind_can,
+                hyundaimotor_ind_total,
+                hyundaimotor_ind_can,
+                foss_ind_total,
+                foss_ind_can,
+                shinyoung_ind_total,
+                shinyoung_ind_can,
+                cape_ind_total,
+                cape_ind_can,
+                ktb_ind_total,
+                ktb_ind_can,
+                bnk_ind_total,
+                bnk_ind_can,
+                ibk_ind_total,
+                ibk_ind_can
+        FROM 	ipo_underwriter
+        WHERE 	ipo_index = #{ipoIndex}
+    </select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.dbsgapi.dbsgapi.ipo.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
 
 @Data
@@ -10,6 +12,7 @@ public class IpoDto {
     private String stockKinds;
     private long stockCode;
     private long dartCode;
+    private long sectorCode;
     private long profits;
     private long sales;
 
