@@ -34,4 +34,6 @@ public class IpoDto {
     private int putBackOptionPrice;
     private String putBackOptionDeadline;
     private String tag;
+    private String registDate;
+    private String updateDate;
 }

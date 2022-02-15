@@ -28,4 +28,6 @@ public class IpoSummaryDto {
     private String underwriter;
     @Schema(description ="태그", example = "")
     private String tag;
+    @Schema(description ="최근 발행된 코멘트", example = "수요예측이 끝났습니다! 결과를 확인해보세요.")
+    private String recentComment;
 }

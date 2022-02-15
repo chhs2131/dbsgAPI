@@ -21,14 +21,34 @@
     <select id="selectIpo" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoDto">
         SELECT ipo_index,
                stock_name,
-               stock_kinds,
                stock_exchange,
+               stock_kinds,
+               stock_code,
+               dart_code,
+               sector_code,
+               profits,
+               sales,
+
+               DATE_FORMAT(ipo_forecast_date, '%Y-%m-%d') ipo_forecast_date,
                DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
                DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
+
+               lock_up_percent,
+               ipo_institutional_acceptance_rate,
+               ipo_price,
+               ipo_price_low,
+               ipo_price_high,
+               ipo_min_deposit,
+
                underwriter,
-               tag
+               put_back_option_who,
+               put_back_option_price,
+               put_back_option_deadline,
+               tag,
+               DATE_FORMAT(regist_date, '%Y-%m-%d %T') regist_date,
+               DATE_FORMAT(update_date, '%Y-%m-%d %T') update_date
         FROM 	ipo
         WHERE 	ipo_index = #{ipoIndex}
     </select>
@@ -41,6 +61,7 @@
                DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date
         FROM 	ipo_comment
         WHERE 	ipo_index = #{ipoIndex}
+        ORDER BY comment_index DESC
     </select>
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
