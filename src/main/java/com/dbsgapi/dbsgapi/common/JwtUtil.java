@@ -3,12 +3,15 @@ package com.dbsgapi.dbsgapi.common;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,6 +23,8 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
+@Slf4j
+@Component
 public class JwtUtil {
     private final UserDetailsService userDetailsService = new UserDetailsService() {
         @Override
@@ -27,7 +32,11 @@ public class JwtUtil {
             return null;
         }
     };
-    private SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    //@Value("${jwt.secret}")
+    private String secret = "anNvbi10b2tlbi1zZWNyZXQta2V5LWluLWRic2ctYXBpLWJhc2U2NC1xYXp4c3dlZGN2ZnJ0Z2JuaHl1am1raW9scC0wOTg3NjU0MzIxLWp3dC1zdG9ja3NlcnZlcgo=";
+    byte[] keyBytes = Decoders.BASE64.decode(secret);
+    private SecretKey key = Keys.hmacShaKeyFor(keyBytes);
     private final long tokenValidTime = 60 * 30 * 1000L;    // 토큰 유효시간 1달
 
     public String createJws(String user_no) throws Exception {
@@ -95,9 +104,16 @@ public class JwtUtil {
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
         }
+        return false;
     }
 
     public String validateHeader(String header) {

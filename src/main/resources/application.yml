@@ -28,3 +28,6 @@ springdoc:
     path: /doc
   #packages-to-scan: *
   paths-to-match: /api/v1/**, /login/**
+
+jwt:
+  secret: anNvbi10b2tlbi1zZWNyZXQta2V5LWluLWRic2ctYXBpLWJhc2U2NC1xYXp4c3dlZGN2ZnJ0Z2JuaHl1am1raW9scC0wOTg3NjU0MzIxLWp3dC1zdG9ja3NlcnZlcgo=
