@@ -15,7 +15,6 @@ import java.util.Map;
 
 @Service
 public class KakaoServiceImpl implements KakaoService{
-
     @Autowired
     private KakaoMapper loginMapper;
 
