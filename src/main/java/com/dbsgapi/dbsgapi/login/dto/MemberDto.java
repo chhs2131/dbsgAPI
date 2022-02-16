@@ -16,4 +16,10 @@ public class MemberDto {
     private String registDate;
     @Schema(description ="Client측에 토큰값을 전달하기 위한 부분", example = "a1b2c3d4e5k6a1b2c3d4e5k6a1b2c3d4e5k6a ... c3d4e5k6")
     private String jwt;
+
+    public void setForJwt(String userNo, String roleName, String jwt) {
+        this.setUserNo(Long.parseLong(userNo));
+        this.setRoleName(roleName);
+        this.setJwt(jwt);
+    }
 }

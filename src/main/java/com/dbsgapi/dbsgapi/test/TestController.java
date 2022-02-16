@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.test;
 
+import com.dbsgapi.dbsgapi.security.SecurityUtil;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -23,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import com.dbsgapi.dbsgapi.common.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -112,5 +116,12 @@ public class TestController {
         // https://mungto.tistory.com/440
         // HEADER 이라는 헤더KEY를 추가하면 해당 헤더에있는 KEY를 반환한다.
         return ResponseEntity.ok().body(header.getFirst("HEADER") + " .. [header body]" + header.toString());
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<Optional<String>> getMyUserInfo(HttpServletRequest request) {
+        // Token을 통해 유저이름과 닉네임, 권한을 조회하여 반환 (단, 본인한정)
+        log.debug("user실행 => " + request.toString());
+        return ResponseEntity.ok(SecurityUtil.getCurrentUsername());
     }
 }

@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.common;
 
+import com.dbsgapi.dbsgapi.login.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,29 +24,33 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 import java.security.Key;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class JwtUtil {
-    private final UserDetailsService userDetailsService = new UserDetailsService() {
-        @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            return null;
-        }
-    };
+    private static final String AUTHORITIES_KEY = "auth";
+    private CustomUserDetailsService customUserDetailsService;
 
-    //@Value("${jwt.secret}")
     private String secret = "anNvbi10b2tlbi1zZWNyZXQta2V5LWluLWRic2ctYXBpLWJhc2U2NC1xYXp4c3dlZGN2ZnJ0Z2JuaHl1am1raW9scC0wOTg3NjU0MzIxLWp3dC1zdG9ja3NlcnZlcgo=";
     byte[] keyBytes = Decoders.BASE64.decode(secret);
     private SecretKey key = Keys.hmacShaKeyFor(keyBytes);
     private final long tokenValidTime = 60 * 30 * 1000L;    // 토큰 유효시간 1달
 
-    public String createJws(String user_no) throws Exception {
+    /*
+    public String createJws(Authentication authentication) throws Exception {
         Date now = new Date();
-        Claims claims = Jwts.claims().setSubject("userPk");
-        claims.put("user_no", user_no);
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        Claims claims = Jwts.claims().setSubject(authentication.getName());
+        claims.put("user_no", authentication.getPrincipal());
+        claims.put(AUTHORITIES_KEY, authorities);
 
         String jws = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)헤더타입 지정
@@ -57,6 +65,28 @@ public class JwtUtil {
 
         return jws;
     }
+    */
+
+    public String createJws(String user_no) throws Exception {
+        Date now = new Date();
+        Claims claims = Jwts.claims().setSubject("userPk");
+        claims.put("user_no", user_no);
+        claims.put("user_role", "USER");
+
+        String jws = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)헤더타입 지정
+                .setClaims(claims) // setClaims는 기존 PAYLOAD에 덮어쓰기된다. (즉, 뒤쪽에 놓게되면 이전내용이 무시됨)
+                .setIssuer("dbsg_api") // (2)토큰발급자 설정
+                .setIssuedAt(now) // (3)발급시간 설정(date)
+                .setExpiration(new Date(now.getTime() + tokenValidTime)) // (4)만료시간 설정
+                //.claim("id", "아이디") // (5)비공개 클레임 설정
+                //.claim("email", "ajufresh@gmail.com")
+                .signWith(key, SignatureAlgorithm.HS256) // (6)해상 알고리즘 및 시크릿KEY 지정
+                .compact(); // 설정값을 바탕으로 JWT를 압축 (JWS형식)
+
+        return jws;
+    }
+
 
     public String accessJws(String compactJws) throws Exception {
         //test 전용, 이후에는 Filter를 통해 security와 연동하여 검증예정.
@@ -85,13 +115,19 @@ public class JwtUtil {
 
     //토큰에서 인증정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
+        String userPk = this.getUserPk(token);
+        String userNo = this.getUserno(token);
 
-    //토큰에서 Subject 추출
-    public String getUserPk(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+//        Collection<? extends GrantedAuthority> authorities =
+//                Arrays.stream(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get(AUTHORITIES_KEY).toString().split(","))
+//                        .map(SimpleGrantedAuthority::new)
+//                        .collect(Collectors.toList());
+
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userNo);
+        //User principal = new User(userNo, "", authorities);
+        //return new UsernamePasswordAuthenticationToken(userNo, "", userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userNo, "", userDetails.getAuthorities());
+        //return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     //Request Header에서 Token값 가져오기
@@ -112,26 +148,29 @@ public class JwtUtil {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
+        } catch (NullPointerException e) {
+            log.info("토큰값이 비어있습니다.");
         }
         return false;
     }
 
-    public String validateHeader(String header) {
-        validationAuthorizationHeader(header);
-        String token = extractToken(header);
-        return token;
-    }
-
-    //Header에 형식 검사
-    private void validationAuthorizationHeader(String header) {
+    public String validateHeader(String header) {  //deprecated
         if (header == null || !header.startsWith("Bearer ")) {
-            throw new IllegalArgumentException();
+            //throw new IllegalArgumentException();
+            return null;
         }
+        return header.substring("Bearer ".length());
     }
 
-    //Header에 Bearer 문자열 제거 후 token값만
-    private String extractToken(String header) {
-        return header.substring("Bearer ".length());
+    //토큰에서 Subject 추출
+    public String getUserPk(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+    }
+    public String getUserno(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("user_no", String.class);
+    }
+    public String getUserRole(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("user_role", String.class);
     }
 
     // 발생가능예외

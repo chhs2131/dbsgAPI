@@ -8,10 +8,12 @@ import com.dbsgapi.dbsgapi.login.kakao.dto.KakaoOAuthDto;
 import com.dbsgapi.dbsgapi.login.kakao.service.KakaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,9 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "카카오 계정", description = "카카오 OAuth 로그인을 위한 API")
 public class KakaoController {
     private final JwtUtil jwtUtil = new JwtUtil();
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Autowired
     private KakaoService kakaoService;
+
+    public KakaoController(AuthenticationManagerBuilder authenticationManagerBuilder) {
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+    }
 
     @RequestMapping(value="/login/kakaoLoginUrl", method= RequestMethod.GET)
     @Operation(summary="백엔드 테스트용", description="카카오 AuthCode 취득을 위한 URI 반환")
@@ -62,9 +69,22 @@ public class KakaoController {
             memberDto = kakaoService.selectMember(userNo);
         }
 
+        //보안객체 등록
+        //Authentication authentication = this.getAuthentication(memberDto);
+        //SecurityContextHolder.getContext().setAuthentication(authentication);
+
         //JWT 토큰을 추가하고 Return 한다.
+        //String token = jwtUtil.createJws(authentication);
         String token = jwtUtil.createJws(Long.toString(memberDto.getUserNo()));
         memberDto.setJwt(token);
         return memberDto;
+    }
+
+    private Authentication getAuthentication(MemberDto memberDto) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(memberDto.getUserNo(), "");
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        return authentication;
     }
 }
