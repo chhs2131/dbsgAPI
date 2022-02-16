@@ -27,7 +27,7 @@ public class KakaoServiceImpl implements KakaoService{
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoOAuthDto kakaoOAuthDto = new KakaoOAuthDto();
         String accessToken = "no_data";
-        String redirectUri = "http://test.dbsg.co.kr:8080/login/kakao";
+        String redirectUri = "http://server.dbsg.co.kr:8080/login/kakao";
 
         String apiUrl = "https://kauth.kakao.com/oauth/token?" +
                 "grant_type=authorization_code&" +
