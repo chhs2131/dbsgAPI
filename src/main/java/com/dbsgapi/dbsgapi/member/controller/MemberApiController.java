@@ -77,8 +77,8 @@ public class MemberApiController {
     // 즐겨찾기 추가하기
     @RequestMapping(value={"/favorite/insert"}, method=RequestMethod.POST)
     @Operation(summary="즐겨찾기 신규등록", description="uuid와 해당 종목의 index값을 전달하여 새로운 즐겨찾기를 등록합니다.")
-    public String insertFavorite(@Parameter(description="DBSG 회원번호") String uuid, String kind, String kind_no) throws Exception {
-        return "favorite test" + uuid;
+    public String insertFavorite(String kind, String kind_no) throws Exception {
+        return "favorite test";
     }
 
     // 즐겨찾기 삭제하기
