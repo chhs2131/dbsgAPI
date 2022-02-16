@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
-<!--    List<MemberFavoriteDto> selectFavorites(long userNo) throws Exception;-->
-<!--    MemberFavoriteDto selectFavorite(String kind, long kindNo) throws Exception;-->
-<!--    void insertFavorite(MemberFavoriteDto memberFavoriteDto) throws Exception;-->
-<!--    void deleteFavorite(long userNo) throws Exception;-->
 <mapper namespace="com.dbsgapi.dbsgapi.member.mapper.MemberMapper">
-
     <select id="selectFavorites" resultType="com.dbsgapi.dbsgapi.member.dto.MemberFavoriteDto">
         SELECT favorite_index,
                user_no,
@@ -26,26 +20,29 @@
                kind_no,
                DATE_FORMAT(regist_date, '%Y-%m-%d %T') regist_date
         FROM 	members_favorite
-        WHERE 	kind = #{kind} and kind_no = #{kindNo}
+        WHERE 	user_no = #{userNo}
+                AND kind = #{kind}
+                AND kind_no = #{kindNo};
     </select>
 
     <insert id="insertFavorite" parameterType="com.dbsgapi.dbsgapi.member.dto.MemberFavoriteDto"
             useGeneratedKeys="true" keyColumn="favorite_index" keyProperty="favoriteIndex" >
-        INSERT INTO members_favorite
-            (
-            user_no, kind, kind_no, regist_date
-            )
+        INSERT INTO members_favorite (
+                user_no, kind,
+                kind_no,
+                regist_date
+                )
         VALUES (
                 #{userNo},
                 #{kind},
                 #{kindNo},
                 NOW()
-               )
+               );
     </insert>
 
-    <select id="selectFavorite" parameterType="Long">
+    <delete id="deleteFavorite" parameterType="Long">
         DELETE FROM members_favorite
-        WHERE 	favorite_index = #{favoriteIndex}
-    </select>
+        WHERE 	favorite_index = #{favoriteIndex};
+    </delete>
 
 </mapper>
