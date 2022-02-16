@@ -49,9 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // @RequestMapping 별 권한제어
         http.authorizeRequests()
-                .antMatchers("/api/v1/member/**").hasAnyRole("ADMIN", "USER", "GUEST")
                 .antMatchers("/templates/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
+        //.antMatchers("/api/v1/member/**").hasAnyRole("ADMIN", "USER", "GUEST")
 
         http.addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

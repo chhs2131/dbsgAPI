@@ -38,4 +38,9 @@ public class SecurityUtil {
 
         return Optional.ofNullable(username);
     }
+
+    public static long getUserNo() {
+        Optional<String> uuid = getCurrentUsername();
+        return Long.parseLong(uuid.orElse("0"));
+    }
 }
