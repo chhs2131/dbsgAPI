@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void deleteFavorite(long favoriteIndex) throws Exception {
-        memberMapper.deleteFavorite(favoriteIndex);
+    public void deleteFavorite(MemberFavoriteDto memberFavoriteDto) throws Exception {
+        memberMapper.deleteFavorite(memberFavoriteDto);
     }
 }

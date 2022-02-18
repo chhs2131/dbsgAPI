@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.dbsgapi.dbsgapi.security.SecurityUtil;
 
 import java.util.List;
@@ -53,21 +50,25 @@ public class MemberApiController {
     // 즐겨찾기 추가하기
     @RequestMapping(value={"/favorite/insert"}, method=RequestMethod.POST)
     @Operation(summary="즐겨찾기 신규등록", description="해당 분류의 index값을 전달하여 새로운 즐겨찾기를 등록합니다.</br> kind 및 kind_no 필요")
-    public ResponseEntity<String> insertFavorite(MemberFavoriteDto memberFavoriteDto) throws Exception {
+    public ResponseEntity<String> insertFavorite(@RequestBody MemberFavoriteDto memberFavoriteDto) throws Exception {
         long userNo = SecurityUtil.getUserNo();
         //중복 등록 방지 처리 필요 (기준: kind, kind_no), upsert?
         memberFavoriteDto.setUserNo(userNo);
+
         memberService.insertFavorite(memberFavoriteDto);
         return new ResponseEntity<>("favorite test userNo: " + userNo, HttpStatus.OK);
     }
 
     // 즐겨찾기 삭제하기
     @RequestMapping(value={"/favorite/{favoriteIndex}"}, method=RequestMethod.DELETE)
-    @Operation(summary="즐겨찾기 삭제", description="지정한 즐겨찾기(favorite_index)를 삭제합니다.")
+    @Operation(summary="즐겨찾기 삭제", description="지정한 즐겨찾기(favorite_index)를 삭제합니다. (본인이 등록한것만 삭제가능)")
     public ResponseEntity<String> deleteFavorite(@PathVariable long favoriteIndex) throws Exception {
         long userNo = SecurityUtil.getUserNo();
-        //중복 등록 방지 처리 필요 (기준: kind, kind_no), upsert?
-        memberService.deleteFavorite(favoriteIndex);
+        MemberFavoriteDto memberFavoriteDto = new MemberFavoriteDto();
+        memberFavoriteDto.setUserNo(userNo);
+        memberFavoriteDto.setFavoriteIndex(favoriteIndex);
+
+        memberService.deleteFavorite(memberFavoriteDto);
         return new ResponseEntity<>("favorite test userNo: " + userNo, HttpStatus.OK);
     }
 
