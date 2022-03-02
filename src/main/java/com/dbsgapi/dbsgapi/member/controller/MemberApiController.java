@@ -20,7 +20,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@Tag(name = "Member", description = "(아직 제작중임!!) 유저별로 귀속된 데이터를 관리하는 API")
+@Tag(name = "Member", description = "유저별 귀속 데이터를 관리하는 API")
 @RequestMapping("/api/v1/member")
 public class MemberApiController {
     @Autowired
@@ -36,8 +36,10 @@ public class MemberApiController {
 
     // 즐겨찾기 단일 가져오기 (등록여부 확인용)
     @RequestMapping(value={"/favorite/{kind}"}, method=RequestMethod.GET)
-    @Operation(summary="즐겨찾기 상세조회", description="해당 분류의 index값을 전달하여 특정 종목의 즐겨찾기 여부를 조회합니다. (값이 존재할시 1개에 대한 정보 return)</br> kind 및 kindNo 필요")
-    public ResponseEntity<MemberFavoriteDto> getFavorite(@PathVariable String kind, long kindNo) throws Exception {
+    @Operation(summary="즐겨찾기 단일 조회", description="해당 분류의 index값을 전달하여 특정 종목의 즐겨찾기 여부를 조회합니다. (값이 존재할시 1개에 대한 정보 return)</br> kind 및 kindNo 필요")
+    public ResponseEntity<MemberFavoriteDto> getFavorite(
+            @Parameter(description="분류(ipo)") @PathVariable String kind,
+            @Parameter(description="분류내 PK(index)") long kindNo) throws Exception {
         long userNo = SecurityUtil.getUserNo();
         MemberFavoriteDto memberFavoriteDto = new MemberFavoriteDto();
         memberFavoriteDto.setUserNo(userNo);
@@ -62,7 +64,8 @@ public class MemberApiController {
     // 즐겨찾기 삭제하기
     @RequestMapping(value={"/favorite/{favoriteIndex}"}, method=RequestMethod.DELETE)
     @Operation(summary="즐겨찾기 삭제", description="지정한 즐겨찾기(favorite_index)를 삭제합니다. (본인이 등록한것만 삭제가능)")
-    public ResponseEntity<String> deleteFavorite(@PathVariable long favoriteIndex) throws Exception {
+    public ResponseEntity<String> deleteFavorite(
+            @Parameter(description="즐겨찾기 PK(index)") @PathVariable long favoriteIndex) throws Exception {
         long userNo = SecurityUtil.getUserNo();
         MemberFavoriteDto memberFavoriteDto = new MemberFavoriteDto();
         memberFavoriteDto.setUserNo(userNo);
