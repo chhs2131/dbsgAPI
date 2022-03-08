@@ -47,8 +47,16 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
+    @RequestMapping(value="/comment", method = RequestMethod.GET)
+    @Operation(summary="전체 IPO Comment 확인", description="최근 코멘트(히스토리)를 전부 조회합니다. 페이징 변수 추가.")
+    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList() throws Exception {
+        List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList();
+        log.debug(ipoData.toString());
+        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/comment/{ipoIndex}", method = RequestMethod.GET)
-    @Operation(summary="IPO Comment 확인", description="해당 종목에 코멘트(히스토리)를 조회합니다.")
+    @Operation(summary="단일 IPO Comment 확인", description="해당 종목에 코멘트(히스토리)를 조회합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoComment(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
         List<IpoCommentDto> ipoData = ipoService.selectIpoComment(ipoIndex);
         log.debug(ipoData.toString());

@@ -11,5 +11,6 @@ public interface IpoService {
     List<IpoSummaryDto> selectIpos() throws Exception;
     IpoDto selectIpo(long ipoIndex) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
+    List<IpoCommentDto> selectIpoCommentList() throws Exception;
     IpoUnderwriterDto selectIpoUnderwriter(long ipoIndex) throws Exception;
 }

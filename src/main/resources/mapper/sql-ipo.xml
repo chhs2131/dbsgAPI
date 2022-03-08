@@ -53,6 +53,17 @@
         WHERE 	ipo_index = #{ipoIndex}
     </select>
 
+    <select id="selectIpoList" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+        SELECT comment_index,
+               ipo_index,
+               comment,
+               writer,
+               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date
+        FROM 	ipo_comment
+        ORDER BY comment_index DESC
+        LIMIT 100;
+    </select>
+
     <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
         SELECT comment_index,
                ipo_index,
