@@ -6,6 +6,7 @@ import lombok.Data;
 public class IpoCommentDto {
     private long commentIndex;
     private long ipoIndex;
+    private String stockName;
     private String comment;
     private String writer;
     private String registDate;

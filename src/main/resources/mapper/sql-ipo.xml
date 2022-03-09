@@ -54,12 +54,14 @@
     </select>
 
     <select id="selectIpoCommentList" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
-        SELECT comment_index,
-               ipo_index,
-               comment,
-               writer,
-               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date
-        FROM 	ipo_comment
+        SELECT ipo_comment.comment_index,
+               ipo_comment.ipo_index,
+               ipo.stock_name,
+               ipo_comment.comment,
+               ipo_comment.writer,
+               date_format(ipo_comment.regist_date, '%Y-%m-%d %T') regist_date
+        FROM ipo_comment
+                 LEFT JOIN ipo ON ipo_comment.ipo_index = ipo.ipo_index
         ORDER BY comment_index DESC
         LIMIT 100;
     </select>
@@ -83,65 +85,6 @@
                 ind_total_min,
                 ind_can_max,
                 ind_can_min
-                /*
-                number_of_ipo_shares,
-                nh_ind_total,
-                nh_ind_can,
-                korea_ind_total,
-                korea_ind_can,
-                shinhan_ind_total,
-                shinhan_ind_can,
-                hana_ind_total,
-                hana_ind_can,
-                kiwoom_ind_total,
-                kiwoom_ind_can,
-                mirae_ind_total,
-                mirae_ind_can,
-                kb_ind_total,
-                kb_ind_can,
-                kakaopay_ind_total,
-                kakaopay_ind_can,
-                daishin_ind_total,
-                daishin_ind_can,
-                bookook_ind_total,
-                bookook_ind_can,
-                samsung_ind_total,
-                samsung_ind_can,
-                toss_ind_total,
-                toss_ind_can,
-                hanwha_ind_total,
-                hanwha_ind_can,
-                eugene_ind_total,
-                eugene_ind_can,
-                ebest_ind_total,
-                ebest_ind_can,
-                db_ind_total,
-                db_ind_can,
-                hi_ind_total,
-                hi_ind_can,
-                yuanta_ind_total,
-                yuanta_ind_can,
-                meritz_ind_total,
-                meritz_ind_can,
-                kyobo_ind_total,
-                kyobo_ind_can,
-                sk_ind_total,
-                sk_ind_can,
-                hyundaimotor_ind_total,
-                hyundaimotor_ind_can,
-                foss_ind_total,
-                foss_ind_can,
-                shinyoung_ind_total,
-                shinyoung_ind_can,
-                cape_ind_total,
-                cape_ind_can,
-                ktb_ind_total,
-                ktb_ind_can,
-                bnk_ind_total,
-                bnk_ind_can,
-                ibk_ind_total,
-                ibk_ind_can
-                */
         FROM 	ipo_underwriter
         WHERE 	ipo_index = #{ipoIndex}
     </select>
