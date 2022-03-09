@@ -22,6 +22,7 @@ public class IpoDto {
     private String ipoRefundDate;
     private String ipoDebutDate;
 
+    private long numberOfIpoShares;
     private double lockUpPercent;
     private double ipoInstitutionalAcceptanceRate;
     private int ipoPrice;

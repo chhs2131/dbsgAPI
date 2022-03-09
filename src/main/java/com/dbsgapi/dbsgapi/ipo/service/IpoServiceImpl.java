@@ -36,7 +36,7 @@ public class IpoServiceImpl implements IpoService{
     }
 
     @Override
-    public IpoUnderwriterDto selectIpoUnderwriter(long ipoIndex) throws Exception {
+    public List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws Exception {
         return ipoMapper.selectIpoUnderwriter(ipoIndex);
     }
 }

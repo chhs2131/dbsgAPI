@@ -65,10 +65,9 @@ public class IpoApiController {
 
     @RequestMapping(value="/underwriter/{ipoIndex}", method = RequestMethod.GET)
     @Operation(summary="IPO 주간사 정보 확인", description="해당 종목에 주간사 정보를 조회합니다.")
-    public ResponseEntity<IpoUnderwriterDto> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
-        IpoUnderwriterDto ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
+    public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
+        List<IpoUnderwriterDto> ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
         log.debug(ipoData.toString());
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
-
 }

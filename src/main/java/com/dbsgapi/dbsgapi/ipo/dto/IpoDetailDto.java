@@ -11,7 +11,7 @@ public class IpoDetailDto {
     @Schema(description ="IPO 기본정보")
     private IpoDto ipo;
     @Schema(description ="주간사 정보")
-    private IpoUnderwriterDto underwriter;
+    private List<IpoUnderwriterDto> underwriter;
     @Schema(description ="코멘트(히스토리) 정보")
     private List<IpoCommentDto> comment;
 }

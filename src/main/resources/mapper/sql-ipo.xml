@@ -53,7 +53,7 @@
         WHERE 	ipo_index = #{ipoIndex}
     </select>
 
-    <select id="selectIpoList" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+    <select id="selectIpoCommentList" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
         SELECT comment_index,
                ipo_index,
                comment,
@@ -77,8 +77,13 @@
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
         SELECT  ipo_index,
-                DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
-                update_date,
+                DATE_FORMAT(regist_date, '%Y-%m-%d') update_date,
+                under_name,
+                ind_total_max,
+                ind_total_min,
+                ind_can_max,
+                ind_can_min
+                /*
                 number_of_ipo_shares,
                 nh_ind_total,
                 nh_ind_can,
@@ -136,6 +141,7 @@
                 bnk_ind_can,
                 ibk_ind_total,
                 ibk_ind_can
+                */
         FROM 	ipo_underwriter
         WHERE 	ipo_index = #{ipoIndex}
     </select>

@@ -4,13 +4,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)  // NON_NULL -> NON_ABSENT -> NON_EMPTY -> NON_DEFAULT
+//@JsonInclude(JsonInclude.Include.NON_NULL)  // NON_NULL -> NON_ABSENT -> NON_EMPTY -> NON_DEFAULT
 public class IpoUnderwriterDto {
     private long ipoIndex;
-    private String registDate;
     private String updateDate;
-    private long numberOfIpoShares;
+    private String underName;
+    private long indTotalMax;
+    private long indTotalMin;
+    private long indCanMax;
+    private long indCanMin;
 
+    /*
+    //depreacted. 20220309
+    private String registDate;
     private String nhIndTotal;
     private String nhIndCan;
     private String koreaIndTotal;
@@ -67,4 +73,5 @@ public class IpoUnderwriterDto {
     private String bnkIndCan;
     private String ibkIndTotal;
     private String ibkIndCan;
+     */
 }
