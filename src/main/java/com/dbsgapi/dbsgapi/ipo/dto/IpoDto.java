@@ -10,9 +10,9 @@ public class IpoDto {
     private String stockName;
     private String stockExchange;
     private String stockKinds;
-    private String stock;
+    private String stockCode;
     private String dartCode;
-    private long sectorCode;
+    private String sector;
     private long profits;
     private long sales;
 
