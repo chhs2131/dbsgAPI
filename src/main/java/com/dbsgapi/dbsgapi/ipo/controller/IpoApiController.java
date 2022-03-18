@@ -3,6 +3,7 @@ package com.dbsgapi.dbsgapi.ipo.controller;
 import com.dbsgapi.dbsgapi.ipo.dto.*;
 import com.dbsgapi.dbsgapi.ipo.service.IpoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,17 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
+    @RequestMapping(value="/schedule", method = RequestMethod.GET)
+    @Operation(summary="지정 기간내에 일정을 확인", description="지정한 기간내에 일정을 모두 확인합니다.")
+    public ResponseEntity<List<IpoScheduleDto>> getScheduleList(
+            @Parameter(description="조회 시작일자") String startDate, @Parameter(description="조회 종료일자") String endDate) throws Exception {
+        List<IpoScheduleDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
+        log.debug(ipoData.toString());
+        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/comment", method = RequestMethod.GET)
-    @Operation(summary="전체 IPO Comment 확인", description="최근 코멘트(히스토리)를 전부 조회합니다. 페이징 변수 추가.")
+    @Operation(summary="전체 IPO Comment 확인", description="최근 코멘트(히스토리)를 전부 조회합니다. 페이징 변수 추가 필요.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList() throws Exception {
         List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList();
         log.debug(ipoData.toString());

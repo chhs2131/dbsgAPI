@@ -53,6 +53,23 @@
         WHERE 	ipo_index = #{ipoIndex}
     </select>
 
+    <select id="selectIpoScheduleList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoScheduleDto">
+        SELECT ipo_index,
+               stock_name,
+               date_format(ipo_forecast_date,'%Y-%m-%d') ipo_forecast_date,
+               date_format(ipo_start_date, '%Y-%m-%d') ipo_start_date,
+               date_format(ipo_end_date, '%Y-%m-%d') ipo_end_date,
+               date_format(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
+               date_format(ipo_debut_date, '%Y-%m-%d') ipo_debut_date
+        FROM ipo
+        WHERE
+            (ipo_forecast_date BETWEEN #{startDate} AND #{endDate}) OR
+            (ipo_start_date BETWEEN #{startDate} AND #{endDate}) OR
+            (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
+            (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
+            (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
+    </select>
+
     <select id="selectIpoCommentList" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
         SELECT ipo_comment.comment_index,
                ipo_comment.ipo_index,
