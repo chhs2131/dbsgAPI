@@ -3,7 +3,7 @@
 
 <mapper namespace="com.dbsgapi.dbsgapi.ipo.mapper.IpoMapper">
     <select id="selectIpos" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
-        SELECT ipo_index,
+        SELECT ipo.ipo_index,
                stock_name,
                stock_kinds,
                stock_exchange,
@@ -11,10 +11,14 @@
                DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
-               underwriter,
+               under.underwriter,
                tag
-        FROM ipo
-        ORDER BY ipo_index DESC
+        FROM ipo LEFT OUTER JOIN
+             (SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name SEPARATOR ',') AS underwriter
+              FROM (SELECT ipo_underwriter.ipo_index, ipo_underwriter.under_name, ipo_underwriter.ind_total_max FROM ipo_underwriter) AS iu
+              GROUP BY iu.ipo_index) AS under
+             ON ipo.ipo_index = under.ipo_index
+        ORDER BY ipo.ipo_index DESC
         LIMIT 100;
     </select>
 
@@ -70,7 +74,7 @@
             (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
     </select>
 
-    <select id="selectIpoCommentList" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+    <select id="selectIpoCommentList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
         SELECT ipo_comment.comment_index,
                ipo_comment.ipo_index,
                ipo.stock_name,
@@ -80,7 +84,7 @@
         FROM ipo_comment
                  LEFT JOIN ipo ON ipo_comment.ipo_index = ipo.ipo_index
         ORDER BY comment_index DESC
-        LIMIT 100;
+        LIMIT #{limit} OFFSET #{offset};
     </select>
 
     <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">

@@ -12,6 +12,6 @@ public interface IpoMapper {
     IpoDto selectIpo(long ipoIndex) throws Exception;
     List<IpoScheduleDto> selectIpoScheduleList(Map<String, String> map) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
-    List<IpoCommentDto> selectIpoCommentList() throws Exception;
+    List<IpoCommentDto> selectIpoCommentList(Map<String, Integer> map) throws Exception;
     List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws Exception;
 }

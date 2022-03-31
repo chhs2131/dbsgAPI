@@ -39,8 +39,12 @@ public class IpoServiceImpl implements IpoService{
     }
 
     @Override
-    public List<IpoCommentDto> selectIpoCommentList() throws Exception {
-        return ipoMapper.selectIpoCommentList();
+    public List<IpoCommentDto> selectIpoCommentList(int page, int num) throws Exception {
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        // map.put 전에 각 데이터가 0이 아닌지 확인하는 Verify 로직 필요.
+        map.put("limit", page * num);
+        map.put("offset", page * num - num);
+        return ipoMapper.selectIpoCommentList(map);
     }
 
     @Override

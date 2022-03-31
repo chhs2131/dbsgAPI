@@ -9,6 +9,6 @@ public interface IpoService {
     IpoDto selectIpo(long ipoIndex) throws Exception;
     List<IpoScheduleDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
-    List<IpoCommentDto> selectIpoCommentList() throws Exception;
+    List<IpoCommentDto> selectIpoCommentList(int page, int num) throws Exception;
     List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws Exception;
 }
