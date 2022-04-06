@@ -58,7 +58,7 @@ public class IpoApiController {
     }
 
     @RequestMapping(value="/comment", method = RequestMethod.GET)
-    @Operation(summary="전체 IPO Comment 확인", description="최근 코멘트(히스토리)를 전부 조회합니다. 페이징 변수 추가 필요.")
+    @Operation(summary="전체 IPO Comment 확인", description="코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@Parameter(description="페이지 번호") int page, @RequestParam(required=false, defaultValue="20") int num) throws Exception {
         List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList(page, num);
         log.debug(ipoData.toString());

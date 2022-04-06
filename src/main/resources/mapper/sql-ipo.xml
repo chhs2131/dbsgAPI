@@ -5,7 +5,7 @@
     <select id="selectIpos" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
         SELECT ipo.ipo_index,
                stock_name,
-               stock_kinds,
+               IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
                stock_exchange,
                DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
                DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
@@ -14,11 +14,11 @@
                under.underwriter,
                tag
         FROM ipo LEFT OUTER JOIN
-             (SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name SEPARATOR ',') AS underwriter
+             (SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name ORDER BY iu.ind_total_max DESC) AS underwriter
               FROM (SELECT ipo_underwriter.ipo_index, ipo_underwriter.under_name, ipo_underwriter.ind_total_max FROM ipo_underwriter) AS iu
               GROUP BY iu.ipo_index) AS under
              ON ipo.ipo_index = under.ipo_index
-        ORDER BY ipo.ipo_index DESC
+        ORDER BY ipo.ipo_start_date DESC
         LIMIT 100;
     </select>
 
@@ -26,7 +26,7 @@
         SELECT ipo_index,
                stock_name,
                stock_exchange,
-               stock_kinds,
+               IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
                stock_code,
                dart_code,
                sector_code.sector_desc AS sector,
@@ -100,7 +100,7 @@
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
         SELECT  ipo_index,
-                DATE_FORMAT(regist_date, '%Y-%m-%d') update_date,
+                DATE_FORMAT(update_date, '%Y-%m-%d') update_date,
                 under_name,
                 ind_total_max,
                 ind_total_min,
