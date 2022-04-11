@@ -10,6 +10,10 @@
 	<meta charset="UTF-8">
 	<title>공모주 목록</title>
 	<!--<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />-->
+	<link href="/css/styles.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+
 	<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.0/dist/bootstrap-table.min.css">
 	<link href="https://unpkg.com/bootstrap-table@1.19.0/dist/extensions/page-jump-to/bootstrap-table-page-jump-to.min.css" rel="stylesheet">
 </head>
@@ -35,10 +39,11 @@
 			data-export-data-type="all"
 			data-show-print="true"
 
-			data-url="http://test.dbsg.co.kr:8080/ipo/ipoList.ajax" data-sort-name="ipoIndex" data-sort-order="desc">
+			data-url="/ipo/ipoList.ajax" data-sort-name="ipoStartDate" data-sort-order="desc">
 			<thead>
 				<tr>
 					<th data-field="ipoIndex" data-sortable="true" data-align="center" data-formatter="viewButton">순번</th>
+					<th data-field="stockKinds" data-sortable="false" data-align="center">분류</th>
 					<th data-field="stockName" data-sortable="true" data-align="left">종목명</th>
 					<th data-field="underwriter" data-sortable="true" data-align="right">주간사</th>
 					<th data-field="ipoStartDate" data-sortable="true" data-align="center">청약일자</th>

@@ -51,15 +51,15 @@ public class IpoController {
         return list;
     }
 
-//    @RequestMapping("/ipo/ipoEditer.do")
-//    public ModelAndView openIpoEditer(@RequestParam int ipoIndex) throws Exception {
-//        ModelAndView mv = new ModelAndView("/admin/page/ipoEditer");
-//        log.warn("Start ipo Editer Controller");
-//        IpoDto ipo = ipoService.selectIpoDetail(ipoIndex);
-//
-//        mv.addObject("ipo", ipo);
-//        return mv;
-//    }
+    @RequestMapping("/ipo/ipoEditer.do")
+    public ModelAndView openIpoEditer(@RequestParam int ipoIndex) throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/page/ipoEditer");
+        log.warn("Start ipo Editer Controller");
+        IpoDto ipo = ipoService.selectIpo(ipoIndex);
+
+        mv.addObject("ipo", ipo);
+        return mv;
+    }
 
     @RequestMapping("/ipo/ipoWrite.do")
     public ModelAndView openIpoWrite() throws Exception {
@@ -90,15 +90,14 @@ public class IpoController {
 //        return "redirect:/ipo/ipoList.do";
 //    }
 //
-//    @RequestMapping(value="/ipo/{ipoIndex}", method= RequestMethod.GET)
-//    public ModelAndView openIpoDetail(@PathVariable("ipoIndex") int ipoIndex) throws Exception {
-//        ModelAndView mv = new ModelAndView("/admin/page/ipoDetail");
-//
-//        IpoDto ipo = ipoService.selectIpoDetail(ipoIndex);
-//        mv.addObject("ipo", ipo);
-//
-//        log.warn("IpoDetail Result <= " + mv);
-//
-//        return mv;
-//    }
+    @RequestMapping(value="/ipo/{ipoIndex}", method= RequestMethod.GET)
+    public ModelAndView openIpoDetail(@PathVariable("ipoIndex") int ipoIndex) throws Exception {
+        ModelAndView mv = new ModelAndView("/admin/page/ipoDetail");
+
+        IpoDto ipo = ipoService.selectIpo(ipoIndex);
+        mv.addObject("ipo", ipo);
+
+        log.warn("IpoDetail Result <= " + mv);
+        return mv;
+    }
 }
