@@ -30,7 +30,7 @@ public class IpoDto {
     private int ipoPriceHigh;
     private int ipoMinDeposit;
 
-    private String underwriter;
+    // private String underwriter;
     private String putBackOptionWho;
     private int putBackOptionPrice;
     private String putBackOptionDeadline;

@@ -49,7 +49,6 @@
                ipo_price_high,
                ipo_min_deposit,
 
-               underwriter,
                put_back_option_who,
                put_back_option_price,
                put_back_option_deadline,
@@ -83,7 +82,9 @@
                ipo.stock_name,
                ipo_comment.comment,
                ipo_comment.writer,
-               date_format(ipo_comment.regist_date, '%Y-%m-%d %T') regist_date
+               date_format(ipo_comment.regist_date, '%Y-%m-%d %T') regist_date,
+               ipo_comment.log_type,
+               ipo_comment.change_log_json
         FROM ipo_comment
                  LEFT JOIN ipo ON ipo_comment.ipo_index = ipo.ipo_index
         ORDER BY comment_index DESC
@@ -95,10 +96,13 @@
                ipo_index,
                comment,
                writer,
-               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date
+               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
+               log_type,
+               change_log_json
         FROM 	ipo_comment
         WHERE 	ipo_index = #{ipoIndex}
-        ORDER BY comment_index DESC
+        ORDER BY regist_date DESC
+        LIMIT   100;
     </select>
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
