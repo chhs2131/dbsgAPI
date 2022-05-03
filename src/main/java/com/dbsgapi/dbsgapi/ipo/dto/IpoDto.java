@@ -37,4 +37,12 @@ public class IpoDto {
     private String tag;
     private String registDate;
     private String updateDate;
+
+    public void setIpoPriceHigh(int ipoPriceHigh) {
+        // 실권주에 확정공모가가 아직 없는 경우, 확정이전가격(ipo_price_high)을 확정공모가로 반환해준다.
+        this.ipoPriceHigh = ipoPriceHigh;
+        if(this.ipoPrice == 0 && this.stockKinds.equals("실권주")) {
+            this.ipoPrice = this.ipoPriceHigh;
+        }
+    }
 }
