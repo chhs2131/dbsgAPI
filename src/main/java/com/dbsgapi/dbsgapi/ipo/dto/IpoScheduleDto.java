@@ -8,8 +8,10 @@ import lombok.Data;
 public class IpoScheduleDto {
     private long ipoIndex;
     private String stockName;
-    @Schema(description ="수요예측일")
-    private String ipoForecastDate;
+    @Schema(description ="수요예측 시작일")
+    private String ipoForecastStart;
+    @Schema(description ="수요예측 마감일")
+    private String ipoForecastEnd;
     @Schema(description ="공모 청약 시작일")
     private String ipoStartDate;
     @Schema(description ="공모 청약 마감일")

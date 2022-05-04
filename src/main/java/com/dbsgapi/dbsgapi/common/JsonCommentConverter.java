@@ -31,18 +31,14 @@ public class JsonCommentConverter {
         String commentReturn = "";
         switch (this.commentCode) {
             case 0:
-                System.out.println("nono");
                 break;
             case 1:
-                System.out.println("code ipo");
                 commentReturn = commentIpo(this.commentJson);
                 break;
             case 2:
-                System.out.println("code underwriter");
                 commentReturn = commentUnderwriter(this.commentJson);
                 break;
             default:
-                System.out.println("code default");
                 break;
         }
         return commentReturn;
@@ -61,47 +57,56 @@ public class JsonCommentConverter {
     }
 
     private String commentIpo(String commentJson) {
-        // json 해석 로직 작성 필요
-        /*
-        'profits', nullif(NEW.profits, OLD.profits),
-        'sales', nullif(NEW.sales, OLD.sales),
-        'ipo_forecast_date', nullif(NEW.ipo_forecast_date, OLD.ipo_forecast_date),
-        'ipo_start_date', nullif(NEW.ipo_start_date, OLD.ipo_start_date),
-        'ipo_end_date', nullif(NEW.ipo_end_date, OLD.ipo_end_date),
-        'ipo_refund_date', nullif(NEW.ipo_refund_date, OLD.ipo_refund_date),
-        'ipo_debut_date', nullif(NEW.ipo_debut_date, OLD.ipo_debut_date),
-        'lock_up_percent', nullif(NEW.lock_up_percent, OLD.lock_up_percent),
-        'ipo_institutional_acceptance_rate', nullif(NEW.ipo_institutional_acceptance_rate, OLD.ipo_institutional_acceptance_rate),
-        'number_of_ipo_shares', nullif(NEW.number_of_ipo_shares, OLD.number_of_ipo_shares),
-        'par_value', nullif(NEW.par_value, OLD.par_value),
-        'ipo_price', nullif(NEW.ipo_price, OLD.ipo_price),
-        'ipo_price_low', nullif(NEW.ipo_price_low, OLD.ipo_price_low),
-        'ipo_price_high', nullif(NEW.ipo_price_high, OLD.ipo_price_high),
-        'ipo_min_deposit', nullif(NEW.ipo_min_deposit, OLD.ipo_min_deposit),
-        'put_back_option_who', nullif(NEW.put_back_option_who, OLD.put_back_option_who),
-        'put_back_option_price', nullif(NEW.put_back_option_price, OLD.put_back_option_price),
-        'put_back_option_deadline', nullif(NEW.put_back_option_deadline, OLD.put_back_option_deadline)
-         */
-
+        // 해당하는값이 -1인 경우도 구분해줘야한다. -1은 값이 사라짐.
         Map<String, Object> map = jsonToMap(commentJson);
-
         assert map != null;
         if(!map.isEmpty()) {
             if (map.containsKey("profits") && map.get("profits") != null) {
-                return "profits" + (String) map.get("profits");
+                return "profits" + String.valueOf( map.get("profits"));
             } else if (map.containsKey("sales") && map.get("sales") != null) {
-                return "sales" + (String) map.get("sales");
+                return "sales" + String.valueOf( map.get("sales"));
+            } else if (map.containsKey("ipo_forecast_start") && map.get("ipo_forecast_start") != null) {
+                return "ipo_forecast_start" + String.valueOf( map.get("ipo_forecast_start"));
+            } else if (map.containsKey("ipo_forecast_start") && map.get("ipo_forecast_start") != null) {  // forecast_end 추후에 수정!!!!!!!!!!
+                return "ipo_forecast_start" + String.valueOf( map.get("ipo_forecast_start"));
+            } else if (map.containsKey("ipo_start_date") && map.get("ipo_start_date") != null) {
+                return "ipo_start_date" + String.valueOf( map.get("ipo_start_date"));
+            } else if (map.containsKey("ipo_end_date") && map.get("ipo_end_date") != null) {
+                return "ipo_end_date" + String.valueOf( map.get("ipo_end_date"));
+            } else if (map.containsKey("ipo_refund_date") && map.get("ipo_refund_date") != null) {
+                return "ipo_refund_date" + String.valueOf( map.get("ipo_refund_date"));
+            } else if (map.containsKey("ipo_debut_date") && map.get("ipo_debut_date") != null) {
+                return "ipo_debut_date" + String.valueOf( map.get("ipo_debut_date"));
+            } else if (map.containsKey("lock_up_percent") && map.get("lock_up_percent") != null) {
+                return "lock_up_percent" + String.valueOf( map.get("lock_up_percent"));
+            } else if (map.containsKey("ipo_institutional_acceptance_rate") && map.get("ipo_institutional_acceptance_rate") != null) {
+                return "ipo_institutional_acceptance_rate" + String.valueOf( map.get("ipo_institutional_acceptance_rate"));
+            } else if (map.containsKey("number_of_ipo_shares") && map.get("number_of_ipo_shares") != null) {
+                return "number_of_ipo_shares" + String.valueOf( map.get("number_of_ipo_shares"));
+            } else if (map.containsKey("par_value") && map.get("par_value") != null) {
+                return "par_value" + String.valueOf( map.get("par_value"));
+            } else if (map.containsKey("ipo_price") && map.get("ipo_price") != null) {
+                return "ipo_price" + String.valueOf( map.get("ipo_price"));
+            } else if (map.containsKey("ipo_price_low") && map.get("ipo_price_low") != null) {
+                return "ipo_price_low" + String.valueOf( map.get("ipo_price_low"));
+            } else if (map.containsKey("ipo_price_high") && map.get("ipo_price_high") != null) {
+                return "ipo_price_high" + String.valueOf( map.get("ipo_price_high"));
+            } else if (map.containsKey("ipo_min_deposit") && map.get("ipo_min_deposit") != null) {
+                return "ipo_min_deposit" + String.valueOf( map.get("ipo_min_deposit"));
+            } else if (map.containsKey("put_back_option_who") && map.get("put_back_option_who") != null) {
+                return "put_back_option_who" + String.valueOf( map.get("put_back_option_who"));
+            } else if (map.containsKey("put_back_option_price") && map.get("put_back_option_price") != null) {
+                return "put_back_option_price" + String.valueOf( map.get("put_back_option_price"));
+            } else if (map.containsKey("put_back_option_deadline") && map.get("put_back_option_deadline") != null) {
+                return "put_back_option_deadline" + String.valueOf( map.get("put_back_option_deadline"));
             }
         }
-
-        return "ipo가 변경되었습니다.";
+        return "";
     }
 
     private String commentUnderwriter(String commentJson) {
         // underwriter(주간사) json을 해석하고 그 내용을 String으로 반환합니다.
         Map<String, Object> map = jsonToMap(commentJson);
-        System.out.println(map);
-
         assert map != null;
         if(!map.isEmpty()) {
             if (map.containsKey("ind_can_max") && map.get("ind_can_max") != null) {
@@ -114,7 +119,6 @@ public class JsonCommentConverter {
                 return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
             }
         }
-
         return "";
     }
 

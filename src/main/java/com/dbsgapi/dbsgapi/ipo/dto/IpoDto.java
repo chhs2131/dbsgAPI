@@ -16,7 +16,8 @@ public class IpoDto {
     private long profits;
     private long sales;
 
-    private String ipoForecastDate;
+    private String ipoForecastStart;
+    private String ipoForecastEnd;
     private String ipoStartDate;
     private String ipoEndDate;
     private String ipoRefundDate;
