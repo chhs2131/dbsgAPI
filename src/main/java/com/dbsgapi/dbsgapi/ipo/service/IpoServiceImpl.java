@@ -1,11 +1,13 @@
 package com.dbsgapi.dbsgapi.ipo.service;
 
+import com.dbsgapi.dbsgapi.common.JsonCommentConverter;
 import com.dbsgapi.dbsgapi.ipo.dto.*;
 import com.dbsgapi.dbsgapi.ipo.mapper.IpoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +18,29 @@ public class IpoServiceImpl implements IpoService{
 
     @Override
     public List<IpoSummaryDto> selectIpos() throws Exception {
-        return ipoMapper.selectIpos();
+        List<IpoSummaryDto> ipos = ipoMapper.selectIpos();
+        Iterator<IpoSummaryDto> iterator = ipos.iterator();
+        while(iterator.hasNext()) {
+            IpoSummaryDto ipo = iterator.next();
+            String commentIndex = ipo.getRecentComment();
+
+            if(commentIndex != null) {
+                IpoCommentDto ipoComment = selectIpoCommentIndex(Long.parseLong(commentIndex));
+                if(ipoComment != null) {
+                    if (ipoComment.getComment() != null) {
+                        ipo.setRecentComment(ipoComment.getComment());
+                    } else {
+                        JsonCommentConverter jcc = new JsonCommentConverter();  // json인 경우 해석해서 대입
+                        jcc.setCommentType(ipoComment.getLogType());
+                        jcc.setCommentJson(ipoComment.getChangeLogJson());
+                        ipo.setRecentComment(jcc.toString());
+                    }
+                    // 아무것도 없는 예외처리도 해야할까요
+                }
+            }
+        }
+
+        return ipos;
     }
 
     @Override
@@ -36,6 +60,11 @@ public class IpoServiceImpl implements IpoService{
     @Override
     public List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception {
         return ipoMapper.selectIpoComment(ipoIndex);
+    }
+
+    @Override
+    public IpoCommentDto selectIpoCommentIndex(long commentIndex) throws Exception {
+        return ipoMapper.selectIpoCommentIndex(commentIndex);
     }
 
     @Override

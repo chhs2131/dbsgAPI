@@ -67,8 +67,10 @@ public class JsonCommentConverter {
                 return "sales" + String.valueOf( map.get("sales"));
             } else if (map.containsKey("ipo_forecast_start") && map.get("ipo_forecast_start") != null) {
                 return "ipo_forecast_start" + String.valueOf( map.get("ipo_forecast_start"));
-            } else if (map.containsKey("ipo_forecast_start") && map.get("ipo_forecast_start") != null) {  // forecast_end 추후에 수정!!!!!!!!!!
-                return "ipo_forecast_start" + String.valueOf( map.get("ipo_forecast_start"));
+            } else if (map.containsKey("ipo_forecast_end") && map.get("ipo_forecast_end") != null) {
+                return "ipo_forecast_end" + String.valueOf( map.get("ipo_forecast_end"));
+            } else if (map.containsKey("ipo_forecast_date") && map.get("ipo_forecast_date") != null) {
+                return "ipo_forecast_date" + String.valueOf( map.get("ipo_forecast_date"));
             } else if (map.containsKey("ipo_start_date") && map.get("ipo_start_date") != null) {
                 return "ipo_start_date" + String.valueOf( map.get("ipo_start_date"));
             } else if (map.containsKey("ipo_end_date") && map.get("ipo_end_date") != null) {

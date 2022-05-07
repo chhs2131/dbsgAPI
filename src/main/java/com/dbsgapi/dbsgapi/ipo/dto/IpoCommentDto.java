@@ -16,7 +16,6 @@ public class IpoCommentDto {
     private String logType;
     private String changeLogJson;
 
-    JsonCommentConverter jcc = new JsonCommentConverter();
 
     public void setChangeLogJson(String changeLogJson) {
         // changeLogJson이 comment보다 후순위로 값을 가져옴. (아마 mybatis에서 가져오는 순서대로인것 같음)
@@ -24,6 +23,7 @@ public class IpoCommentDto {
 
         // changeLogJson을 체크하여 null이 아닌경우 comment를 갱신함.
         if(changeLogJson != null && !changeLogJson.isEmpty()) {
+            JsonCommentConverter jcc = new JsonCommentConverter();
             jcc.setCommentType(this.logType);
             jcc.setCommentJson(this.changeLogJson);
             this.comment = jcc.toString();

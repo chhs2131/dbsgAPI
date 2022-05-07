@@ -3,8 +3,6 @@
 
 <mapper namespace="com.dbsgapi.dbsgapi.ipo.mapper.IpoMapper">
     <select id="selectIpos" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
-
-
         SELECT ipo.ipo_index,
                stock_name,
                IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
@@ -34,7 +32,7 @@
               GROUP BY iu.ipo_index) AS under
              ON ipo.ipo_index = under.ipo_index
         ORDER BY ipo.ipo_start_date DESC
-        LIMIT 100;
+        LIMIT 300;
     </select>
 
     <select id="selectIpo" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoDto">
@@ -49,7 +47,7 @@
                sales,
 
                DATE_FORMAT(ipo_forecast_start, '%Y-%m-%d') ipo_forecast_start,
-               DATE_FORMAT(ipo_forecast_date, '%Y-%m-%d') ipo_forecast_end,
+               DATE_FORMAT(ipo_forecast_end, '%Y-%m-%d') ipo_forecast_end,
                DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
                DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
@@ -76,7 +74,7 @@
         SELECT ipo_index,
                stock_name,
                date_format(ipo_forecast_start,'%Y-%m-%d') ipo_forecast_start,
-               date_format(ipo_forecast_date,'%Y-%m-%d') ipo_forecast_end,
+               date_format(ipo_forecast_end,'%Y-%m-%d') ipo_forecast_end,
                date_format(ipo_start_date, '%Y-%m-%d') ipo_start_date,
                date_format(ipo_end_date, '%Y-%m-%d') ipo_end_date,
                date_format(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
@@ -84,7 +82,7 @@
         FROM ipo
         WHERE
             (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
-            (ipo_forecast_date BETWEEN #{startDate} AND #{endDate}) OR
+            (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_start_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
@@ -115,9 +113,23 @@
                log_type,
                change_log_json
         FROM 	ipo_comment
-        WHERE 	ipo_index = #{ipoIndex}
+        WHERE 	ipo_index = #{ipoIndex} and enabled not like 'N'
         ORDER BY regist_date DESC
         LIMIT   100;
+    </select>
+
+    <select id="selectIpoCommentIndex" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+        SELECT comment_index,
+               ipo_index,
+               comment,
+               writer,
+               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
+               log_type,
+               change_log_json
+        FROM 	ipo_comment
+        WHERE 	comment_index = #{commentIndex} and enabled not like 'N'
+        ORDER BY regist_date DESC
+        LIMIT   1;
     </select>
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">

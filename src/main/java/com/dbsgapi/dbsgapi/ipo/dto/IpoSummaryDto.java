@@ -1,7 +1,9 @@
 package com.dbsgapi.dbsgapi.ipo.dto;
 
+import com.dbsgapi.dbsgapi.ipo.service.IpoService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Schema(description ="종목에 대한 요약된 정보를 제공합니다.")
 @Data
@@ -30,4 +32,8 @@ public class IpoSummaryDto {
     private String tag;
     @Schema(description ="최근 발행된 코멘트", example = "수요예측이 끝났습니다! 결과를 확인해보세요.")
     private String recentComment;
+
+    public String getRecentComment() {
+        return this.recentComment;
+    }
 }
