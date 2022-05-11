@@ -3,12 +3,15 @@ package com.dbsgapi.dbsgapi.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class JsonCommentConverter {
     private String commentType;
     private String commentJson;
     private int commentCode;  // commentType를 통해 code 파생됨.
+    private List<String> commentList = new ArrayList<String>();
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -27,7 +30,7 @@ public class JsonCommentConverter {
         this.commentJson = commentJson;
     }
 
-    public String toString() {
+    public String getRecentComment() {
         String commentReturn = "";
         switch (this.commentCode) {
             case 0:
@@ -44,6 +47,11 @@ public class JsonCommentConverter {
         return commentReturn;
     }
 
+    public List<String> getCommentList() {
+        System.out.println(this.commentList);
+        return this.commentList;
+    }
+
     private void setCommentCode(String commentType) {
         if(commentType.isEmpty()) {
             this.commentCode = 0;
@@ -56,53 +64,75 @@ public class JsonCommentConverter {
         }
     }
 
+    private boolean mapVerify(Map<String, Object> map, String key) {
+        if (!map.containsKey(key)) {
+            return false;
+        } else if (map.get(key) == null) {
+            return false;
+        } else if (map.get(key) == "-1") {
+            return false;
+        }
+        System.out.println("map contain: " + key + " " + String.valueOf(map.get(key)));
+        return true;
+    }
+
     private String commentIpo(String commentJson) {
         // 해당하는값이 -1인 경우도 구분해줘야한다. -1은 값이 사라짐.
         Map<String, Object> map = jsonToMap(commentJson);
         assert map != null;
+        String mapValue;
         if(!map.isEmpty()) {
-            if (map.containsKey("profits") && map.get("profits") != null) {
-                return "profits" + String.valueOf( map.get("profits"));
-            } else if (map.containsKey("sales") && map.get("sales") != null) {
-                return "sales" + String.valueOf( map.get("sales"));
-            } else if (map.containsKey("ipo_forecast_start") && map.get("ipo_forecast_start") != null) {
-                return "ipo_forecast_start" + String.valueOf( map.get("ipo_forecast_start"));
-            } else if (map.containsKey("ipo_forecast_end") && map.get("ipo_forecast_end") != null) {
-                return "ipo_forecast_end" + String.valueOf( map.get("ipo_forecast_end"));
-            } else if (map.containsKey("ipo_forecast_date") && map.get("ipo_forecast_date") != null) {
-                return "ipo_forecast_date" + String.valueOf( map.get("ipo_forecast_date"));
-            } else if (map.containsKey("ipo_start_date") && map.get("ipo_start_date") != null) {
-                return "ipo_start_date" + String.valueOf( map.get("ipo_start_date"));
-            } else if (map.containsKey("ipo_end_date") && map.get("ipo_end_date") != null) {
-                return "ipo_end_date" + String.valueOf( map.get("ipo_end_date"));
-            } else if (map.containsKey("ipo_refund_date") && map.get("ipo_refund_date") != null) {
-                return "ipo_refund_date" + String.valueOf( map.get("ipo_refund_date"));
-            } else if (map.containsKey("ipo_debut_date") && map.get("ipo_debut_date") != null) {
-                return "ipo_debut_date" + String.valueOf( map.get("ipo_debut_date"));
-            } else if (map.containsKey("lock_up_percent") && map.get("lock_up_percent") != null) {
-                return "lock_up_percent" + String.valueOf( map.get("lock_up_percent"));
-            } else if (map.containsKey("ipo_institutional_acceptance_rate") && map.get("ipo_institutional_acceptance_rate") != null) {
-                return "ipo_institutional_acceptance_rate" + String.valueOf( map.get("ipo_institutional_acceptance_rate"));
-            } else if (map.containsKey("number_of_ipo_shares") && map.get("number_of_ipo_shares") != null) {
-                return "number_of_ipo_shares" + String.valueOf( map.get("number_of_ipo_shares"));
-            } else if (map.containsKey("par_value") && map.get("par_value") != null) {
-                return "par_value" + String.valueOf( map.get("par_value"));
-            } else if (map.containsKey("ipo_price") && map.get("ipo_price") != null) {
-                return "ipo_price" + String.valueOf( map.get("ipo_price"));
-            } else if (map.containsKey("ipo_price_low") && map.get("ipo_price_low") != null) {
-                return "ipo_price_low" + String.valueOf( map.get("ipo_price_low"));
-            } else if (map.containsKey("ipo_price_high") && map.get("ipo_price_high") != null) {
-                return "ipo_price_high" + String.valueOf( map.get("ipo_price_high"));
-            } else if (map.containsKey("ipo_min_deposit") && map.get("ipo_min_deposit") != null) {
-                return "ipo_min_deposit" + String.valueOf( map.get("ipo_min_deposit"));
-            } else if (map.containsKey("put_back_option_who") && map.get("put_back_option_who") != null) {
-                return "put_back_option_who" + String.valueOf( map.get("put_back_option_who"));
-            } else if (map.containsKey("put_back_option_price") && map.get("put_back_option_price") != null) {
-                return "put_back_option_price" + String.valueOf( map.get("put_back_option_price"));
-            } else if (map.containsKey("put_back_option_deadline") && map.get("put_back_option_deadline") != null) {
-                return "put_back_option_deadline" + String.valueOf( map.get("put_back_option_deadline"));
+            System.out.println("commentIPO");
+
+            if (mapVerify(map, "profits")) {
+                mapValue = String.valueOf(map.get("profits"));
+                this.commentList.add("profits" + mapValue);
             }
+            if (mapVerify(map, "sales")) {
+                mapValue = String.valueOf( map.get("sales"));
+                this.commentList.add("sales" + mapValue);
+            }
+            if (mapVerify(map, "ipo_forecast_start")) {
+                this.commentList.add( "ipo_forecast_start" + String.valueOf( map.get("ipo_forecast_start")));
+            }  if (mapVerify(map, "ipo_forecast_end")) {
+                this.commentList.add( "ipo_forecast_end" + String.valueOf( map.get("ipo_forecast_end")));
+            }  if (mapVerify(map, "ipo_forecast_date")) {
+                this.commentList.add( "ipo_forecast_date" + String.valueOf( map.get("ipo_forecast_date")));
+            }  if (mapVerify(map, "ipo_start_date")) {
+                this.commentList.add( "ipo_start_date" + String.valueOf( map.get("ipo_start_date")));
+            }  if (mapVerify(map, "ipo_end_date")) {
+                this.commentList.add( "ipo_end_date" + String.valueOf( map.get("ipo_end_date")));
+            }  if (mapVerify(map, "ipo_refund_date")) {
+                this.commentList.add( "ipo_refund_date" + String.valueOf( map.get("ipo_refund_date")));
+            }  if (mapVerify(map, "ipo_debut_date")) {
+                this.commentList.add( "ipo_debut_date" + String.valueOf( map.get("ipo_debut_date")));
+            }  if (mapVerify(map, "lock_up_percent")) {
+                this.commentList.add( "lock_up_percent" + String.valueOf( map.get("lock_up_percent")));
+            }  if (mapVerify(map, "ipo_institutional_acceptance_rate")) {
+                this.commentList.add( "ipo_institutional_acceptance_rate" + String.valueOf( map.get("ipo_institutional_acceptance_rate")));
+            }  if (mapVerify(map, "number_of_ipo_shares")) {
+                this.commentList.add( "number_of_ipo_shares" + String.valueOf( map.get("number_of_ipo_shares")));
+            }  if (mapVerify(map, "par_value")) {
+                this.commentList.add( "par_value" + String.valueOf( map.get("par_value")));
+            }  if (mapVerify(map, "ipo_price")) {
+                this.commentList.add( "ipo_price" + String.valueOf( map.get("ipo_price")));
+            }  if (mapVerify(map, "ipo_price_low")) {
+                this.commentList.add( "ipo_price_low" + String.valueOf( map.get("ipo_price_low")));
+            }  if (mapVerify(map, "ipo_price_high")) {
+                this.commentList.add( "ipo_price_high" + String.valueOf( map.get("ipo_price_high")));
+            }  if (mapVerify(map, "ipo_min_deposit")) {
+                this.commentList.add( "ipo_min_deposit" + String.valueOf( map.get("ipo_min_deposit")));
+            }  if (mapVerify(map, "put_back_option_who")) {
+                this.commentList.add( "put_back_option_who" + String.valueOf( map.get("put_back_option_who")));
+            }  if (mapVerify(map, "put_back_option_price")) {
+                this.commentList.add( "put_back_option_price" + String.valueOf( map.get("put_back_option_price")));
+            }  if (mapVerify(map, "put_back_option_deadline")) {
+                this.commentList.add( "put_back_option_deadline" + String.valueOf( map.get("put_back_option_deadline")));
+            }
+
+            return commentList.get(0);
         }
+        getCommentList();
         return "";
     }
 
