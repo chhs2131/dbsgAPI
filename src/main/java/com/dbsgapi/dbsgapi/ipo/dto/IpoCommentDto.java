@@ -4,6 +4,8 @@ import com.dbsgapi.dbsgapi.common.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class IpoCommentDto {
     private long commentIndex;
@@ -11,11 +13,11 @@ public class IpoCommentDto {
     private String writer;
     private String stockName;
     private String comment;
+    private List<String> commentList;
     private String registDate;
 
     private String logType;
     private String changeLogJson;
-
 
     public void setChangeLogJson(String changeLogJson) {
         // changeLogJson이 comment보다 후순위로 값을 가져옴. (아마 mybatis에서 가져오는 순서대로인것 같음)
@@ -26,7 +28,8 @@ public class IpoCommentDto {
             JsonCommentConverter jcc = new JsonCommentConverter();
             jcc.setCommentType(this.logType);
             jcc.setCommentJson(this.changeLogJson);
-            this.comment = jcc.toString();
+            this.comment = jcc.getRecentComment();
+            this.commentList = jcc.getCommentList();
         }
     }
     @JsonIgnore

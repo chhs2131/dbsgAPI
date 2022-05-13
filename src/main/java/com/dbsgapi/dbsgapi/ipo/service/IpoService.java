@@ -7,7 +7,7 @@ import java.util.List;
 public interface IpoService {
     List<IpoSummaryDto> selectIpos() throws Exception;
     IpoDto selectIpo(long ipoIndex) throws Exception;
-    List<IpoScheduleDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
+    List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
     IpoCommentDto selectIpoCommentIndex(long commentIndex) throws Exception;
     List<IpoCommentDto> selectIpoCommentList(int page, int num) throws Exception;

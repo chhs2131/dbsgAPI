@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Schema(description ="종목에 대한 요약된 정보를 제공합니다.")
+@Schema(description ="종목에 대한 요약된 정보를 제공합니다. (IPO목록 및 스케쥴에서 사용)")
 @Data
 public class IpoSummaryDto {
     @Schema(description ="DB에서 관리하는 index번호", example = "100077", required=true)
@@ -17,6 +17,10 @@ public class IpoSummaryDto {
     @Schema(description ="유형구분", example = "공모주", allowableValues = {"공모주","실권주","스팩주"})
     private String stockKinds;
 
+    @Schema(description ="수요예측 시작일", example = "2022-01-10")
+    private String ipoForecastStart;
+    @Schema(description ="수요예측 마감일", example = "2022-01-11")
+    private String ipoForecastEnd;
     @Schema(description ="청약 시작일", example = "2022-01-18", required=true)
     private String ipoStartDate;
     @Schema(description ="청약 종료일", example = "2022-01-19")

@@ -3,12 +3,16 @@ package com.dbsgapi.dbsgapi.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class JsonCommentConverter {
     private String commentType;
     private String commentJson;
     private int commentCode;  // commentType를 통해 code 파생됨.
+    private List<String> commentList = new ArrayList<String>();
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -27,7 +31,7 @@ public class JsonCommentConverter {
         this.commentJson = commentJson;
     }
 
-    public String toString() {
+    public String getRecentComment() {
         String commentReturn = "";
         switch (this.commentCode) {
             case 0:
@@ -44,6 +48,10 @@ public class JsonCommentConverter {
         return commentReturn;
     }
 
+    public List<String> getCommentList() {
+        return this.commentList;
+    }
+
     private void setCommentCode(String commentType) {
         if(commentType.isEmpty()) {
             this.commentCode = 0;
@@ -56,72 +64,154 @@ public class JsonCommentConverter {
         }
     }
 
+    private boolean mapVerify(Map<String, Object> map, String key) {
+        if (!map.containsKey(key)) {
+            return false;
+        } else if (map.get(key) == null) {
+            return false;
+        } else if (Objects.equals(String.valueOf(map.get(key)), "-1")) {  // 예외처리 제대로 동작하게 수정 필요. [의무보유확약 비율이 정정되었습니다. (-1.0%), 수요 예측 결과가 발표되었습니다. (기업경쟁률: -1.0), 공모가가 확정되었습니다. (17200원)]
+            return false;
+        } else if (Objects.equals(String.valueOf(map.get(key)), "-1.0")) {
+            return false;
+        }
+        return true;
+    }
+
     private String commentIpo(String commentJson) {
+        String returnComment;
         // 해당하는값이 -1인 경우도 구분해줘야한다. -1은 값이 사라짐.
         Map<String, Object> map = jsonToMap(commentJson);
         assert map != null;
+        String mapValue;
         if(!map.isEmpty()) {
-            if (map.containsKey("profits") && map.get("profits") != null) {
-                return "profits" + String.valueOf( map.get("profits"));
-            } else if (map.containsKey("sales") && map.get("sales") != null) {
-                return "sales" + String.valueOf( map.get("sales"));
-            } else if (map.containsKey("ipo_forecast_start") && map.get("ipo_forecast_start") != null) {
-                return "ipo_forecast_start" + String.valueOf( map.get("ipo_forecast_start"));
-            } else if (map.containsKey("ipo_forecast_end") && map.get("ipo_forecast_end") != null) {
-                return "ipo_forecast_end" + String.valueOf( map.get("ipo_forecast_end"));
-            } else if (map.containsKey("ipo_forecast_date") && map.get("ipo_forecast_date") != null) {
-                return "ipo_forecast_date" + String.valueOf( map.get("ipo_forecast_date"));
-            } else if (map.containsKey("ipo_start_date") && map.get("ipo_start_date") != null) {
-                return "ipo_start_date" + String.valueOf( map.get("ipo_start_date"));
-            } else if (map.containsKey("ipo_end_date") && map.get("ipo_end_date") != null) {
-                return "ipo_end_date" + String.valueOf( map.get("ipo_end_date"));
-            } else if (map.containsKey("ipo_refund_date") && map.get("ipo_refund_date") != null) {
-                return "ipo_refund_date" + String.valueOf( map.get("ipo_refund_date"));
-            } else if (map.containsKey("ipo_debut_date") && map.get("ipo_debut_date") != null) {
-                return "ipo_debut_date" + String.valueOf( map.get("ipo_debut_date"));
-            } else if (map.containsKey("lock_up_percent") && map.get("lock_up_percent") != null) {
-                return "lock_up_percent" + String.valueOf( map.get("lock_up_percent"));
-            } else if (map.containsKey("ipo_institutional_acceptance_rate") && map.get("ipo_institutional_acceptance_rate") != null) {
-                return "ipo_institutional_acceptance_rate" + String.valueOf( map.get("ipo_institutional_acceptance_rate"));
-            } else if (map.containsKey("number_of_ipo_shares") && map.get("number_of_ipo_shares") != null) {
-                return "number_of_ipo_shares" + String.valueOf( map.get("number_of_ipo_shares"));
-            } else if (map.containsKey("par_value") && map.get("par_value") != null) {
-                return "par_value" + String.valueOf( map.get("par_value"));
-            } else if (map.containsKey("ipo_price") && map.get("ipo_price") != null) {
-                return "ipo_price" + String.valueOf( map.get("ipo_price"));
-            } else if (map.containsKey("ipo_price_low") && map.get("ipo_price_low") != null) {
-                return "ipo_price_low" + String.valueOf( map.get("ipo_price_low"));
-            } else if (map.containsKey("ipo_price_high") && map.get("ipo_price_high") != null) {
-                return "ipo_price_high" + String.valueOf( map.get("ipo_price_high"));
-            } else if (map.containsKey("ipo_min_deposit") && map.get("ipo_min_deposit") != null) {
-                return "ipo_min_deposit" + String.valueOf( map.get("ipo_min_deposit"));
-            } else if (map.containsKey("put_back_option_who") && map.get("put_back_option_who") != null) {
-                return "put_back_option_who" + String.valueOf( map.get("put_back_option_who"));
-            } else if (map.containsKey("put_back_option_price") && map.get("put_back_option_price") != null) {
-                return "put_back_option_price" + String.valueOf( map.get("put_back_option_price"));
-            } else if (map.containsKey("put_back_option_deadline") && map.get("put_back_option_deadline") != null) {
-                return "put_back_option_deadline" + String.valueOf( map.get("put_back_option_deadline"));
+        // 1순위: 일정관련 정보들
+            if (mapVerify(map, "ipo_start_date") && mapVerify(map, "ipo_end_date")) {
+                this.commentList.add("공모청약일이 변경되었습니다. (" +
+                        String.valueOf( map.get("ipo_start_date")) + " ~ " + String.valueOf( map.get("ipo_end_date")) + ")");
             }
+            else if (mapVerify(map, "ipo_start_date")) {
+                this.commentList.add("공모청약 시작일이 변경되었습니다. (" + String.valueOf( map.get("ipo_start_date")) + ")");
+            }
+            else if (mapVerify(map, "ipo_end_date")) {
+                this.commentList.add("공모청약 종료일이 변경되었습니다. (" + String.valueOf( map.get("ipo_end_date")) + ")");
+            }
+
+            if (mapVerify(map, "ipo_refund_date")) {
+                this.commentList.add("대금 환불일이 변경되었습니다. (" + String.valueOf( map.get("ipo_refund_date")) + ")");
+            }
+            if (mapVerify(map, "ipo_debut_date")) {
+                this.commentList.add("상장일이 변경되었습니다. (" + String.valueOf( map.get("ipo_debut_date")) + ")");
+            }
+            if (mapVerify(map, "ipo_forecast_date")) {  // 수요예측 종료일의 이전 컬럼명.
+                this.commentList.add("수요예측 종료일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_date")) + ")");
+            }
+
+            if (mapVerify(map, "ipo_forecast_start") && mapVerify(map, "ipo_forecast_end")) {
+                this.commentList.add("수요예측일이 변경되었습니다. (" +
+                        String.valueOf( map.get("ipo_forecast_start")) + " ~ " + String.valueOf( map.get("ipo_forecast_end")) + ")");
+            }
+            else if (mapVerify(map, "ipo_forecast_start")) {
+                this.commentList.add("수요예측 시작일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_start")) + ")");
+            }
+            else if (mapVerify(map, "ipo_forecast_end")) {
+                this.commentList.add("수요예측 종료일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_end")) + ")");
+            }
+
+        // 2순위: 공모 관련 변동 정보
+            if (mapVerify(map, "lock_up_percent")) {
+                this.commentList.add( "의무보유확약 비율이 정정되었습니다. (" + String.valueOf( map.get("lock_up_percent"))+"%)");
+            }
+            if (mapVerify(map, "ipo_institutional_acceptance_rate")) {
+                this.commentList.add( "수요 예측 결과가 발표되었습니다. (기업경쟁률: " + String.valueOf( map.get("ipo_institutional_acceptance_rate")) + ")");
+            }
+            if (mapVerify(map, "ipo_price")) {
+                this.commentList.add( "공모가가 확정되었습니다. (" + String.valueOf( map.get("ipo_price")) + "원)");
+            }
+
+            if (mapVerify(map, "ipo_price_low") && mapVerify(map, "ipo_price_high")) {
+                this.commentList.add("공모가 밴드가 변경되었습니다. (" +
+                        String.valueOf( map.get("ipo_price_low")) + "원 ~ " + String.valueOf( map.get("ipo_price_high")) + "원)");
+            }
+            else if (mapVerify(map, "ipo_price_low")) {
+                this.commentList.add( "공모가 밴드가 변경되었습니다. (하단: " + String.valueOf( map.get("ipo_price_low"))+"원)");
+            }
+            else if (mapVerify(map, "ipo_price_high")) {
+                this.commentList.add( "공모가 밴드가 변경되었습니다. (상단: " + String.valueOf( map.get("ipo_price_high"))+"원)");
+            }
+
+            if (mapVerify(map, "ipo_min_deposit")) {
+                this.commentList.add( "최소 청약 증거금이 변경되었습니다. (" + String.valueOf( map.get("ipo_min_deposit"))+"원)");
+            }
+            if (mapVerify(map, "put_back_option_who")) {
+                this.commentList.add( "환매청구권 대상이 정정되었습니다. (" + String.valueOf( map.get("put_back_option_who")) +")");
+            }
+            if (mapVerify(map, "put_back_option_price")) {
+                this.commentList.add( "환매청구권 가격이 정정되었습니다. (" + String.valueOf( map.get("put_back_option_price"))+"원)");
+            }
+            if (mapVerify(map, "put_back_option_deadline")) {
+                this.commentList.add( "환매청구권 기한이 정정되었습니다. (" + String.valueOf( map.get("put_back_option_deadline"))+")");
+            }
+
+        // 3순위: 공모 관련 고정 정보
+            if (mapVerify(map, "profits")) {
+                mapValue = String.valueOf(map.get("profits"));
+                this.commentList.add("영업이익 값이 정정되었습니다. " + mapValue);
+            }
+            if (mapVerify(map, "sales")) {
+                mapValue = String.valueOf( map.get("sales"));
+                this.commentList.add("매출액 값이 정정되었습니다." + mapValue);
+            }
+            if (mapVerify(map, "number_of_ipo_shares")) {
+                this.commentList.add( "총 공모 주식수가 변경되었습니다. (" + String.valueOf( map.get("number_of_ipo_shares")) + "주)");
+            }
+            if (mapVerify(map, "par_value")) {
+                this.commentList.add( "액면가가 변경되었습니다. (" + String.valueOf( map.get("par_value")) + "원)");
+            }
+
+            // 가장 높은 우선순위에 있는 comment를 반환한다. ex) 공모가가 확정되었습니다. (1,200원) - 외 3건
+            if(!commentList.isEmpty()) {
+                int sizeOfList = commentList.size() - 1;  // 변경사항이 여러개일 경우 "외 n건"을 붙인다.
+                if (sizeOfList == 0) {
+                    returnComment = commentList.get(0);
+                } else {
+                    returnComment = commentList.get(0) + " - 외 " + String.valueOf(sizeOfList) + "건";
+                }
+            } else {
+                returnComment = "";
+            }
+        } else {
+            // comment 내용이 없을 경우 Blank String 을 반환한다.
+            returnComment = "";
         }
-        return "";
+
+        return returnComment;
     }
 
     private String commentUnderwriter(String commentJson) {
+        String returnComment;
         // underwriter(주간사) json을 해석하고 그 내용을 String으로 반환합니다.
         Map<String, Object> map = jsonToMap(commentJson);
         assert map != null;
         if(!map.isEmpty()) {
             if (map.containsKey("ind_can_max") && map.get("ind_can_max") != null) {
-                return "ind_can_max" + String.valueOf(map.get("ind_can_max"));
+                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
+                // return "ind_can_max" + String.valueOf(map.get("ind_can_max"));
             } else if (map.containsKey("ind_can_min") && map.get("ind_can_min") != null) {
-                return "ind_can_min" + String.valueOf(map.get("ind_can_min"));
+                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
+                // return "ind_can_min" + String.valueOf(map.get("ind_can_min"));
             } else if (map.containsKey("ind_total_max") && map.get("ind_total_max") != null) {
-                return "ind_total_max" + String.valueOf(map.get("ind_total_max"));
+                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
+                // return "ind_total_max" + String.valueOf(map.get("ind_total_max"));
             } else if (map.containsKey("ind_total_min") && map.get("ind_total_min") != null) {
-                return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
+                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
+                // return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
+            } else {
+                returnComment = "";
             }
+        } else {
+            returnComment = "";
         }
-        return "";
+        return returnComment;
     }
 
     private Map<String, Object> jsonToMap(String json) {

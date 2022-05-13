@@ -14,7 +14,7 @@ public class SwaggerConfiguration {
         return new OpenAPI()
                 .info(new Info().title("DBSG API")
                         .description("주식알리미 서비스에 사용되는 API 명세입니다.")
-                        .version("v0.0.3")
+                        .version("v0.0.6")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }
 }
