@@ -7,6 +7,8 @@
                stock_name,
                IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
                stock_exchange,
+               DATE_FORMAT(ipo_forecast_start, '%Y-%m-%d') ipo_forecast_start,
+               DATE_FORMAT(ipo_forecast_end, '%Y-%m-%d') ipo_forecast_end,
                DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
                DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
@@ -70,16 +72,37 @@
         WHERE 	ipo_index = #{ipoIndex}
     </select>
 
-    <select id="selectIpoScheduleList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoScheduleDto">
-        SELECT ipo_index,
+    <select id="selectIpoScheduleList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
+        SELECT ipo.ipo_index,
                stock_name,
-               date_format(ipo_forecast_start,'%Y-%m-%d') ipo_forecast_start,
-               date_format(ipo_forecast_end,'%Y-%m-%d') ipo_forecast_end,
-               date_format(ipo_start_date, '%Y-%m-%d') ipo_start_date,
-               date_format(ipo_end_date, '%Y-%m-%d') ipo_end_date,
-               date_format(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
-               date_format(ipo_debut_date, '%Y-%m-%d') ipo_debut_date
-        FROM ipo
+               IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
+               stock_exchange,
+               DATE_FORMAT(ipo_forecast_start, '%Y-%m-%d') ipo_forecast_start,
+               DATE_FORMAT(ipo_forecast_end, '%Y-%m-%d') ipo_forecast_end,
+               DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
+               DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
+               DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
+               DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
+               under.underwriter,
+               ct.recent_comment
+        FROM ipo LEFT OUTER JOIN
+             (
+                 SELECT ipo_comment.ipo_index, ipo_comment.regist_date, ipo_comment.comment_index AS recent_comment
+                 FROM ipo_comment
+                 WHERE (ipo_comment.ipo_index, ipo_comment.regist_date)
+                           IN(
+                           SELECT ipo_comment.ipo_index, MAX(ipo_comment.regist_date) FROM ipo_comment
+                           GROUP BY ipo_comment.ipo_index
+                       )
+             ) AS ct
+             ON ipo.ipo_index = ct.ipo_index LEFT OUTER JOIN
+             (SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name ORDER BY iu.ind_total_max DESC) AS underwriter
+              FROM(
+                      SELECT ipo_underwriter.ipo_index, ipo_underwriter.ind_total_max, IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name
+                      FROM underwriter_code AS uc1 JOIN underwriter_code AS uc2 ON uc1.parents_code = uc2.underwriter_code
+                                                   RIGHT OUTER JOIN ipo_underwriter ON uc1.underwriter_name LIKE ipo_underwriter.under_name) AS iu
+              GROUP BY iu.ipo_index) AS under
+             ON ipo.ipo_index = under.ipo_index
         WHERE
             (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR
@@ -87,6 +110,8 @@
             (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
+        ORDER BY ipo.ipo_start_date DESC
+        LIMIT 30;
     </select>
 
     <select id="selectIpoCommentList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">

@@ -10,7 +10,7 @@ import java.util.Map;
 public interface IpoMapper {
     List<IpoSummaryDto> selectIpos() throws Exception;
     IpoDto selectIpo(long ipoIndex) throws Exception;
-    List<IpoScheduleDto> selectIpoScheduleList(Map<String, String> map) throws Exception;
+    List<IpoSummaryDto> selectIpoScheduleList(Map<String, String> map) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
     IpoCommentDto selectIpoCommentIndex(long commentIndex) throws Exception;
     List<IpoCommentDto> selectIpoCommentList(Map<String, Integer> map) throws Exception;

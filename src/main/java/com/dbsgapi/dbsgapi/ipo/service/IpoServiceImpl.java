@@ -49,7 +49,7 @@ public class IpoServiceImpl implements IpoService{
     }
 
     @Override
-    public List<IpoScheduleDto> selectIpoScheduleList(String startDate, String endDate) throws Exception {
+    public List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         // map.put 전에 날짜형태가 맞는지 확인하고, 정상적으로 데이터가 입력되었는지 확인하는 Verify 로직 필요.
         map.put("startDate", startDate);

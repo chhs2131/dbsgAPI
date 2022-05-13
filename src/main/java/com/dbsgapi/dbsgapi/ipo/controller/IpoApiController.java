@@ -22,8 +22,16 @@ public class IpoApiController {
     private IpoService ipoService;
 
     @RequestMapping(value="", method = RequestMethod.GET)
-    @Operation(summary="IPO 목록을 반환", description="IPO 목록을 최근 등록된 순으로 반환합니다.")
-    public ResponseEntity<List<IpoSummaryDto>> getIpoList() throws Exception {
+    @Operation(summary="IPO 목록을 반환", description="IPO 목록을 최근 등록된 순으로 반환합니다. (추후 페이징 방식으로 변경 예정)")
+    public ResponseEntity<List<IpoSummaryDto>> getIpoList(
+            @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
+            @RequestParam(required=false, defaultValue="20") int num
+    ) throws Exception {
+        //
+        // ipo List
+        // 추후 페이징 방식으로 로직 작성 필요!!
+        //
+        //
         List<IpoSummaryDto> listIpo = ipoService.selectIpos();
         log.debug(listIpo.toString());
         return new ResponseEntity<>(listIpo, HttpStatus.OK);
@@ -50,16 +58,19 @@ public class IpoApiController {
 
     @RequestMapping(value="/schedule", method = RequestMethod.GET)
     @Operation(summary="지정 기간내에 일정을 확인", description="지정한 기간내에 일정을 모두 확인합니다.")
-    public ResponseEntity<List<IpoScheduleDto>> getScheduleList(
+    public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
             @Parameter(description="조회 시작일자") String startDate, @Parameter(description="조회 종료일자") String endDate) throws Exception {
-        List<IpoScheduleDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
+        List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
         log.debug(ipoData.toString());
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
     @RequestMapping(value="/comment", method = RequestMethod.GET)
     @Operation(summary="전체 IPO Comment 확인", description="코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
-    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@Parameter(description="페이지 번호") int page, @RequestParam(required=false, defaultValue="20") int num) throws Exception {
+    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(
+            @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
+            @RequestParam(required=false, defaultValue="20") int num
+    ) throws Exception {
         List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList(page, num);
         log.debug(ipoData.toString());
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
