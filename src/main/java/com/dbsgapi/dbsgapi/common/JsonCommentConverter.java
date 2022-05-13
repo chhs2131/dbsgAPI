@@ -102,19 +102,23 @@ public class JsonCommentConverter {
             if (mapVerify(map, "ipo_debut_date")) {
                 this.commentList.add("상장일이 변경되었습니다. (" + String.valueOf( map.get("ipo_debut_date")) + ")");
             }
-            if (mapVerify(map, "ipo_forecast_date")) {  // 수요예측 종료일의 이전 컬럼명.
-                this.commentList.add("수요예측 종료일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_date")) + ")");
-            }
 
             if (mapVerify(map, "ipo_forecast_start") && mapVerify(map, "ipo_forecast_end")) {
                 this.commentList.add("수요예측일이 변경되었습니다. (" +
                         String.valueOf( map.get("ipo_forecast_start")) + " ~ " + String.valueOf( map.get("ipo_forecast_end")) + ")");
+            }
+            else if (mapVerify(map, "ipo_forecast_start") && mapVerify(map, "ipo_forecast_date")) {
+                this.commentList.add("수요예측일이 변경되었습니다. (" +
+                        String.valueOf( map.get("ipo_forecast_start")) + " ~ " + String.valueOf( map.get("ipo_forecast_date")) + ")");
             }
             else if (mapVerify(map, "ipo_forecast_start")) {
                 this.commentList.add("수요예측 시작일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_start")) + ")");
             }
             else if (mapVerify(map, "ipo_forecast_end")) {
                 this.commentList.add("수요예측 종료일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_end")) + ")");
+            }
+            else if (mapVerify(map, "ipo_forecast_date")) {  // 수요예측 종료일의 이전 컬럼명.
+                this.commentList.add("수요예측 종료일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_date")) + ")");
             }
 
         // 2순위: 공모 관련 변동 정보
