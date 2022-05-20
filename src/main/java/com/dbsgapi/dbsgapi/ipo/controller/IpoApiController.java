@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -27,6 +28,7 @@ public class IpoApiController {
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @RequestParam(required=false, defaultValue="20") int num
     ) throws Exception {
+        //
         //
         // ipo List
         // 추후 페이징 방식으로 로직 작성 필요!!
@@ -66,20 +68,29 @@ public class IpoApiController {
     }
 
     @RequestMapping(value="/comment", method = RequestMethod.GET)
-    @Operation(summary="전체 IPO Comment 확인", description="코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
+    @Operation(summary="IPO Comment 조회", description="코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(
+            @Parameter(description="특정 ipoIndex만 조회") @RequestParam(required=false, defaultValue="0") int ipoIndex,
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @RequestParam(required=false, defaultValue="20") int num
     ) throws Exception {
-        List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList(page, num);
-        log.debug(ipoData.toString());
+        List<IpoCommentDto> ipoData = new ArrayList<IpoCommentDto>();
+        if(ipoIndex == 0) {  // 전체 조회
+            ipoData = ipoService.selectIpoCommentList(page, num);
+            log.debug(ipoData.toString());
+        }else if(ipoIndex > 0) {  // 특정 종목만 조회
+            ipoData = ipoService.selectIpoComment(ipoIndex);
+            log.debug(ipoData.toString());
+        } else {
+            throw new IllegalArgumentException();
+        }
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/comment/{ipoIndex}", method = RequestMethod.GET)
-    @Operation(summary="단일 IPO Comment 확인", description="해당 종목에 코멘트(히스토리)를 조회합니다.")
-    public ResponseEntity<List<IpoCommentDto>> getIpoComment(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
-        List<IpoCommentDto> ipoData = ipoService.selectIpoComment(ipoIndex);
+    @RequestMapping(value="/comment/{commentIndex}", method = RequestMethod.GET)
+    @Operation(summary="특정 Comment 확인", description="단일 comment를 조회합니다. commentIndex를 통해 조회합니다. (ipoIndex 즉, 종목번호 아님)")
+    public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) throws Exception {
+        IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
         log.debug(ipoData.toString());
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }

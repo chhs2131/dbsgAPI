@@ -55,6 +55,10 @@
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
 
+               ipo_cancel_bool,
+               DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
+               ipo_cancel_reason,
+
                lock_up_percent,
                ipo_institutional_acceptance_rate,
                ipo_price,
@@ -83,6 +87,8 @@
                DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
+               ipo_cancel_bool,
+               DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
                under.underwriter,
                ct.recent_comment
         FROM ipo LEFT OUTER JOIN
@@ -152,9 +158,7 @@
                log_type,
                change_log_json
         FROM 	ipo_comment
-        WHERE 	comment_index = #{commentIndex} and enabled not like 'N'
-        ORDER BY regist_date DESC
-        LIMIT   1;
+        WHERE 	comment_index = #{commentIndex} and enabled not like 'N';
     </select>
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">

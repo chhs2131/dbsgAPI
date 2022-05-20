@@ -2,6 +2,7 @@ package com.dbsgapi.dbsgapi.ipo.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
@@ -22,6 +23,10 @@ public class IpoDto {
     private String ipoEndDate;
     private String ipoRefundDate;
     private String ipoDebutDate;
+
+    private String ipoCancelBool;
+    private String ipoCancelDate;
+    private String ipoCancelReason;
 
     private long numberOfIpoShares;
     private double lockUpPercent;

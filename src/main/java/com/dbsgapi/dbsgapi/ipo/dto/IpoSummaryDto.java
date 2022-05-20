@@ -30,6 +30,11 @@ public class IpoSummaryDto {
     @Schema(description ="시장 상장일", example = "2022-01-27")
     private String ipoDebutDate;
 
+    @Schema(description ="철회 여부", example = "Y")
+    private String ipoCancelBool;
+    @Schema(description ="철회 신고서 발행일", example = "2022-01-27")
+    private String ipoCancelDate;
+
     @Schema(description ="주간사", example = "KB증권,대신증권,신한금융,미래에셋증권,신영증권,하나금융,하이투자")
     private String underwriter;
     @Schema(description ="태그", example = "")
