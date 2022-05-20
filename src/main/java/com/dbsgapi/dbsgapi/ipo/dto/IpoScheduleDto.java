@@ -4,8 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description ="공모주의 일정관련 정보만 제공합니다.")
+@Schema(description ="[deprecated] 공모주의 일정관련 정보만 제공합니다.")
 public class IpoScheduleDto {
+    // deprecated 2022-05-14 ipoSummaryDto를 공동으로 사용하는 것으로 대체됨.
     private long ipoIndex;
     private String stockName;
     @Schema(description ="수요예측 시작일")
