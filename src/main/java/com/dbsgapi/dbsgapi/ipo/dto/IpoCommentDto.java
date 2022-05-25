@@ -2,18 +2,27 @@ package com.dbsgapi.dbsgapi.ipo.dto;
 
 import com.dbsgapi.dbsgapi.common.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class IpoCommentDto {
+    @Schema(example = "123")
     private long commentIndex;
+    @Schema(example = "72")
     private long ipoIndex;
     private String writer;
+    @Schema(description ="종목명", example = "LG에너지솔루션")
     private String stockName;
+    @Schema(description ="유형구분", example = "공모주", allowableValues = {"공모주","실권주","스팩주"})
+    private String stockKinds;
+    @Schema(description ="내용(우선순위 상위 1개만)", example = "----가 변경되었습니다. - 외 3건")
     private String comment;
+    @Schema(description ="내용(전체)", example = "List형식. [----가 변경되었습니다. -----가 변경되었습니다. 상장일이 변경되었습니다.]")
     private List<String> commentList;
+    @Schema(description ="등록일", example = "2022-01-01")
     private String registDate;
 
     private String logType;

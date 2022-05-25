@@ -3,6 +3,7 @@ package com.dbsgapi.dbsgapi.ipo.controller;
 import com.dbsgapi.dbsgapi.ipo.dto.IpoDto;
 import com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.ipo.service.IpoService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,12 +45,14 @@ public class IpoController {
 
         return mv;
     }
+    /*
     @RequestMapping("/ipo/ipoList.ajax")
     @ResponseBody
-    public List<IpoSummaryDto> ipoListAjax() throws Exception {
-        List<IpoSummaryDto> list = ipoService.selectIpos();
+    public List<IpoSummaryDto> ipoListAjax(int page = 1, int num = 20, String kind = "all") throws Exception {
+        List<IpoSummaryDto> list = ipoService.selectIpos(String kind, int page, int num);
         return list;
     }
+     */
 
     @RequestMapping("/ipo/ipoEditer.do")
     public ModelAndView openIpoEditer(@RequestParam int ipoIndex) throws Exception {

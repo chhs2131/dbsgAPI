@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dbsgapi.dbsgapi.ipo.mapper.IpoMapper">
-    <select id="selectIpos" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
+    <select id="selectIpos" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
         SELECT ipo.ipo_index,
                stock_name,
                IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
@@ -14,6 +14,10 @@
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
                under.underwriter,
+
+               ipo_cancel_bool,
+               DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
+
                ct.recent_comment
         FROM ipo LEFT OUTER JOIN
              (
@@ -34,7 +38,7 @@
               GROUP BY iu.ipo_index) AS under
              ON ipo.ipo_index = under.ipo_index
         ORDER BY ipo.ipo_start_date DESC
-        LIMIT 300;
+        LIMIT #{limit} OFFSET #{offset};
     </select>
 
     <select id="selectIpo" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoDto">
@@ -55,6 +59,10 @@
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
 
+               ipo_cancel_bool,
+               DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
+               ipo_cancel_reason,
+
                lock_up_percent,
                ipo_institutional_acceptance_rate,
                ipo_price,
@@ -67,7 +75,8 @@
                put_back_option_deadline,
                tag,
                DATE_FORMAT(regist_date, '%Y-%m-%d %T') regist_date,
-               DATE_FORMAT(update_date, '%Y-%m-%d %T') update_date
+               DATE_FORMAT(update_date, '%Y-%m-%d %T') update_date,
+               DATE_FORMAT(terminate_date, '%Y-%m-%d %T') terminate_date
         FROM 	ipo LEFT OUTER JOIN sector_code ON ipo.sector = sector_code.sector_code
         WHERE 	ipo_index = #{ipoIndex}
     </select>
@@ -83,6 +92,8 @@
                DATE_FORMAT(ipo_end_date, '%Y-%m-%d') ipo_end_date,
                DATE_FORMAT(ipo_refund_date, '%Y-%m-%d') ipo_refund_date,
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
+               ipo_cancel_bool,
+               DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
                under.underwriter,
                ct.recent_comment
         FROM ipo LEFT OUTER JOIN
@@ -118,6 +129,7 @@
         SELECT ipo_comment.comment_index,
                ipo_comment.ipo_index,
                ipo.stock_name,
+               IF(INSTR(ipo.stock_name,'스팩')=0, ipo.stock_kinds, '스팩주') AS stock_kinds,
                ipo_comment.comment,
                ipo_comment.writer,
                date_format(ipo_comment.regist_date, '%Y-%m-%d %T') regist_date,
@@ -152,9 +164,7 @@
                log_type,
                change_log_json
         FROM 	ipo_comment
-        WHERE 	comment_index = #{commentIndex} and enabled not like 'N'
-        ORDER BY regist_date DESC
-        LIMIT   1;
+        WHERE 	comment_index = #{commentIndex} and enabled not like 'N';
     </select>
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
