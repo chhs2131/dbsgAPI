@@ -26,15 +26,10 @@ public class IpoApiController {
     @Operation(summary="IPO 목록을 반환", description="IPO 목록을 최근 등록된 순으로 반환합니다. (추후 페이징 방식으로 변경 예정)")
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
-            @RequestParam(required=false, defaultValue="20") int num
+            @Parameter(description="페이지당 반환갯수") @RequestParam(required=false, defaultValue="100") int num,
+            @Parameter(description="종류") @RequestParam(required=false, defaultValue="all") String kind
     ) throws Exception {
-        //
-        //
-        // ipo List
-        // 추후 페이징 방식으로 로직 작성 필요!!
-        //
-        //
-        List<IpoSummaryDto> listIpo = ipoService.selectIpos();
+        List<IpoSummaryDto> listIpo = ipoService.selectIpos(kind, page, num);
         log.debug(listIpo.toString());
         return new ResponseEntity<>(listIpo, HttpStatus.OK);
     }

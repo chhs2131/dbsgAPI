@@ -17,8 +17,16 @@ public class IpoServiceImpl implements IpoService{
     private IpoMapper ipoMapper;
 
     @Override
-    public List<IpoSummaryDto> selectIpos() throws Exception {
-        List<IpoSummaryDto> ipos = ipoMapper.selectIpos();
+    public List<IpoSummaryDto> selectIpos(String kind, int page, int num) throws Exception {
+        // todo ipolist kind 구분하는 구문 추가
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map.put("limit", num);
+        map.put("offset", page * num - num);
+
+        // ipo list 조회 로직
+        List<IpoSummaryDto> ipos = ipoMapper.selectIpos(map);
+
+        // recent_comment 조회 로직
         Iterator<IpoSummaryDto> iterator = ipos.iterator();
         while(iterator.hasNext()) {
             IpoSummaryDto ipo = iterator.next();
@@ -71,7 +79,7 @@ public class IpoServiceImpl implements IpoService{
     public List<IpoCommentDto> selectIpoCommentList(int page, int num) throws Exception {
         Map<String, Integer> map = new HashMap<String, Integer>();
         // map.put 전에 각 데이터가 0이 아닌지 확인하는 Verify 로직 필요.
-        map.put("limit", page * num);
+        map.put("limit", num);
         map.put("offset", page * num - num);
         return ipoMapper.selectIpoCommentList(map);
     }
