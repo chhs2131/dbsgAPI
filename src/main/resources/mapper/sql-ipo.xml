@@ -48,10 +48,13 @@
                IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
                stock_code,
                dart_code,
+               ipo.sector AS sector_code,
                sector_code.sector_desc AS sector,
                profits,
                sales,
 
+               DATE_FORMAT(ex_start_date, '%Y-%m-%d') ex_start_date,
+               DATE_FORMAT(ex_end_date, '%Y-%m-%d') ex_end_date,
                DATE_FORMAT(ipo_forecast_start, '%Y-%m-%d') ipo_forecast_start,
                DATE_FORMAT(ipo_forecast_end, '%Y-%m-%d') ipo_forecast_end,
                DATE_FORMAT(ipo_start_date, '%Y-%m-%d') ipo_start_date,
@@ -63,6 +66,7 @@
                DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
                ipo_cancel_reason,
 
+               purpose_of_funds,
                lock_up_percent,
                ipo_institutional_acceptance_rate,
                ipo_price,
