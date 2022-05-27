@@ -15,11 +15,14 @@ public class IpoDto {
     private String stockKinds;
     private String stockCode;
     private String dartCode;
+    private String sectorCode;
     private String sector;
     private long profits;
     private long sales;
 
     // 일정 정보
+    private String exStartDate;
+    private String exEndDate;
     private String ipoForecastStart;
     private String ipoForecastEnd;
     private String ipoStartDate;
@@ -32,6 +35,7 @@ public class IpoDto {
     private String ipoCancelReason;
 
     // 공모 정보
+    private String purposeOfFunds;
     private long numberOfIpoShares;
     private double lockUpPercent;
     private double ipoInstitutionalAcceptanceRate;
@@ -42,7 +46,6 @@ public class IpoDto {
     private String putBackOptionWho;
     private int putBackOptionPrice;
     private String putBackOptionDeadline;
-
 
     // private String underwriter;
     private String tag;
@@ -60,4 +63,6 @@ public class IpoDto {
 
     @JsonIgnore
     public String getTerminateDate() {return this.terminateDate;}
+    @JsonIgnore
+    public String getSectorCode() {return this.sectorCode;}
 }
