@@ -17,38 +17,15 @@ public class IpoServiceImpl implements IpoService{
     private IpoMapper ipoMapper;
 
     @Override
-    public List<IpoSummaryDto> selectIpos(String kind, int page, int num) throws Exception {
-        // todo ipolist kind 구분하는 구문 추가
-        Map<String, Integer> map = new HashMap<String, Integer>();
+    public List<IpoSummaryDto> selectIpos(String queryString, int page, int num) throws Exception {
+        // todo ipolist keyword 구분하는 구문 추가
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("limit", num);
         map.put("offset", page * num - num);
+        map.put("queryString", queryString);
 
         // ipo list 조회 로직
-        List<IpoSummaryDto> ipos = ipoMapper.selectIpos(map);
-
-        // recent_comment 조회 로직
-        Iterator<IpoSummaryDto> iterator = ipos.iterator();
-        while(iterator.hasNext()) {
-            IpoSummaryDto ipo = iterator.next();
-            String commentIndex = ipo.getRecentComment();
-
-            if(commentIndex != null) {
-                IpoCommentDto ipoComment = selectIpoCommentIndex(Long.parseLong(commentIndex));
-                if(ipoComment != null) {
-                    if (ipoComment.getComment() != null) {
-                        ipo.setRecentComment(ipoComment.getComment());
-                    } else {
-                        JsonCommentConverter jcc = new JsonCommentConverter();  // json인 경우 해석해서 대입
-                        jcc.setCommentType(ipoComment.getLogType());
-                        jcc.setCommentJson(ipoComment.getChangeLogJson());
-                        ipo.setRecentComment(jcc.toString());
-                    }
-                    // 아무것도 없는 예외처리도 해야할까요
-                }
-            }
-        }
-
-        return ipos;
+        return ipoMapper.selectIpos(map);
     }
 
     @Override

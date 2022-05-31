@@ -1,6 +1,7 @@
 package com.dbsgapi.dbsgapi.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public class JsonCommentConverter {
     private String commentType;
     private String commentJson;
@@ -69,7 +71,7 @@ public class JsonCommentConverter {
             return false;
         } else if (map.get(key) == null) {
             return false;
-        } else if (Objects.equals(String.valueOf(map.get(key)), "-1")) {  // 예외처리 제대로 동작하게 수정 필요. [의무보유확약 비율이 정정되었습니다. (-1.0%), 수요 예측 결과가 발표되었습니다. (기업경쟁률: -1.0), 공모가가 확정되었습니다. (17200원)]
+        } else if (Objects.equals(String.valueOf(map.get(key)), "-1")) {
             return false;
         } else if (Objects.equals(String.valueOf(map.get(key)), "-1.0")) {
             return false;
@@ -121,6 +123,17 @@ public class JsonCommentConverter {
                 this.commentList.add("수요예측 종료일이 변경되었습니다. (" + String.valueOf( map.get("ipo_forecast_date")) + ")");
             }
 
+            if (mapVerify(map, "ex_start_date") && mapVerify(map, "ex_end_date")) {
+                this.commentList.add("구주주 청약일이 변경되었습니다. (" +
+                        String.valueOf( map.get("ex_start_date")) + " ~ " + String.valueOf( map.get("ex_end_date")) + ")");
+            }
+            else if (mapVerify(map, "ex_start_date")) {
+                this.commentList.add("구주주 청약 시작일이 변경되었습니다. (" + String.valueOf( map.get("ex_start_date")) + ")");
+            }
+            else if (mapVerify(map, "ex_end_date")) {
+                this.commentList.add("구주주 청약 종료일이 변경되었습니다. (" + String.valueOf( map.get("ex_end_date")) + ")");
+            }
+
         // 2순위: 공모 관련 변동 정보
             if (mapVerify(map, "lock_up_percent")) {
                 this.commentList.add( "의무보유확약 비율이 정정되었습니다. (" + String.valueOf( map.get("lock_up_percent"))+"%)");
@@ -170,6 +183,9 @@ public class JsonCommentConverter {
             }
             if (mapVerify(map, "par_value")) {
                 this.commentList.add( "액면가가 변경되었습니다. (" + String.valueOf( map.get("par_value")) + "원)");
+            }
+            if (mapVerify(map, "purpose_of_funds")) {
+                this.commentList.add( "자금의 사용목적이 변경되었습니다. (" + String.valueOf( map.get("purpose_of_funds")) + ")");
             }
 
             // 가장 높은 우선순위에 있는 comment를 반환한다. ex) 공모가가 확정되었습니다. (1,200원) - 외 3건

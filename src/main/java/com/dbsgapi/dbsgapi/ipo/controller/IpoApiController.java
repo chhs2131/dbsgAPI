@@ -27,9 +27,10 @@ public class IpoApiController {
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @Parameter(description="페이지당 반환갯수") @RequestParam(required=false, defaultValue="100") int num,
-            @Parameter(description="종류") @RequestParam(required=false, defaultValue="all") String kind
+            @Parameter(description="검색 조건문 (임시) (ex: stock_name LIKE '%에스%')") @RequestParam(required=false, defaultValue="1=1") String queryString
     ) throws Exception {
-        List<IpoSummaryDto> listIpo = ipoService.selectIpos(kind, page, num);
+        // todo 검색조건문(queryString) 현재 임시 사용중으로 client가 query형태를 알지 못해도 사용할 수 있도록 수정 필요.
+        List<IpoSummaryDto> listIpo = ipoService.selectIpos(queryString, page, num);
         log.debug(listIpo.toString());
         return new ResponseEntity<>(listIpo, HttpStatus.OK);
     }

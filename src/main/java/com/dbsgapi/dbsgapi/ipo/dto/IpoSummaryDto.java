@@ -1,6 +1,8 @@
 package com.dbsgapi.dbsgapi.ipo.dto;
 
+import com.dbsgapi.dbsgapi.common.JsonCommentConverter;
 import com.dbsgapi.dbsgapi.ipo.service.IpoService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +41,47 @@ public class IpoSummaryDto {
     private String underwriter;
     @Schema(description ="태그", example = "")
     private String tag;
+
+    // comment 관련 정보들
+    private int recentCommentIndex;
+    private String logType;
+    private String comment;
+    private String changeLogJson;
     @Schema(description ="최근 발행된 코멘트", example = "수요예측이 끝났습니다! 결과를 확인해보세요.")
     private String recentComment;
 
-    public String getRecentComment() {
-        return this.recentComment;
+    public String getRecentComment() { return this.recentComment; }
+    public void setComment(String comment) {
+        this.comment = comment;
+        this.recentComment = comment;
+    }
+    public void setChangeLogJson(String changeLogJson) {
+        // changeLogJson이 comment보다 후순위로 값을 가져옴. (아마 mybatis에서 가져오는 순서대로인것 같음)
+        this.changeLogJson = changeLogJson;
+
+        // changeLogJson을 체크하여 null이 아닌경우 comment를 갱신함.
+        if(changeLogJson != null && !changeLogJson.isEmpty()) {
+            JsonCommentConverter jcc = new JsonCommentConverter();
+            jcc.setCommentType(this.logType);
+            jcc.setCommentJson(this.changeLogJson);
+            this.recentComment = jcc.getRecentComment();
+        }
+    }
+
+    @JsonIgnore
+    public int getRecentCommentIndex() {  // 외부에 값을 표출하진 않음 jsonIgnore
+        return recentCommentIndex;
+    }
+    @JsonIgnore
+    public String getLogType() {  // 외부에 값을 표출하진 않음 jsonIgnore
+        return logType;
+    }
+    @JsonIgnore
+    public String getComment() {  // 외부에 값을 표출하진 않음 jsonIgnore
+        return comment;
+    }
+    @JsonIgnore
+    public String getChangeLogJson() {  // 외부에 값을 표출하진 않음 jsonIgnore
+        return changeLogJson;
     }
 }

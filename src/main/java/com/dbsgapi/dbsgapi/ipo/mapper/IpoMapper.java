@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Mapper
 public interface IpoMapper {
-    List<IpoSummaryDto> selectIpos(Map<String, Integer> map) throws Exception;
+    List<IpoSummaryDto> selectIpos(Map<String, Object> map) throws Exception;
     IpoDto selectIpo(long ipoIndex) throws Exception;
     List<IpoSummaryDto> selectIpoScheduleList(Map<String, String> map) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
