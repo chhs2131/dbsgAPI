@@ -5,7 +5,7 @@ import com.dbsgapi.dbsgapi.ipo.dto.*;
 import java.util.List;
 
 public interface IpoService {
-    List<IpoSummaryDto> selectIpos(String kind, int page, int num) throws Exception;
+    List<IpoSummaryDto> selectIpos(String queryString, int page, int num) throws Exception;
     IpoDto selectIpo(long ipoIndex) throws Exception;
     List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;

@@ -1,8 +1,6 @@
 # 공모주토피아 백엔드 서버 개발
 
 ### 백엔드 개요
-
-- 기준 서비스 인원 : 10만명
 - 개발환경
     - Window 10
     - IntelliJ 2021.2.3 (Ultimate Edition) (SpringToolSuite4)

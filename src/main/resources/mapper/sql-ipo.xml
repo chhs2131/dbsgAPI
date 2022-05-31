@@ -18,25 +18,46 @@
                ipo_cancel_bool,
                DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
 
-               ct.recent_comment
+               ct.recent_comment_index,
+               ct.log_type,
+               ct.comment,
+               ct.change_log_json
         FROM ipo LEFT OUTER JOIN
              (
-                 SELECT ipo_comment.ipo_index, ipo_comment.regist_date, ipo_comment.comment_index AS recent_comment
+                 SELECT
+                     ipo_comment.ipo_index,
+                     ipo_comment.regist_date,
+                     ipo_comment.comment_index as recent_comment_index,
+                     ipo_comment.log_type,
+                     ipo_comment.comment,
+                     ipo_comment.change_log_json
                  FROM ipo_comment
-                 WHERE (ipo_comment.ipo_index, ipo_comment.regist_date)
+                 WHERE (ipo_comment.ipo_index, ipo_comment.regist_date, ipo_comment.enabled)
                            IN(
-                           SELECT ipo_comment.ipo_index, MAX(ipo_comment.regist_date) FROM ipo_comment
+                           SELECT ipo_comment.ipo_index, MAX(ipo_comment.regist_date), 'Y'
+                           FROM ipo_comment
                            GROUP BY ipo_comment.ipo_index
                        )
              ) AS ct
              ON ipo.ipo_index = ct.ipo_index LEFT OUTER JOIN
-             (SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name ORDER BY iu.ind_total_max DESC) AS underwriter
-              FROM(
-                      SELECT ipo_underwriter.ipo_index, ipo_underwriter.ind_total_max, IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name
-                      FROM underwriter_code AS uc1 JOIN underwriter_code AS uc2 ON uc1.parents_code = uc2.underwriter_code
-                                                   RIGHT OUTER JOIN ipo_underwriter ON uc1.underwriter_name LIKE ipo_underwriter.under_name) AS iu
-              GROUP BY iu.ipo_index) AS under
+             (
+                 SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name ORDER BY iu.ind_total_max DESC) AS underwriter
+                 FROM(
+                         SELECT
+                             ipo_underwriter.ipo_index,
+                             ipo_underwriter.ind_total_max,
+                             IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name
+                         FROM
+                             underwriter_code AS uc1
+                                 JOIN underwriter_code AS uc2
+                                      ON uc1.parents_code = uc2.underwriter_code
+                                 RIGHT OUTER JOIN ipo_underwriter
+                                                  ON uc1.underwriter_name LIKE ipo_underwriter.under_name
+                     ) AS iu
+                 GROUP BY iu.ipo_index
+             ) AS under
              ON ipo.ipo_index = under.ipo_index
+        WHERE ${queryString}
         ORDER BY ipo.ipo_start_date DESC
         LIMIT #{limit} OFFSET #{offset};
     </select>
