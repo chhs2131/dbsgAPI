@@ -172,11 +172,11 @@ public class JsonCommentConverter {
         // 3순위: 공모 관련 고정 정보
             if (mapVerify(map, "profits")) {
                 mapValue = String.valueOf(map.get("profits"));
-                this.commentList.add("영업이익 값이 정정되었습니다. " + mapValue);
+                this.commentList.add("영업이익 금액이 정정되었습니다. (" + mapValue +"원)");
             }
             if (mapVerify(map, "sales")) {
                 mapValue = String.valueOf( map.get("sales"));
-                this.commentList.add("매출액 값이 정정되었습니다." + mapValue);
+                this.commentList.add("매출액 금액이 정정되었습니다. (" + mapValue + "원)");
             }
             if (mapVerify(map, "number_of_ipo_shares")) {
                 this.commentList.add( "총 공모 주식수가 변경되었습니다. (" + String.valueOf( map.get("number_of_ipo_shares")) + "주)");
