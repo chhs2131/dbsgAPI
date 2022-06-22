@@ -36,7 +36,7 @@
              ) AS under
              ON ipo.ipo_index = under.ipo_index
         WHERE ${queryString}
-        ORDER BY ipo.ipo_start_date DESC
+        ORDER BY (terminate_date IS NULL) DESC, terminate_date DESC, ipo.regist_date DESC
         LIMIT #{limit} OFFSET #{offset};
     </select>
 
@@ -121,7 +121,7 @@
             (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
-        ORDER BY ipo.ipo_start_date DESC
+        ORDER BY (terminate_date IS NULL) DESC, terminate_date DESC, ipo.regist_date DESC
         LIMIT 30;
     </select>
 
@@ -175,6 +175,8 @@
             ipo_underwriter.ind_total_min,
             ipo_underwriter.ind_total_max,
             ipo_underwriter.ind_total_min,
+            ipo_underwriter.sub_min_quan,
+            ipo_underwriter.sub_deposit_percent,
             DATE_FORMAT(ipo_underwriter.update_date, '%Y-%m-%d') update_date
         FROM underwriter_code AS uc1 JOIN underwriter_code AS uc2 ON uc1.parents_code = uc2.underwriter_code
                                      RIGHT OUTER JOIN ipo_underwriter ON uc1.underwriter_name LIKE ipo_underwriter.under_name

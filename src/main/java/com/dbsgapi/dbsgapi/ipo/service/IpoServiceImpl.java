@@ -44,7 +44,12 @@ public class IpoServiceImpl implements IpoService{
 
     @Override
     public List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception {
-        return ipoMapper.selectIpoComment(ipoIndex);
+        // 쿼리문 요청, 조회
+        List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoComment(ipoIndex);
+        // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
+        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getComment()));
+
+        return ipoCommentList;
     }
 
     @Override
@@ -54,11 +59,18 @@ public class IpoServiceImpl implements IpoService{
 
     @Override
     public List<IpoCommentDto> selectIpoCommentList(int page, int num) throws Exception {
-        Map<String, Integer> map = new HashMap<String, Integer>();
         // map.put 전에 각 데이터가 0이 아닌지 확인하는 Verify 로직 필요.
+        Map<String, Integer> map = new HashMap<String, Integer>();
         map.put("limit", num);
         map.put("offset", page * num - num);
-        return ipoMapper.selectIpoCommentList(map);
+
+        // 쿼리문 요청, 조회
+        List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoCommentList(map);
+
+        // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
+        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getComment()));
+
+        return ipoCommentList;
     }
 
     @Override

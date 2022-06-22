@@ -21,6 +21,10 @@ public class IpoUnderwriterDto {
     private long indCanMax;
     @Schema(description ="1인 청약가능수량 최소", example = "5500")
     private long indCanMin;
+    @Schema(description ="일반청약자 최소 청약수량 (균등)", example = "10")
+    private int subMinQuan;
+    @Schema(description ="일반청약자 증거금률", example = "50")
+    private float subDepositPercent;
 
     /*
     //depreacted. 20220309
