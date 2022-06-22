@@ -5,7 +5,7 @@
     <select id="selectIpos" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
         SELECT ipo.ipo_index,
                stock_name,
-               IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
+               IF(INSTR(stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, stock_kinds, '스팩주') AS stock_kinds,
                stock_exchange,
                DATE_FORMAT(ipo_forecast_start, '%Y-%m-%d') ipo_forecast_start,
                DATE_FORMAT(ipo_forecast_end, '%Y-%m-%d') ipo_forecast_end,
@@ -16,43 +16,21 @@
                under.underwriter,
 
                ipo_cancel_bool,
-               DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
-
-               ct.recent_comment_index,
-               ct.log_type,
-               ct.comment,
-               ct.change_log_json
+               DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date
         FROM ipo LEFT OUTER JOIN
-             (
-                 SELECT
-                     ipo_comment.ipo_index,
-                     ipo_comment.regist_date,
-                     ipo_comment.comment_index as recent_comment_index,
-                     ipo_comment.log_type,
-                     ipo_comment.comment,
-                     ipo_comment.change_log_json
-                 FROM ipo_comment
-                 WHERE (ipo_comment.ipo_index, ipo_comment.regist_date, ipo_comment.enabled)
-                           IN(
-                           SELECT ipo_comment.ipo_index, MAX(ipo_comment.regist_date), 'Y'
-                           FROM ipo_comment
-                           GROUP BY ipo_comment.ipo_index
-                       )
-             ) AS ct
-             ON ipo.ipo_index = ct.ipo_index LEFT OUTER JOIN
              (
                  SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name ORDER BY iu.ind_total_max DESC) AS underwriter
                  FROM(
-                         SELECT
-                             ipo_underwriter.ipo_index,
-                             ipo_underwriter.ind_total_max,
-                             IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name
+                         SELECT DISTINCT
+                                         ipo_underwriter.ipo_index,
+                                         ipo_underwriter.ind_total_max,
+                                         IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name
                          FROM
                              underwriter_code AS uc1
                                  JOIN underwriter_code AS uc2
-                                      ON uc1.parents_code = uc2.underwriter_code
+                                     ON uc1.parents_code = uc2.underwriter_code
                                  RIGHT OUTER JOIN ipo_underwriter
-                                                  ON uc1.underwriter_name LIKE ipo_underwriter.under_name
+                                     ON ipo_underwriter.under_name LIKE CONCAT('%', uc1.underwriter_name, '%')
                      ) AS iu
                  GROUP BY iu.ipo_index
              ) AS under
@@ -66,7 +44,7 @@
         SELECT ipo_index,
                stock_name,
                stock_exchange,
-               IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
+               IF(INSTR(stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, stock_kinds, '스팩주') AS stock_kinds,
                stock_code,
                dart_code,
                ipo.sector AS sector_code,
@@ -99,9 +77,9 @@
                put_back_option_price,
                put_back_option_deadline,
                tag,
-               DATE_FORMAT(regist_date, '%Y-%m-%d %T') regist_date,
-               DATE_FORMAT(update_date, '%Y-%m-%d %T') update_date,
-               DATE_FORMAT(terminate_date, '%Y-%m-%d %T') terminate_date
+               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
+               DATE_FORMAT(update_date, '%Y-%m-%d') update_date,
+               DATE_FORMAT(terminate_date, '%Y-%m-%d') terminate_date
         FROM 	ipo LEFT OUTER JOIN sector_code ON ipo.sector = sector_code.sector_code
         WHERE 	ipo_index = #{ipoIndex}
     </select>
@@ -109,7 +87,7 @@
     <select id="selectIpoScheduleList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
         SELECT ipo.ipo_index,
                stock_name,
-               IF(INSTR(stock_name,'스팩')=0, stock_kinds, '스팩주') AS stock_kinds,
+               IF(INSTR(stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, stock_kinds, '스팩주') AS stock_kinds,
                stock_exchange,
                DATE_FORMAT(ipo_forecast_start, '%Y-%m-%d') ipo_forecast_start,
                DATE_FORMAT(ipo_forecast_end, '%Y-%m-%d') ipo_forecast_end,
@@ -119,24 +97,21 @@
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
                ipo_cancel_bool,
                DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date,
-               under.underwriter,
-               ct.recent_comment
+               under.underwriter
         FROM ipo LEFT OUTER JOIN
-             (
-                 SELECT ipo_comment.ipo_index, ipo_comment.regist_date, ipo_comment.comment_index AS recent_comment
-                 FROM ipo_comment
-                 WHERE (ipo_comment.ipo_index, ipo_comment.regist_date)
-                           IN(
-                           SELECT ipo_comment.ipo_index, MAX(ipo_comment.regist_date) FROM ipo_comment
-                           GROUP BY ipo_comment.ipo_index
-                       )
-             ) AS ct
-             ON ipo.ipo_index = ct.ipo_index LEFT OUTER JOIN
              (SELECT iu.ipo_index, GROUP_CONCAT(iu.under_name ORDER BY iu.ind_total_max DESC) AS underwriter
               FROM(
-                      SELECT ipo_underwriter.ipo_index, ipo_underwriter.ind_total_max, IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name
-                      FROM underwriter_code AS uc1 JOIN underwriter_code AS uc2 ON uc1.parents_code = uc2.underwriter_code
-                                                   RIGHT OUTER JOIN ipo_underwriter ON uc1.underwriter_name LIKE ipo_underwriter.under_name) AS iu
+                      SELECT DISTINCT
+                          ipo_underwriter.ipo_index,
+                          ipo_underwriter.ind_total_max,
+                          IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name
+                      FROM
+                          underwriter_code AS uc1
+                              JOIN underwriter_code AS uc2
+                                   ON uc1.parents_code = uc2.underwriter_code
+                              RIGHT OUTER JOIN ipo_underwriter
+                                               ON ipo_underwriter.under_name LIKE CONCAT('%', uc1.underwriter_name, '%')
+              ) AS iu
               GROUP BY iu.ipo_index) AS under
              ON ipo.ipo_index = under.ipo_index
         WHERE
@@ -154,10 +129,10 @@
         SELECT ipo_comment.comment_index,
                ipo_comment.ipo_index,
                ipo.stock_name,
-               IF(INSTR(ipo.stock_name,'스팩')=0, ipo.stock_kinds, '스팩주') AS stock_kinds,
+               IF(INSTR(ipo.stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, ipo.stock_kinds, '스팩주') AS stock_kinds,
                ipo_comment.comment,
                ipo_comment.writer,
-               date_format(ipo_comment.regist_date, '%Y-%m-%d %T') regist_date,
+               date_format(ipo_comment.regist_date, '%Y-%m-%d') regist_date,
                ipo_comment.log_type,
                ipo_comment.change_log_json
         FROM ipo_comment

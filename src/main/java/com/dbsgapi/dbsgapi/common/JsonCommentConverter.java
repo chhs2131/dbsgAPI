@@ -172,11 +172,11 @@ public class JsonCommentConverter {
         // 3순위: 공모 관련 고정 정보
             if (mapVerify(map, "profits")) {
                 mapValue = String.valueOf(map.get("profits"));
-                this.commentList.add("영업이익 값이 정정되었습니다. " + mapValue);
+                this.commentList.add("영업이익 금액이 정정되었습니다. (" + mapValue +"원)");
             }
             if (mapVerify(map, "sales")) {
                 mapValue = String.valueOf( map.get("sales"));
-                this.commentList.add("매출액 값이 정정되었습니다." + mapValue);
+                this.commentList.add("매출액 금액이 정정되었습니다. (" + mapValue + "원)");
             }
             if (mapVerify(map, "number_of_ipo_shares")) {
                 this.commentList.add( "총 공모 주식수가 변경되었습니다. (" + String.valueOf( map.get("number_of_ipo_shares")) + "주)");
@@ -213,17 +213,23 @@ public class JsonCommentConverter {
         Map<String, Object> map = jsonToMap(commentJson);
         assert map != null;
         if(!map.isEmpty()) {
-            if (map.containsKey("ind_can_max") && map.get("ind_can_max") != null) {
+            if (mapVerify(map,"ind_can_max")) {
                 returnComment = "일반인 청약가능 수량이 변경되었습니다.";
                 // return "ind_can_max" + String.valueOf(map.get("ind_can_max"));
-            } else if (map.containsKey("ind_can_min") && map.get("ind_can_min") != null) {
+            } else if (mapVerify(map,"ind_can_min")) {
                 returnComment = "일반인 청약가능 수량이 변경되었습니다.";
                 // return "ind_can_min" + String.valueOf(map.get("ind_can_min"));
-            } else if (map.containsKey("ind_total_max") && map.get("ind_total_max") != null) {
+            } else if (mapVerify(map,"ind_total_max")) {
                 returnComment = "일반인 청약가능 수량이 변경되었습니다.";
                 // return "ind_total_max" + String.valueOf(map.get("ind_total_max"));
-            } else if (map.containsKey("ind_total_min") && map.get("ind_total_min") != null) {
+            } else if (mapVerify(map,"ind_total_min")) {
                 returnComment = "일반인 청약가능 수량이 변경되었습니다.";
+                // return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
+            } else if (mapVerify(map,"sub_min_quan")) {
+                returnComment = "일반인 최소 청약 수량이 변경되었습니다. (" + String.valueOf( map.get("sub_min_quan")) + "주)";
+                // return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
+            } else if (mapVerify(map,"sub_deposit_percent")) {
+                returnComment = "일반인 청약 증거금 비율이 변경되었습니다. (" + String.valueOf( map.get("sub_deposit_percent")) + "%)";
                 // return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
             } else {
                 returnComment = "";

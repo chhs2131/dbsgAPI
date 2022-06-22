@@ -42,7 +42,7 @@ public class IpoSummaryDto {
     @Schema(description ="태그", example = "")
     private String tag;
 
-    // comment 관련 정보들
+    // comment 관련 정보들 (최근 코멘트 기능 현재 사용하지 않음)
     private int recentCommentIndex;
     private String logType;
     private String comment;
