@@ -6,10 +6,7 @@ import com.dbsgapi.dbsgapi.ipo.mapper.IpoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class IpoServiceImpl implements IpoService{
@@ -67,10 +64,39 @@ public class IpoServiceImpl implements IpoService{
         // 쿼리문 요청, 조회
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoCommentList(map);
 
-        // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
+        // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다. (null)
         ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getComment()));
 
+        // 리스트에 신규상장이 있는지 한바퀴 둘러보고 보관하기
+        Map<Long, IpoCommentDto> newRegisterCommentList = new HashMap<>();
+        for(IpoCommentDto commentTemp : ipoCommentList) {
+            if("신규 등록되었습니다.".equals(commentTemp.getComment())) {
+                newRegisterCommentList.put(commentTemp.getIpoIndex(), commentTemp);
+            }
+        }
+        // 당일 신규 등록된 종목의 경우 해당일에 다른 코멘트들은 제외한다.
+        // ipoCommentList.removeIf(ipoComment -> newComment.get(ipoComment.getIpoIndex()).getCommentIndex() != ipoComment.getCommentIndex());
+        ipoCommentList.removeIf(ipoComment -> commentIsNew(ipoComment, newRegisterCommentList));
+
         return ipoCommentList;
+    }
+
+    private boolean commentIsNew(IpoCommentDto ipoComment, Map<Long, IpoCommentDto> newRegisterCommentList) {
+        IpoCommentDto newRegisterComment = newRegisterCommentList.get(ipoComment.getIpoIndex());
+        if (newRegisterComment == null) return false;
+
+        if (!newRegisterComment.getRegistDate().equals(ipoComment.getRegistDate())) {
+            // comment 발행일이 다른 것은 제거대상 x
+            return false;
+        }
+        if (newRegisterComment.getCommentIndex() != ipoComment.getCommentIndex()) {
+            // commentIndex가 다른 것 (= 신규상장 코멘트가 아닌 것)은 제거대상 o
+            System.out.println(ipoComment);
+            System.out.println(newRegisterComment);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
