@@ -57,6 +57,7 @@ class JsonCommentConverterTest {
         assertEquals(jcc.getRecentComment(), "수요예측일이 변경되었습니다. (2022-03-03 ~ 2022-03-04) - 외 4건");
         //assertThat(jcc.getCommentList()).contains("sales3043680004", "2");
     }
+
     @Test
     void ipoTestPriceLow() {
         jcc.setCommentType("ipo");
@@ -74,6 +75,31 @@ class JsonCommentConverterTest {
         jcc.setCommentType("ipo");
         jcc.setCommentJson("{\"sales\": null, \"profits\": -4891444439, \"ipo_price\": null, \"par_value\": null, \"ipo_end_date\": null, \"ipo_price_low\": 100, \"ipo_debut_date\": null, \"ipo_price_high\": 500, \"ipo_start_date\": null, \"ipo_min_deposit\": null, \"ipo_refund_date\": null, \"lock_up_percent\": null, \"ipo_forecast_date\": null, \"put_back_option_who\": null, \"number_of_ipo_shares\": 99999, \"put_back_option_price\": null, \"put_back_option_deadline\": null, \"ipo_institutional_acceptance_rate\": null}");
         assertEquals(jcc.getRecentComment(), "공모가 밴드가 변경되었습니다. (100원 ~ 500원) - 외 2건");
+    }
+    @Test
+    void ipoTestPriceLow2() {
+        jcc.setCommentType("ipo");
+        jcc.setCommentJson("{\"sales\": null, \"profits\": -4891444439, \"ipo_price\": null, \"par_value\": null, \"ipo_end_date\": null, \"ipo_price_low\": 1000, \"ipo_debut_date\": null, \"ipo_price_high\": null, \"ipo_start_date\": null, \"ipo_min_deposit\": null, \"ipo_refund_date\": null, \"lock_up_percent\": null, \"ipo_forecast_date\": null, \"put_back_option_who\": null, \"number_of_ipo_shares\": 99999, \"put_back_option_price\": null, \"put_back_option_deadline\": null, \"ipo_institutional_acceptance_rate\": null}");
+        assertEquals(jcc.getRecentComment(), "공모가 밴드가 변경되었습니다. (하단: 1,000원) - 외 2건");
+    }
+    @Test
+    void ipoTestPriceHigh2() {
+        jcc.setCommentType("ipo");
+        jcc.setCommentJson("{\"sales\": null, \"profits\": -4891444439, \"ipo_price\": null, \"par_value\": null, \"ipo_end_date\": null, \"ipo_price_low\": null, \"ipo_debut_date\": null, \"ipo_price_high\": 5000, \"ipo_start_date\": null, \"ipo_min_deposit\": null, \"ipo_refund_date\": null, \"lock_up_percent\": null, \"ipo_forecast_date\": null, \"put_back_option_who\": null, \"number_of_ipo_shares\": 99999, \"put_back_option_price\": null, \"put_back_option_deadline\": null, \"ipo_institutional_acceptance_rate\": null}");
+        assertEquals(jcc.getRecentComment(), "공모가 밴드가 변경되었습니다. (상단: 5,000원) - 외 2건");
+    }
+    @Test
+    void ipoTestPriceBand2() {
+        jcc.setCommentType("ipo");
+        jcc.setCommentJson("{\"sales\": null, \"profits\": -4891444439, \"ipo_price\": null, \"par_value\": null, \"ipo_end_date\": null, \"ipo_price_low\": 1200, \"ipo_debut_date\": null, \"ipo_price_high\": 5750, \"ipo_start_date\": null, \"ipo_min_deposit\": null, \"ipo_refund_date\": null, \"lock_up_percent\": null, \"ipo_forecast_date\": null, \"put_back_option_who\": null, \"number_of_ipo_shares\": 99999, \"put_back_option_price\": null, \"put_back_option_deadline\": null, \"ipo_institutional_acceptance_rate\": null}");
+        assertEquals(jcc.getRecentComment(), "공모가 밴드가 변경되었습니다. (1,200원 ~ 5,750원) - 외 2건");
+    }
+
+    @Test
+    void ipoTestProfits() {
+        jcc.setCommentType("ipo");
+        jcc.setCommentJson("{\"profits\": -4891444439}");
+        assertEquals(jcc.getRecentComment(), "영업이익 금액이 정정되었습니다. (-48.91억원)");
     }
 }
 

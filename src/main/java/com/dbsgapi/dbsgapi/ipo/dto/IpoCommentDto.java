@@ -20,7 +20,7 @@ public class IpoCommentDto {
     private String stockKinds;
     @Schema(description ="내용(우선순위 상위 1개만)", example = "----가 변경되었습니다. - 외 3건")
     private String comment;
-    @Schema(description ="내용(전체)", example = "List형식. [----가 변경되었습니다. -----가 변경되었습니다. 상장일이 변경되었습니다.]")
+    @Schema(description ="내용(전체)", example = "List형식. [----가 변경되었습니다. ----가 변경되었습니다. 상장일이 변경되었습니다.]")
     private List<String> commentList;
     @Schema(description ="등록일", example = "2022-01-01")
     private String registDate;

@@ -20,6 +20,4 @@ public class TestServiceImpl implements TestService{
         System.out.println("TestSQL 서비스 실행");
         return testMapper.selectMembers();
     }
-
-
 }
