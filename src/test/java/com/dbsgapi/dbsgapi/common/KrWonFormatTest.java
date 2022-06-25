@@ -65,43 +65,43 @@ class KrWonFormatTest {
     @Test
     void string_int_12345() {
         KrWonFormat kwf = new KrWonFormat();
-        String result = kwf.getString(12345);
+        String result = kwf.getString("12345");
         assertEquals("1.23만", result);
     }
     @Test
     void string_int_m12345() {
         KrWonFormat kwf = new KrWonFormat();
-        String result = kwf.getString(-12345);
+        String result = kwf.getString("-12345");
         assertEquals("-1.23만", result);
     }
     @Test
     void string_int_12345000() {
         KrWonFormat kwf = new KrWonFormat();
-        String result = kwf.getString(12345000);
+        String result = kwf.getString("12345000");
         assertEquals("1,234.5만", result);
     }
     @Test
     void string_int_100000() {
         KrWonFormat kwf = new KrWonFormat();
-        String result = kwf.getString(100000);
+        String result = kwf.getString("100000");
         assertEquals("10만", result);
     }
     @Test
     void string_int_123456789() {
         KrWonFormat kwf = new KrWonFormat();
-        String result = kwf.getString(123456789);
+        String result = kwf.getString("123456789");
         assertEquals("1.23억", result);
     }
     @Test
     void string_long_987600000000L() {
         KrWonFormat kwf = new KrWonFormat();
-        String result = kwf.getString(987600000000L);
+        String result = kwf.getString("987600000000");
         assertEquals("9,876억", result);
     }
     @Test
     void string_long_12345678911111111L() {
         KrWonFormat kwf = new KrWonFormat();
-        String result = kwf.getString(12345678911111111L);
+        String result = kwf.getString("12345678911111111");
         assertEquals("1.23경", result);
     }
 

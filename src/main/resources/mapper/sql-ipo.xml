@@ -36,7 +36,11 @@
              ) AS under
              ON ipo.ipo_index = under.ipo_index
         WHERE ${queryString}
-        ORDER BY (terminate_date IS NULL) DESC, terminate_date DESC, ipo.regist_date DESC
+        ORDER BY
+            (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
+            ifnull(terminate_date, ipo_debut_date) DESC,
+            ipo_start_date DESC,
+            ipo.regist_date DESC
         LIMIT #{limit} OFFSET #{offset};
     </select>
 
@@ -121,7 +125,11 @@
             (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
             (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
-        ORDER BY (terminate_date IS NULL) DESC, terminate_date DESC, ipo.regist_date DESC
+        ORDER BY
+            (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
+            ifnull(terminate_date, ipo_debut_date) DESC,
+            ipo_start_date DESC,
+            ipo.regist_date DESC
         LIMIT 30;
     </select>
 
@@ -168,7 +176,7 @@
     </select>
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
-        SELECT
+        SELECT DISTINCT
             ipo_underwriter.ipo_index,
             IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name,
             ipo_underwriter.ind_total_max,
@@ -178,8 +186,13 @@
             ipo_underwriter.sub_min_quan,
             ipo_underwriter.sub_deposit_percent,
             DATE_FORMAT(ipo_underwriter.update_date, '%Y-%m-%d') update_date
-        FROM underwriter_code AS uc1 JOIN underwriter_code AS uc2 ON uc1.parents_code = uc2.underwriter_code
-                                     RIGHT OUTER JOIN ipo_underwriter ON uc1.underwriter_name LIKE ipo_underwriter.under_name
-        WHERE 	ipo_index = #{ipoIndex}
+        FROM
+            underwriter_code AS uc1
+                JOIN underwriter_code AS uc2
+                     ON uc1.parents_code = uc2.underwriter_code
+                RIGHT OUTER JOIN ipo_underwriter
+                                 ON ipo_underwriter.under_name LIKE CONCAT('%', uc1.underwriter_name, '%')
+        WHERE
+            ipo_underwriter.ipo_index = #{ipoIndex};
     </select>
 </mapper>
