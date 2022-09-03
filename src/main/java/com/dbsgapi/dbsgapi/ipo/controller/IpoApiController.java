@@ -35,6 +35,7 @@ public class IpoApiController {
         return new ResponseEntity<>(listIpo, HttpStatus.OK);
     }
 
+    // TODO 단일 조회 path mapping uri 변경 필요 detail <->
     @RequestMapping(value="/{ipoIndex}", method = RequestMethod.GET)
     @Operation(summary="단일 IPO 종목을 상세조회", description="ipoIndex에 해당하는 종목에 상세 정보를 반환합니다.")
     public ResponseEntity<IpoDetailDto> getIpo(@PathVariable("ipoIndex") long ipoIndex) throws Exception {

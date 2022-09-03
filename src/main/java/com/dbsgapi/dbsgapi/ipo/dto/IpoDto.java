@@ -8,6 +8,8 @@ import lombok.Data;
 
 @Data
 public class IpoDto {
+    //TODO 각 항목들을 collection 형태로 분리하기 (https://pooney.tistory.com/39)
+
     // 기본 정보
     private long ipoIndex;
     private String stockName;
