@@ -1,6 +1,8 @@
 package com.dbsgapi.dbsgapi.api.test;
 
+import com.dbsgapi.dbsgapi.global.configuration.properties.SwaggerProperty;
 import com.dbsgapi.dbsgapi.global.util.SecurityUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,11 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class TestController {
-    @Autowired
     private TestService testService;
-
-    JwtUtil jwtUtil = new JwtUtil();
+    private final JwtUtil jwtUtil;
 
     @GetMapping("/test")
     @ResponseBody
@@ -119,5 +120,14 @@ public class TestController {
         // Token을 통해 유저이름과 닉네임, 권한을 조회하여 반환 (단, 본인한정)
         log.debug("user실행 => " + request.toString());
         return ResponseEntity.ok(SecurityUtil.getCurrentUsername());
+    }
+
+    private final SwaggerProperty swaggerProperty;
+    @GetMapping("/property")
+    @ResponseBody
+    public String getProperty() {
+        String responseValue = swaggerProperty.getTitle() + String.valueOf(swaggerProperty.getVersion());
+        log.info(responseValue);
+        return "new string" + responseValue;
     }
 }

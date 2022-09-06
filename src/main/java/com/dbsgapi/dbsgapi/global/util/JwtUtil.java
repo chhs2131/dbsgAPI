@@ -1,10 +1,14 @@
 package com.dbsgapi.dbsgapi.global.util;
 
 import com.dbsgapi.dbsgapi.api.login.service.CustomUserDetailsService;
+import com.dbsgapi.dbsgapi.global.configuration.properties.JwtProperty;
+import com.dbsgapi.dbsgapi.global.configuration.properties.SwaggerProperty;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,14 +20,44 @@ import java.util.Date;
 
 @Slf4j
 @Component
-public class JwtUtil {
-    private static final String AUTHORITIES_KEY = "auth";
+@RequiredArgsConstructor
+public final class JwtUtil {
     private CustomUserDetailsService customUserDetailsService;
+    final JwtProperty jwtProperty;
 
-    private String secret = "anNvbi10b2tlbi1zZWNyZXQta2V5LWluLWRic2ctYXBpLWJhc2U2NC1xYXp4c3dlZGN2ZnJ0Z2JuaHl1am1raW9scC0wOTg3NjU0MzIxLWp3dC1zdG9ja3NlcnZlcgo=";
-    byte[] keyBytes = Decoders.BASE64.decode(secret);
-    private SecretKey key = Keys.hmacShaKeyFor(keyBytes);
-    private final long tokenValidTime = 60 * 30 * 1000L;    // 토큰 유효시간 1달
+    //private final String AUTHORITIES_KEY = jwtProperty.getAuthoritiesKey();
+//    private final String secret = jwtProperty.getSecret();
+//    private final long tokenValidTime = jwtProperty.getTokenValidTime();
+//    private final String header = jwtProperty.getHeader();
+//
+//    byte[] keyBytes = Decoders.BASE64.decode(secret);
+//    private SecretKey key = Keys.hmacShaKeyFor(keyBytes);
+
+
+
+
+
+
+    private final String AUTHORITIES_KEY;
+    private final String secret;
+    private final long tokenValidTime;
+    private final String header;
+
+    byte[] keyBytes;
+    private SecretKey key;
+
+    @Autowired
+    public JwtUtil(JwtProperty jwtProperty) {
+        this.jwtProperty = jwtProperty;
+
+        this.AUTHORITIES_KEY = jwtProperty.getAuthoritiesKey();
+        this.secret = jwtProperty.getSecret();
+        this.tokenValidTime = jwtProperty.getTokenValidTime();
+        this.header = jwtProperty.getHeader();
+
+        this.keyBytes = Decoders.BASE64.decode(secret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
 
     /*
     public String createJws(Authentication authentication) throws Exception {

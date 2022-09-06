@@ -1,19 +1,17 @@
 server:
   port: 8080
 spring:
-#  devtools:
-#    livereload:
-#      enabled: true
+  profiles:
+    default: local
+    group:
+      local:
+        - secret
+      dev:
+        - secret
+      prod:
+        - secret
   datasource:
     hikari:
-      #driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      #jdbc-url: jdbc:mysql://34.135.81.32:3306/stockServer
-      jdbc-url: jdbc:mysql://server.dbsg.co.kr:3306/stockServer
-      #jdbc-url: jdbc:log4jdbc:mysql://34.135.81.32:3306/stockServer?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
-      username: everywhere
-      password: everypw
-      #username: admin
-      #password: P@ssVV0rd
       connection-test-query: SELECT 1
       driver-class-name: com.mysql.cj.jdbc.Driver
   mvc:
@@ -24,12 +22,29 @@ spring:
 Mybatis:
   configuration:
     map-underscore-to-camel-case: true
+
+# swagger (https://springdoc.org/properties.html)
 springdoc:
-  #옵션설명: https://springdoc.org/properties.html
   swagger-ui:
     path: /doc
-  #packages-to-scan: *
   paths-to-match: /api/v1/**, /login/**
+swagger:
+  title: 공모주토피아 API
+  version: v0.0.13
+  description: 주식알리미 서비스에 사용되는 API 명세입니다.<br/> <a href='https://www.notion.so/8c74d32d5e9846d698757d8b23cb0108?v=065595755f7645028e0a191479d986fa'>서버 변동사항 정리</a>
 
+# jwt
 jwt:
-  secret: anNvbi10b2tlbi1zZWNyZXQta2V5LWluLWRic2ctYXBpLWJhc2U2NC1xYXp4c3dlZGN2ZnJ0Z2JuaHl1am1raW9scC0wOTg3NjU0MzIxLWp3dC1zdG9ja3NlcnZlcgo=
+  token-valid-time: 1800000  # 1달
+  authorities-key: auth
+  header: Bearer
+
+# social
+social:
+  kakao:
+    login:
+      path: https://kauth.kakao.com/oauth/token
+      method: GET
+    profile:
+      path: https://kapi.kakao.com/v2/user/me
+      method: GET

@@ -9,6 +9,7 @@ import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,19 +19,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "카카오 계정", description = "카카오 OAuth 로그인을 위한 API")
 public class KakaoController {
     //TODO 카카오 로그인 login package 아래로 전부 옮길 것 (kakao 패키지 삭제)
 
-    private final JwtUtil jwtUtil = new JwtUtil();
+    private final JwtUtil jwtUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    @Autowired
     private KakaoService kakaoService;
-
-    public KakaoController(AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
 
     @RequestMapping(value="/login/kakaoLoginUrl", method= RequestMethod.GET)
     @Operation(summary="백엔드 테스트용", description="카카오 AuthCode 취득을 위한 URI 반환")

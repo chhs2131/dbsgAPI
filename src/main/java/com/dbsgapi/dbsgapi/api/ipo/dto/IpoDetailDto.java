@@ -15,3 +15,4 @@ public class IpoDetailDto {
     @Schema(description ="코멘트(히스토리) 정보")
     private List<IpoCommentDto> comment;
 }
+

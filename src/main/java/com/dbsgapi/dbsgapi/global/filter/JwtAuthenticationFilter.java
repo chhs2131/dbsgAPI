@@ -4,8 +4,10 @@ import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.global.authentication.JwtAuthentication;
 import com.dbsgapi.dbsgapi.global.authentication.AnonymousAuthentication;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -17,8 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
+@RequiredArgsConstructor
+@Component
 public class JwtAuthenticationFilter extends GenericFilterBean {
-    private final JwtUtil jwtUtil = new JwtUtil();
+    private final JwtUtil jwtUtil;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
