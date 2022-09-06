@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.login.service;
 
+import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
 import com.dbsgapi.dbsgapi.global.util.HttpConnection;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto;
@@ -7,6 +8,7 @@ import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
 import com.dbsgapi.dbsgapi.api.login.mapper.KakaoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class KakaoServiceImpl implements KakaoService{
-    @Autowired
     private KakaoMapper loginMapper;
+    private final SocialProperty socialProperty;
 
-    String kakaoRestKey = "e0b6130240281c4b18e88e405545754f";
     HttpConnection httpConnection = new HttpConnection();
 
     public KakaoOAuthDto getToken(String authCode) throws Exception {
@@ -28,9 +30,9 @@ public class KakaoServiceImpl implements KakaoService{
         String accessToken = "no_data";
         String redirectUri = "http://server.dbsg.co.kr:8080/login/kakao";
 
-        String apiUrl = "https://kauth.kakao.com/oauth/token?" +
+        String apiUrl = socialProperty.getKakao().getLogin().getPath() + "?" +
                 "grant_type=authorization_code&" +
-                "client_id=" + kakaoRestKey +
+                "client_id=" + socialProperty.getKakao().getKey() +
                 "&redirect_uri=" + redirectUri +
                 "&code=" + authCode;
 
@@ -47,7 +49,7 @@ public class KakaoServiceImpl implements KakaoService{
         accessToken = "Bearer " + accessToken;
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoApiUserDto kakaoApiUserDto = new KakaoApiUserDto();
-        String apiUrl = "https://kapi.kakao.com/v2/user/me?property_keys=%5B%22id%22%5D";
+        String apiUrl = socialProperty.getKakao().getProfile().getPath() + "?property_keys=%5B%22id%22%5D";
 
         Map<String,String> header = new HashMap<String,String>();
         header.put("Authorization", accessToken);
