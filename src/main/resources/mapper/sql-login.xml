@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.dbsgapi.dbsgapi.login.kakao.mapper.KakaoMapper">
-    <select id="selectKakaoMember" parameterType="String" resultType="com.dbsgapi.dbsgapi.login.kakao.dto.KakaoMemberDto">
+<mapper namespace="com.dbsgapi.dbsgapi.api.login.kakao.mapper.KakaoMapper">
+    <select id="selectKakaoMember" parameterType="String" resultType="com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoMemberDto">
         SELECT kakao_uid,
                user_no,
                access_token,
@@ -15,7 +15,7 @@
         WHERE kakao_uid = #{kakaoUid}
     </select>
 
-    <select id="selectMember" parameterType="Long" resultType="com.dbsgapi.dbsgapi.login.dto.MemberDto">
+    <select id="selectMember" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.login.dto.MemberDto">
         SELECT 	user_no,
                   role_name,
                   enabled,
@@ -24,7 +24,7 @@
         WHERE 	user_no = #{userNo}
     </select>
 
-    <insert id="insertMember" parameterType="com.dbsgapi.dbsgapi.login.dto.MemberDto"
+    <insert id="insertMember" parameterType="com.dbsgapi.dbsgapi.api.login.dto.MemberDto"
             useGeneratedKeys="true" keyColumn="user_no" keyProperty="userNo" >
         INSERT INTO members
             (regist_date)
@@ -32,7 +32,7 @@
                    NOW()
                )
     </insert>
-    <insert id="insertKakaoMember" parameterType="com.dbsgapi.dbsgapi.login.kakao.dto.KakaoApiUserDto">
+    <insert id="insertKakaoMember" parameterType="com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoApiUserDto">
         INSERT INTO members_kakao
         (	kakao_uid,
              user_no,

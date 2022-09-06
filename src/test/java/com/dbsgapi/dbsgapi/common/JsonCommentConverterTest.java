@@ -1,11 +1,10 @@
 package com.dbsgapi.dbsgapi.common;
 
+import com.dbsgapi.dbsgapi.global.common.JsonCommentConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class JsonCommentConverterTest {

@@ -1,9 +1,9 @@
 server:
   port: 8080
 spring:
-  devtools:
-    livereload:
-      enabled: true
+#  devtools:
+#    livereload:
+#      enabled: true
   datasource:
     hikari:
       #driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
