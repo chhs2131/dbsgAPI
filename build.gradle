@@ -51,6 +51,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop:2.6.2'
     developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.2'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     //보안
     implementation 'org.springframework.boot:spring-boot-starter-security'
