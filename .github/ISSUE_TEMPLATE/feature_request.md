@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ''
+title: "[FEAT] defalut-name"
 labels: enhancement
 assignees: ''
 

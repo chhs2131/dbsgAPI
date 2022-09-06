@@ -1,7 +1,7 @@
 ---
 name: refactoring request
 about: Describe this issue template's purpose here.
-title: ''
+title: "[REFACTOR] defalut-name"
 labels: refactor
 assignees: ''
 
