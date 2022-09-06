@@ -12,11 +12,6 @@ spring:
         - secret
   datasource:
     hikari:
-#      jdbc-url: jdbc:mysql://server.dbsg.co.kr:3306/stockServer
-#      username: everywhere
-#      password: everypw
-      #username: admin
-      #password: P@ssVV0rd
       connection-test-query: SELECT 1
       driver-class-name: com.mysql.cj.jdbc.Driver
   mvc:
@@ -40,7 +35,6 @@ swagger:
 
 # jwt
 jwt:
-#  secret: anNvbi10b2tlbi1zZWNyZXQta2V5LWluLWRic2ctYXBpLWJhc2U2NC1xYXp4c3dlZGN2ZnJ0Z2JuaHl1am1raW9scC0wOTg3NjU0MzIxLWp3dC1zdG9ja3NlcnZlcgo=
   token-valid-time: 1800000  # 1달
   authorities-key: auth
   header: Bearer
@@ -48,7 +42,6 @@ jwt:
 # social
 social:
   kakao:
-#    key: e0b6130240281c4b18e88e405545754f
     login:
       path: https://kauth.kakao.com/oauth/token
       method: GET
