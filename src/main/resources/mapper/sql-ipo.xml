@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.dbsgapi.dbsgapi.ipo.mapper.IpoMapper">
-    <select id="selectIpos" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
+<mapper namespace="com.dbsgapi.dbsgapi.api.ipo.mapper.IpoMapper">
+    <select id="selectIpos" parameterType="Map" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoSummaryDto">
         SELECT ipo.ipo_index,
                stock_name,
                IF(INSTR(stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, stock_kinds, '스팩주') AS stock_kinds,
@@ -44,7 +44,7 @@
         LIMIT #{limit} OFFSET #{offset};
     </select>
 
-    <select id="selectIpo" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoDto">
+    <select id="selectIpo" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoDto">
         SELECT ipo_index,
                stock_name,
                stock_exchange,
@@ -88,7 +88,7 @@
         WHERE 	ipo_index = #{ipoIndex}
     </select>
 
-    <select id="selectIpoScheduleList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoSummaryDto">
+    <select id="selectIpoScheduleList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoSummaryDto">
         SELECT ipo.ipo_index,
                stock_name,
                IF(INSTR(stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, stock_kinds, '스팩주') AS stock_kinds,
@@ -133,7 +133,7 @@
         LIMIT 30;
     </select>
 
-    <select id="selectIpoCommentList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+    <select id="selectIpoCommentList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
         SELECT ipo_comment.comment_index,
                ipo_comment.ipo_index,
                ipo.stock_name,
@@ -149,7 +149,7 @@
         LIMIT #{limit} OFFSET #{offset};
     </select>
 
-    <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+    <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
         SELECT comment_index,
                ipo_index,
                comment,
@@ -163,7 +163,7 @@
         LIMIT   100;
     </select>
 
-    <select id="selectIpoCommentIndex" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoCommentDto">
+    <select id="selectIpoCommentIndex" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
         SELECT comment_index,
                ipo_index,
                comment,
@@ -175,7 +175,7 @@
         WHERE 	comment_index = #{commentIndex} and enabled not like 'N';
     </select>
 
-    <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.ipo.dto.IpoUnderwriterDto">
+    <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoUnderwriterDto">
         SELECT DISTINCT
             ipo_underwriter.ipo_index,
             IFNULL(uc2.underwriter_name, ipo_underwriter.under_name) AS under_name,
