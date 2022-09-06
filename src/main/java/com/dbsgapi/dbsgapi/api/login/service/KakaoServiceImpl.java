@@ -1,6 +1,6 @@
 package com.dbsgapi.dbsgapi.api.login.service;
 
-import com.dbsgapi.dbsgapi.global.common.HttpConnection;
+import com.dbsgapi.dbsgapi.global.util.HttpConnection;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;

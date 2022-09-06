@@ -1,4 +1,4 @@
-package com.dbsgapi.dbsgapi.global.common;
+package com.dbsgapi.dbsgapi.global.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

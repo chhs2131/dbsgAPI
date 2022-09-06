@@ -1,9 +1,9 @@
 package com.dbsgapi.dbsgapi.global.filter;
 
-import com.dbsgapi.dbsgapi.global.common.JwtUtil;
+import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
-import com.dbsgapi.dbsgapi.global.security.authentication.JwtAuthentication;
-import com.dbsgapi.dbsgapi.global.security.authentication.AnonymousAuthentication;
+import com.dbsgapi.dbsgapi.global.authentication.JwtAuthentication;
+import com.dbsgapi.dbsgapi.global.authentication.AnonymousAuthentication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;

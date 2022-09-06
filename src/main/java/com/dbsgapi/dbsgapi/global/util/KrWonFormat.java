@@ -1,4 +1,4 @@
-package com.dbsgapi.dbsgapi.global.common;
+package com.dbsgapi.dbsgapi.global.util;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;

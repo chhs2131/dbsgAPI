@@ -4,7 +4,7 @@ import com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
 import com.dbsgapi.dbsgapi.api.login.service.KakaoService;
-import com.dbsgapi.dbsgapi.global.common.JwtUtil;
+import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

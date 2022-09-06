@@ -1,6 +1,6 @@
-package com.dbsgapi.dbsgapi.global.security;
+package com.dbsgapi.dbsgapi.global.configuration;
 
-import com.dbsgapi.dbsgapi.global.common.JwtUtil;
+import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import com.dbsgapi.dbsgapi.global.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

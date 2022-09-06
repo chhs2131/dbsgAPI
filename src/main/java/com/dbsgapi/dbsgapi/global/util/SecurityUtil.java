@@ -1,4 +1,4 @@
-package com.dbsgapi.dbsgapi.global.security;
+package com.dbsgapi.dbsgapi.global.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

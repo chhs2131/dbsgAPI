@@ -1,6 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.dto;
 
-import com.dbsgapi.dbsgapi.global.common.JsonCommentConverter;
+import com.dbsgapi.dbsgapi.global.util.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.dbsgapi.dbsgapi.api.test;
 
-import com.dbsgapi.dbsgapi.global.security.SecurityUtil;
+import com.dbsgapi.dbsgapi.global.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.dbsgapi.dbsgapi.global.common.JwtUtil;
+import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 

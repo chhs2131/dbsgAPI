@@ -1,6 +1,6 @@
 package com.dbsgapi.dbsgapi.common;
 
-import com.dbsgapi.dbsgapi.global.common.JsonCommentConverter;
+import com.dbsgapi.dbsgapi.global.util.JsonCommentConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

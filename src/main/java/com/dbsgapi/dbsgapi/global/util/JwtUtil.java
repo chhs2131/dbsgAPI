@@ -1,4 +1,4 @@
-package com.dbsgapi.dbsgapi.global.common;
+package com.dbsgapi.dbsgapi.global.util;
 
 import com.dbsgapi.dbsgapi.api.login.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
