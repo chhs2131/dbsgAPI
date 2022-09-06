@@ -1,11 +1,11 @@
-package com.dbsgapi.dbsgapi.api.login.kakao.service;
+package com.dbsgapi.dbsgapi.api.login.service;
 
 import com.dbsgapi.dbsgapi.global.common.HttpConnection;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoApiUserDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoMemberDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoOAuthDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.mapper.KakaoMapper;
+import com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto;
+import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;
+import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
+import com.dbsgapi.dbsgapi.api.login.mapper.KakaoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

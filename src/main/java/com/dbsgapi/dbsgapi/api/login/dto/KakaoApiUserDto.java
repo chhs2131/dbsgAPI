@@ -1,4 +1,4 @@
-package com.dbsgapi.dbsgapi.api.login.kakao.dto;
+package com.dbsgapi.dbsgapi.api.login.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

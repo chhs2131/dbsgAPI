@@ -1,9 +1,9 @@
-package com.dbsgapi.dbsgapi.api.login.kakao.controller;
+package com.dbsgapi.dbsgapi.api.login.controller;
 
-import com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoApiUserDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoMemberDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoOAuthDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.service.KakaoService;
+import com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto;
+import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;
+import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
+import com.dbsgapi.dbsgapi.api.login.service.KakaoService;
 import com.dbsgapi.dbsgapi.global.common.JwtUtil;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;

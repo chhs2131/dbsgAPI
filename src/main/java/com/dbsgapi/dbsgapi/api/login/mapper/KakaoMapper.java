@@ -1,7 +1,7 @@
-package com.dbsgapi.dbsgapi.api.login.kakao.mapper;
+package com.dbsgapi.dbsgapi.api.login.mapper;
 
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
-import com.dbsgapi.dbsgapi.api.login.kakao.dto.KakaoMemberDto;
+import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
