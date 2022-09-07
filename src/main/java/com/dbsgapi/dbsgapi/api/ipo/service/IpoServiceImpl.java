@@ -5,9 +5,7 @@ import com.dbsgapi.dbsgapi.api.ipo.dto.IpoDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoUnderwriterDto;
 import com.dbsgapi.dbsgapi.api.ipo.mapper.IpoMapper;
-import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

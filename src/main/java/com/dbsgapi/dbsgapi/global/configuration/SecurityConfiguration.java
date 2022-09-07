@@ -25,15 +25,13 @@ import java.util.Arrays;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    //DataSource dataSource;
 
     @Bean
     @Override
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManagerBean();
     }
-    // DB 객체값.
-    //@Autowired
-    //DataSource dataSource;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

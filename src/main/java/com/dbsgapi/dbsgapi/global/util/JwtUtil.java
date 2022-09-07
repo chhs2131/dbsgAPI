@@ -2,7 +2,6 @@ package com.dbsgapi.dbsgapi.global.util;
 
 import com.dbsgapi.dbsgapi.api.login.service.CustomUserDetailsService;
 import com.dbsgapi.dbsgapi.global.configuration.properties.JwtProperty;
-import com.dbsgapi.dbsgapi.global.configuration.properties.SwaggerProperty;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,19 +23,6 @@ import java.util.Date;
 public final class JwtUtil {
     private CustomUserDetailsService customUserDetailsService;
     final JwtProperty jwtProperty;
-
-    //private final String AUTHORITIES_KEY = jwtProperty.getAuthoritiesKey();
-//    private final String secret = jwtProperty.getSecret();
-//    private final long tokenValidTime = jwtProperty.getTokenValidTime();
-//    private final String header = jwtProperty.getHeader();
-//
-//    byte[] keyBytes = Decoders.BASE64.decode(secret);
-//    private SecretKey key = Keys.hmacShaKeyFor(keyBytes);
-
-
-
-
-
 
     private final String AUTHORITIES_KEY;
     private final String secret;
