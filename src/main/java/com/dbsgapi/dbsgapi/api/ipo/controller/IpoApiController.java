@@ -19,6 +19,7 @@ import java.util.List;
 @Tag(name = "IPO", description = "청약주식(공모주/실권주/스팩주) 관리를 위한 API")
 @RequestMapping("/api/v1/ipo")
 public class IpoApiController {
+    //TODO ★ delete Autowired
     @Autowired
     private IpoService ipoService;
 

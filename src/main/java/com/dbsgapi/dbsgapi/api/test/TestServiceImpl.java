@@ -7,6 +7,7 @@ import java.util.List;
 
 @Service
 public class TestServiceImpl implements TestService{
+    //TODO ★ delete Autowired
     @Autowired
     private TestMapper testMapper;
 

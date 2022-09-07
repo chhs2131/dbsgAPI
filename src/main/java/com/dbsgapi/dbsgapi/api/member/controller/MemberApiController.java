@@ -19,6 +19,7 @@ import java.util.List;
 @Tag(name = "Member", description = "유저별 귀속 데이터를 관리하는 API")
 @RequestMapping("/api/v1/member")
 public class MemberApiController {
+    //TODO ★ delete Autowired
     @Autowired
     MemberService memberService;
 

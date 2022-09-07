@@ -19,6 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @PropertySource("classpath:/application.yml")
 public class DatabaseConfiguration {
+    //TODO ★ delete Autowired
     @Autowired
     private ApplicationContext applicationContext;
 

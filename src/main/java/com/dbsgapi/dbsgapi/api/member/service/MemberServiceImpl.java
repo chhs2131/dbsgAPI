@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
+    //TODO ★ delete Autowired
     @Autowired
     MemberMapper memberMapper;
 

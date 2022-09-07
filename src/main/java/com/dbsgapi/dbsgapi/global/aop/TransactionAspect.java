@@ -19,6 +19,7 @@ public class TransactionAspect {
     private static final String AOP_TRANSACTION_METHOD_NAME = "*";
     private static final String AOP_TRANSACTION_EXPRESSION = "execution(* kr.ac.inha.board..service.*Impl.*(..))";
 
+    //TODO ★ delete Autowired
     @Autowired
     private PlatformTransactionManager transactionManager;
 

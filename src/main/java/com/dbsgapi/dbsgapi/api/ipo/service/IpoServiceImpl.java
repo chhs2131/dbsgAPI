@@ -13,6 +13,7 @@ import java.util.*;
 
 @Service
 public class IpoServiceImpl implements IpoService{
+    //TODO ★ delete Autowired
     @Autowired
     private IpoMapper ipoMapper;
 

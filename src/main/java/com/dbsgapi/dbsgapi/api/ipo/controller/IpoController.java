@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 @Controller
 public class IpoController {
+    //TODO ★ delete Autowired
     @Autowired
     IpoService ipoService;
 
