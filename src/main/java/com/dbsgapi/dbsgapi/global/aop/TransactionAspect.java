@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.global.aop;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -15,13 +16,12 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import java.util.Collections;
 
 @Configuration
+@RequiredArgsConstructor
 public class TransactionAspect {
     private static final String AOP_TRANSACTION_METHOD_NAME = "*";
     private static final String AOP_TRANSACTION_EXPRESSION = "execution(* kr.ac.inha.board..service.*Impl.*(..))";
 
-    //TODO ★ delete Autowired
-    @Autowired
-    private PlatformTransactionManager transactionManager;
+    private final PlatformTransactionManager transactionManager;
 
     @Bean
     public TransactionInterceptor transactionAdvice() {
