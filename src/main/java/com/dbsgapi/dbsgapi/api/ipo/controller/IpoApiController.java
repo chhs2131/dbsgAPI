@@ -5,8 +5,8 @@ import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +16,11 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "IPO", description = "청약주식(공모주/실권주/스팩주) 관리를 위한 API")
 @RequestMapping("/api/v1/ipo")
 public class IpoApiController {
-    @Autowired
-    private IpoService ipoService;
+    private final IpoService ipoService;
 
     @RequestMapping(value="", method = RequestMethod.GET)
     @Operation(summary="IPO 목록을 반환", description="IPO 목록을 최근 등록된 순으로 반환합니다. (추후 페이징 방식으로 변경 예정)")

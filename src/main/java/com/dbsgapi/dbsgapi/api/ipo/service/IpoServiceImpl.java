@@ -5,16 +5,15 @@ import com.dbsgapi.dbsgapi.api.ipo.dto.IpoDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoUnderwriterDto;
 import com.dbsgapi.dbsgapi.api.ipo.mapper.IpoMapper;
-import com.dbsgapi.dbsgapi.api.ipo.dto.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class IpoServiceImpl implements IpoService{
-    @Autowired
-    private IpoMapper ipoMapper;
+    private final IpoMapper ipoMapper;
 
     @Override
     public List<IpoSummaryDto> selectIpos(String queryString, int page, int num) throws Exception {

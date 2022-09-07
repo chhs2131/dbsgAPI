@@ -9,7 +9,6 @@ import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
 import com.dbsgapi.dbsgapi.api.login.mapper.KakaoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
