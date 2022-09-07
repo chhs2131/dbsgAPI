@@ -1,15 +1,15 @@
 package com.dbsgapi.dbsgapi.api.test;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TestServiceImpl implements TestService{
-    //TODO ★ delete Autowired
-    @Autowired
-    private TestMapper testMapper;
+    private final TestMapper testMapper;
 
     @Override
     public String TestService(String testWord) throws Exception {

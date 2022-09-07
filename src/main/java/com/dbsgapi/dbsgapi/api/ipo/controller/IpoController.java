@@ -2,6 +2,7 @@ package com.dbsgapi.dbsgapi.api.ipo.controller;
 
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,10 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class IpoController {
-    //TODO ★ delete Autowired
-    @Autowired
-    IpoService ipoService;
+    private final IpoService ipoService;
 
     @RequestMapping(value = {"/ipo/ipoDashboard.do","/" })
     public ModelAndView openIpoDashboard() throws Exception {
