@@ -7,11 +7,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -68,12 +69,14 @@ public class IpoApiController {
     @Operation(summary="IPO Comment 조회", description="코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(
             @Parameter(description="특정 ipoIndex만 조회") @RequestParam(required=false, defaultValue="0") int ipoIndex,
-            @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
-            @RequestParam(required=false, defaultValue="20") int num
+            @Parameter(description="조회 시작일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now().minusDays(7)}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @Parameter(description="조회 종료일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) throws Exception {
-        List<IpoCommentDto> ipoData = new ArrayList<IpoCommentDto>();
+        List<IpoCommentDto> ipoData;
         if(ipoIndex == 0) {  // 전체 조회
-            ipoData = ipoService.selectIpoCommentList(page, num);
+            ipoData = ipoService.selectIpoCommentList(startDate, endDate);
             log.debug(ipoData.toString());
         }else if(ipoIndex > 0) {  // 특정 종목만 조회
             ipoData = ipoService.selectIpoComment(ipoIndex);

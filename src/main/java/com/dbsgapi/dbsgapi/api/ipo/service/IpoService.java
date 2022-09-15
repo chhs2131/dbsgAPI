@@ -6,6 +6,7 @@ import com.dbsgapi.dbsgapi.api.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoUnderwriterDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IpoService {
@@ -14,6 +15,6 @@ public interface IpoService {
     List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
     IpoCommentDto selectIpoCommentIndex(long commentIndex) throws Exception;
-    List<IpoCommentDto> selectIpoCommentList(int page, int num) throws Exception;
+    List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws Exception;
     List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws Exception;
 }
