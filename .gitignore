@@ -38,4 +38,5 @@ out/
 
 ### custom ###
 application-secret.yml
-dbsgapi/api/test/*
+api/test/*
+api/test
