@@ -145,8 +145,8 @@
                ipo_comment.change_log_json
         FROM ipo_comment
                  LEFT JOIN ipo ON ipo_comment.ipo_index = ipo.ipo_index
-        ORDER BY comment_index DESC
         WHERE ipo_comment.regist_date BETWEEN #{startDate} and #{endDate}
+        ORDER BY comment_index DESC
         LIMIT 200;
     </select>
 
