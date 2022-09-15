@@ -69,9 +69,9 @@ public class IpoApiController {
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(
             @Parameter(description="특정 ipoIndex만 조회") @RequestParam(required=false, defaultValue="0") int ipoIndex,
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
-            @RequestParam(required=false, defaultValue="20") int num
+            @Parameter(description="반환 갯수") @RequestParam(required=false, defaultValue="20") int num
     ) throws Exception {
-        List<IpoCommentDto> ipoData = new ArrayList<IpoCommentDto>();
+        List<IpoCommentDto> ipoData;
         if(ipoIndex == 0) {  // 전체 조회
             ipoData = ipoService.selectIpoCommentList(page, num);
             log.debug(ipoData.toString());
