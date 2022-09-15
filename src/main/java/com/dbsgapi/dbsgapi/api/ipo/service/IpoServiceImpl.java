@@ -8,6 +8,7 @@ import com.dbsgapi.dbsgapi.api.ipo.mapper.IpoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -57,7 +58,11 @@ public class IpoServiceImpl implements IpoService{
     }
 
     @Override
-    public List<IpoCommentDto> selectIpoCommentList(int page, int num) throws Exception {
+    public List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws Exception {
+        // TODO 변수 컴파일 위해서 임시선언
+        int num = 0;
+        int page = 0;
+
         // map.put 전에 각 데이터가 0이 아닌지 확인하는 Verify 로직 필요.
         Map<String, Integer> map = new HashMap<String, Integer>();
         map.put("limit", num);
