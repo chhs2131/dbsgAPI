@@ -35,4 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### custom ###
 application-secret.yml
+**/api/test/*
+**/api/test/
