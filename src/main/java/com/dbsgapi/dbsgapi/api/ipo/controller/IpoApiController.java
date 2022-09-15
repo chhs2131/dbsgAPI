@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -75,7 +74,6 @@ public class IpoApiController {
             @Parameter(description="조회 종료일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) throws Exception {
-        log.error(startDate.toString() + "    /    " + endDate.toString());
         List<IpoCommentDto> ipoData;
         if(ipoIndex == 0) {  // 전체 조회
             ipoData = ipoService.selectIpoCommentList(startDate, endDate);
