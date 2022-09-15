@@ -38,5 +38,5 @@ out/
 
 ### custom ###
 application-secret.yml
-api/test/*
-api/test/
+**/api/test/*
+**/api/test/
