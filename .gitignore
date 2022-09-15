@@ -35,4 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### custom ###
 application-secret.yml
+dbsgapi/api/test/
