@@ -59,14 +59,10 @@ public class IpoServiceImpl implements IpoService{
 
     @Override
     public List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws Exception {
-        // TODO 변수 컴파일 위해서 임시선언
-        int num = 0;
-        int page = 0;
-
         // map.put 전에 각 데이터가 0이 아닌지 확인하는 Verify 로직 필요.
-        Map<String, Integer> map = new HashMap<String, Integer>();
-        map.put("limit", num);
-        map.put("offset", page * num - num);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("startDate", startDate.toString());
+        map.put("endDate", endDate.toString());
 
         // 쿼리문 요청, 조회
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoCommentList(map);
@@ -82,7 +78,6 @@ public class IpoServiceImpl implements IpoService{
             }
         }
         // 당일 신규 등록된 종목의 경우 해당일에 다른 코멘트들은 제외한다.
-        // ipoCommentList.removeIf(ipoComment -> newComment.get(ipoComment.getIpoIndex()).getCommentIndex() != ipoComment.getCommentIndex());
         ipoCommentList.removeIf(ipoComment -> commentIsNew(ipoComment, newRegisterCommentList));
 
         return ipoCommentList;
@@ -98,8 +93,8 @@ public class IpoServiceImpl implements IpoService{
         }
         if (newRegisterComment.getCommentIndex() != ipoComment.getCommentIndex()) {
             // commentIndex가 다른 것 (= 신규상장 코멘트가 아닌 것)은 제거대상 o
-            System.out.println(ipoComment);
-            System.out.println(newRegisterComment);
+            // System.out.println(ipoComment);
+            // System.out.println(newRegisterComment);
             return true;
         } else {
             return false;
