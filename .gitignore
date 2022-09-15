@@ -40,3 +40,4 @@ out/
 application-secret.yml
 **/api/test/*
 **/api/test/
+sql-test.xml
