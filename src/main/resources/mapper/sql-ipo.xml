@@ -146,7 +146,8 @@
         FROM ipo_comment
                  LEFT JOIN ipo ON ipo_comment.ipo_index = ipo.ipo_index
         ORDER BY comment_index DESC
-        LIMIT #{limit} OFFSET #{offset};
+        WHERE ipo_comment.regist_date BETWEEN #{startDate} and #{endDate}
+        LIMIT 200;
     </select>
 
     <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
