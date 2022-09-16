@@ -141,6 +141,7 @@ public final class JwtUtil {
 
     //토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String token) {
+        // TODO 비어있지 않을 때 오류가 나면 Exception 으로 구분 필요
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
