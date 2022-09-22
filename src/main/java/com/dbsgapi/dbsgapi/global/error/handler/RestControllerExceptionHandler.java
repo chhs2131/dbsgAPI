@@ -17,6 +17,6 @@ public class RestControllerExceptionHandler  extends ResponseEntityExceptionHand
     @ExceptionHandler(value = {CustomException.class})
     protected ResponseEntity<DbsgApiResponse> handleCustomException(CustomException e) {
         log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
-        return new ResponseEntity<>(DbsgApiResponse.fromErrorCode(e.getErrorCode()), e.getErrorCode().getStatus());
+        return DbsgApiResponse.fromErrorCode(e.getErrorCode());
     }
 }
