@@ -21,7 +21,6 @@
 - RESTful API Server
     - Spring Boot 2.6.2 (Gradle)
     - lombok
-    - Thymeleaf
     - Mybatis
     - Hikari (connection pool)
     - Swagger 2.9.2
