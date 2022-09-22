@@ -63,6 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        // TODO 허용 리스트 properties 로 분리하기
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://www.dbsg.co.kr",
                 "http://test.dbsg.co.kr:8080", "http://server.dbsg.co.kr:8080", "http://localhost:8080", "http://localhost:63342"));
         configuration.addAllowedHeader("*");
