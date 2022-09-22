@@ -48,6 +48,7 @@
     출처: https://oingdaddy.tistory.com/257 [SI Supply Depot]
 
     <!--레벨설정은 debug이며, 모든 대상에 대해 CONSOLE과 FILE을 적용-->
+    <!--TODO log level 을 properties 파일에서 설정도록 수정하기-->
     <root level="debug">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>

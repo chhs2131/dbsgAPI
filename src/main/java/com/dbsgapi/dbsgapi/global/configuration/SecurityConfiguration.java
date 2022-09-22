@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +24,6 @@ import java.util.Arrays;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    //DataSource dataSource;
 
     @Bean
     @Override
@@ -58,36 +56,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // 필터 추가
         //http.addFilterBefore(new JwtAuthen)
-
-        // 기본 제공 로그인 페이지
-        //http.formLogin().loginPage("/login/login.do");
-
-        // 권한 없을때 띄울 페이지
-        //http.exceptionHandling().accessDeniedPage("/board/openBoardList3.do");
-
-        // 로그아웃시 지정 페이지로 이동
-        //http.logout().logoutSuccessUrl("/board/openBoardList3.do").invalidateHttpSession(true);
     }
-
-    // 계정 정보 확인 및 비교하여 등록된 사용자인지 확인
-    /*
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        String query1 = "SELECT user_id username, CONCAT('{noop}', user_pass) password, "
-                + " CASE WHEN enabled = 'Y' THEN true else false END enabled" + " FROM members WHERE user_id = ?";
-        String query2 = "SELECT user_id, role_name role" + " FROM members WHERE user_id = ?";
-
-        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery(query1).rolePrefix("ROLE_")
-                .authoritiesByUsernameQuery(query2);
-    }
-    */
 
     // CORS 허용 적용
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        //configuration.addAllowedOrigin("*");
+        // TODO 허용 리스트 properties 로 분리하기
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://www.dbsg.co.kr",
                 "http://test.dbsg.co.kr:8080", "http://server.dbsg.co.kr:8080", "http://localhost:8080", "http://localhost:63342"));
         configuration.addAllowedHeader("*");
@@ -98,10 +74,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public SpringSecurityDialect springSecurityDialect() {
-        return new SpringSecurityDialect();
     }
 }

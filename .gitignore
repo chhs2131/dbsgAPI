@@ -41,3 +41,5 @@ application-secret.yml
 **/api/test/*
 **/api/test/
 sql-test.xml
+**/resources/templates/test/
+**/resources/static/test/
