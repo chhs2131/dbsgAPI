@@ -13,6 +13,11 @@ public enum ErrorCode {
     TEST_EXCEPTION(NOT_FOUND, "T000", "yeah"),
 
     // ipo
+    IPO_LIST_NOT_FOUND_EXCEPTION(NOT_FOUND, "II000", "조건에 맞는 조회 결과가 없습니다."),
+    IPO_DETAIL_NOT_FOUND_EXCEPTION(NOT_FOUND, "ID000", "조회 결과가 없습니다."),
+    IPO_SCHEDULE_NOT_FOUND_EXCEPTION(NOT_FOUND, "IS000", "조건에 맞는 조회 결과가 없습니다."),
+    IPO_COMMENT_NOT_FOUND_EXCEPTION(NOT_FOUND, "IC000", "조건에 맞는 조회 결과가 없습니다."),
+    IPO_UNDERWRITER_NOT_FOUND_EXCEPTION(NOT_FOUND, "IU000", "조회 결과가 없습니다."),
 
     // jwt
     MALFRMED_JWT_EXCEPTION(NOT_FOUND, "J000", "잘못된 JWT 서명입니다."),
