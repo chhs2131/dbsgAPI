@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.global.error.handler;
 
+import com.dbsgapi.dbsgapi.global.dto.DbsgApiResponse;
 import com.dbsgapi.dbsgapi.global.error.CustomException;
 import com.dbsgapi.dbsgapi.global.error.ErrorResponse;
 import lombok.Getter;
@@ -14,8 +15,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class RestControllerExceptionHandler  extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {CustomException.class})
-    protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+    protected ResponseEntity<DbsgApiResponse> handleCustomException(CustomException e) {
         log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
-        return ErrorResponse.toResponseEntity(e.getErrorCode());
+        return DbsgApiResponse.fromErrorCode(e.getErrorCode());
     }
 }
