@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Getter
@@ -14,9 +15,11 @@ public enum ErrorCode {
 
     // ipo
     IPO_LIST_NOT_FOUND_EXCEPTION(NOT_FOUND, "II000", "조건에 맞는 조회 결과가 없습니다."),
-    IPO_DETAIL_NOT_FOUND_EXCEPTION(NOT_FOUND, "ID000", "조회 결과가 없습니다."),
+    IPO_DETAIL_NOT_FOUND_EXCEPTION(NOT_FOUND, "II001", "조회 결과가 없습니다."),
     IPO_SCHEDULE_NOT_FOUND_EXCEPTION(NOT_FOUND, "IS000", "조건에 맞는 조회 결과가 없습니다."),
-    IPO_COMMENT_NOT_FOUND_EXCEPTION(NOT_FOUND, "IC000", "조건에 맞는 조회 결과가 없습니다."),
+    IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION(NOT_FOUND, "IC000", "조건에 맞는 조회 결과가 없습니다."),
+    IPO_COMMENT_NOT_FOUND_EXCEPTION(NOT_FOUND, "IC001", "조회 결과가 없습니다."),
+    IPO_COMMENT_WRONG_PARAMETER_EXCEPTION(BAD_REQUEST, "IC100", "조회 대상이 올바르지 않습니다. (ipo index 오류)"),
     IPO_UNDERWRITER_NOT_FOUND_EXCEPTION(NOT_FOUND, "IU000", "조회 결과가 없습니다."),
 
     // jwt
