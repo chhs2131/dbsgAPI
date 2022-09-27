@@ -24,6 +24,7 @@ public class KakaoController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final KakaoService kakaoService;
 
+    //TODO login 관련도 /api/v1/login 쪽으로 분리 필요함
     @GetMapping(value="/login/kakaoLoginUrl")
     @Operation(summary="백엔드 테스트용", description="카카오 AuthCode 취득을 위한 URI 반환")
     public String kakaoLoginUrl() {
