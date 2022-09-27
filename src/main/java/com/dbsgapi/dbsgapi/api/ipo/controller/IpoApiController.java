@@ -3,7 +3,6 @@ package com.dbsgapi.dbsgapi.api.ipo.controller;
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import com.dbsgapi.dbsgapi.global.error.CustomException;
-import com.dbsgapi.dbsgapi.global.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,7 +26,7 @@ import static com.dbsgapi.dbsgapi.global.error.ErrorCode.*;
 public class IpoApiController {
     private final IpoService ipoService;
 
-    @RequestMapping(value="", method = RequestMethod.GET)
+    @GetMapping(value="")
     @Operation(summary="IPO 목록을 반환", description="IPO 목록을 최근 등록된 순으로 반환합니다. (추후 페이징 방식으로 변경 예정)")
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
@@ -43,7 +42,7 @@ public class IpoApiController {
     }
 
     // TODO 단일 조회 path mapping uri 변경 필요 detail <->
-    @RequestMapping(value="/{ipoIndex}", method = RequestMethod.GET)
+    @GetMapping(value="/{ipoIndex}")
     @Operation(summary="단일 IPO 종목을 상세조회", description="ipoIndex에 해당하는 종목에 상세 정보를 반환합니다.")
     public ResponseEntity<IpoDetailDto> getIpo(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
         IpoDetailDto ipoData = new IpoDetailDto();
@@ -56,7 +55,7 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
     
-    @RequestMapping(value="/detail/{ipoIndex}", method = RequestMethod.GET)
+    @GetMapping(value="/detail/{ipoIndex}")
     @Operation(summary="IPO 기본정보 확인", description="해당 종목에 기본정보를 조회합니다.")
     public ResponseEntity<IpoDto> getIpoDetail(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
         IpoDto ipoData = ipoService.selectIpo(ipoIndex);
@@ -66,7 +65,7 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/schedule", method = RequestMethod.GET)
+    @GetMapping(value="/schedule")
     @Operation(summary="지정 기간내에 일정을 확인", description="지정한 기간내에 일정을 모두 확인합니다.")
     public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
             @Parameter(description="조회 시작일자") String startDate,
@@ -79,7 +78,7 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/comment", method = RequestMethod.GET)
+    @GetMapping(value="/comment")
     @Operation(summary="IPO Comment 조회", description="코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(
             @Parameter(description="특정 ipoIndex만 조회") @RequestParam(required=false, defaultValue="0") int ipoIndex,
@@ -102,7 +101,7 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/comment/{commentIndex}", method = RequestMethod.GET)
+    @GetMapping(value="/comment/{commentIndex}")
     @Operation(summary="특정 Comment 확인", description="단일 comment를 조회합니다. commentIndex를 통해 조회합니다. (ipoIndex 즉, 종목번호 아님)")
     public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) throws Exception {
         IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
@@ -112,7 +111,7 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/underwriter/{ipoIndex}", method = RequestMethod.GET)
+    @GetMapping(value="/underwriter/{ipoIndex}")
     @Operation(summary="IPO 주간사 정보 확인", description="해당 종목에 주간사 정보를 조회합니다.")
     public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
         List<IpoUnderwriterDto> ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
