@@ -2,6 +2,8 @@ package com.dbsgapi.dbsgapi.global.util;
 
 import com.dbsgapi.dbsgapi.api.login.service.CustomUserDetailsService;
 import com.dbsgapi.dbsgapi.global.configuration.properties.JwtProperty;
+import com.dbsgapi.dbsgapi.global.error.CustomException;
+import com.dbsgapi.dbsgapi.global.error.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -141,19 +143,25 @@ public final class JwtUtil {
 
     //토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String token) {
+        // TODO 비어있지 않을 때 오류가 나면 Exception 으로 구분 필요
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
+            log.debug("잘못된 JWT 서명입니다.");
+            // throw new CustomException(ErrorCode.MALFRMED_JWT_EXCEPTION);
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
+            log.debug("만료된 JWT 토큰입니다.");
+            // throw new CustomException(ErrorCode.EXPIRED_JWT_EXCEPTION);
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
+            log.debug("지원되지 않는 JWT 토큰입니다.");
+            // throw new CustomException(ErrorCode.UNSUPPORTED_JWT_EXCEPTION);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
+            log.debug("JWT 토큰이 잘못되었습니다.");
+            // throw new CustomException(ErrorCode.ILLEGAL_JWT_EXCEPTION);
         } catch (NullPointerException e) {
-            log.info("토큰값이 비어있습니다.");
+            log.debug("토큰값이 비어있습니다.");
+            // throw new CustomException(ErrorCode.NULL_POINTER_JWT_EXCEPTION);
         }
         return false;
     }

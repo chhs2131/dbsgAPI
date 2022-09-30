@@ -13,8 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,14 +24,15 @@ public class KakaoController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final KakaoService kakaoService;
 
-    @RequestMapping(value="/login/kakaoLoginUrl", method= RequestMethod.GET)
+    //TODO login 관련도 /api/v1/login 쪽으로 분리 필요함
+    @GetMapping(value="/login/kakaoLoginUrl")
     @Operation(summary="백엔드 테스트용", description="카카오 AuthCode 취득을 위한 URI 반환")
-    public String kakaoLoginUrl() throws Exception {
+    public String kakaoLoginUrl() {
         String kakaoLoginUrl = "https://kauth.kakao.com/oauth/authorize?client_id=e0b6130240281c4b18e88e405545754f&redirect_uri=http://server.dbsg.co.kr:8080/login/kakao&response_type=code";
         return kakaoLoginUrl;
     }
 
-    @RequestMapping(value={"/login/kakao"}, method=RequestMethod.GET)
+    @GetMapping(value={"/login/kakao"})
     @Operation(summary="카카오 OAuth2.0 (REST:AuthCode)", description="카카오 AuthCode를 전달하고, 서버의 계정정보값을 취득합니다."
             + "<br/>카카오 로그인시 RedirectURI를 해당으로 설정하여 진행합니다.<br/><br/>단, 카카오 보안규칙상 AuthCode는 일회용이므로 사용시 주의필요."
             + "<br/>Redirect URI 예시: https://kauth.kakao.com/oauth/authorize?client_id=a130d4bc5b0df2dd600ac87ffdda755a&redirect_uri=http://1.243.131.200:8080/login/kakao&response_type=code")
@@ -41,7 +41,7 @@ public class KakaoController {
         return getMemberDto(kakaoOAuthDto);
     }
 
-    @RequestMapping(value={"/login/kakaoAccessToken"}, method=RequestMethod.GET)
+    @GetMapping(value={"/login/kakaoAccessToken"})
     @Operation(summary="카카오 OAuth2.0 (Android:AccessToken)", description="카카오 AccessToken을 전달하고, 서버의 계정정보값을 취득합니다. (Target Client: Android)")
     public MemberDto kakaoLoginAccessToken(@Parameter(description="카카오에서 발급받은 엑세스토큰") String accessToken) throws Exception {
         KakaoOAuthDto kakaoOAuthDto = new KakaoOAuthDto();
@@ -49,6 +49,7 @@ public class KakaoController {
         return getMemberDto(kakaoOAuthDto);
     }
 
+    //TODO 관련 로직 서비스 쪽으로 분리 필요함
     private MemberDto getMemberDto(KakaoOAuthDto kakaoOAuthDto) throws Exception {
         //accessToken을 통해 각각의 서버(카카오, dbsg)에서 정보를 가져옵니다. (신규계정일 경우 등록)
         String accessToken = kakaoOAuthDto.getAccessToken();
