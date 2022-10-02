@@ -27,16 +27,12 @@ public final class CustomResponse<T> {
                 errorCode.getStatus());
     }
 
-    public static <T> ResponseEntity<CustomResponse> of(T data) {
-        return new ResponseEntity<>(CustomResponse.builder()
+    public static <T> CustomResponse of(T data) {
+        return CustomResponse.builder()
                 .status(HttpStatus.OK.value())
                 .code("")
                 .message("")
                 .body(data)
-                .build(),
-                HttpStatus.OK);
+                .build();
     }
-
-    // return new ResponseEntity<>(DbsgApiResponse.fromErrorCode(e.getErrorCode()), e.getErrorCode().getStatus());
-    //
 }
