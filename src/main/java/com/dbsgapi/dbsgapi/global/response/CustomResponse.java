@@ -1,6 +1,5 @@
-package com.dbsgapi.dbsgapi.global.dto;
+package com.dbsgapi.dbsgapi.global.response;
 
-import com.dbsgapi.dbsgapi.global.error.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -11,15 +10,15 @@ import java.util.ArrayList;
 
 @Getter
 @Builder
-public final class DbsgApiResponse<T> {
+public final class CustomResponse<T> {
     private int status;
     private String code;
     private String message;
     private T body;
     private final LocalDateTime timestamp = LocalDateTime.now();
 
-    public static ResponseEntity<DbsgApiResponse> fromErrorCode(ErrorCode errorCode) {
-        return new ResponseEntity<>(DbsgApiResponse.builder()
+    public static ResponseEntity<CustomResponse> fromErrorCode(ErrorCode errorCode) {
+        return new ResponseEntity<>(CustomResponse.builder()
                 .status(errorCode.getStatus().value())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
@@ -28,8 +27,8 @@ public final class DbsgApiResponse<T> {
                 errorCode.getStatus());
     }
 
-    public static <T> ResponseEntity<DbsgApiResponse> of(T data) {
-        return new ResponseEntity<>(DbsgApiResponse.builder()
+    public static <T> ResponseEntity<CustomResponse> of(T data) {
+        return new ResponseEntity<>(CustomResponse.builder()
                 .status(HttpStatus.OK.value())
                 .code("")
                 .message("")

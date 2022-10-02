@@ -2,7 +2,7 @@ package com.dbsgapi.dbsgapi.api.ipo.controller;
 
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
-import com.dbsgapi.dbsgapi.global.error.CustomException;
+import com.dbsgapi.dbsgapi.global.response.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.dbsgapi.dbsgapi.global.error.ErrorCode.*;
+import static com.dbsgapi.dbsgapi.global.response.ErrorCode.*;
 
 @Slf4j
 @RestController
