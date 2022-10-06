@@ -18,13 +18,17 @@ public final class CustomResponse<T> {
     private final LocalDateTime timestamp = LocalDateTime.now();
 
     public static ResponseEntity<CustomResponse> fromErrorCode(ErrorCode errorCode) {
-        return new ResponseEntity<>(CustomResponse.builder()
+        CustomResponse<?> customResponse = CustomResponse.builder()
                 .status(errorCode.getStatus().value())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .body(new ArrayList<>())
-                .build(),
-                errorCode.getStatus());
+                .build();
+
+        // 204(no content)일 경우, 정상반환(200)으로 변경하여 Client에게 공통응답 형식으로 반환하게 만들어준다.
+        if (errorCode.getStatus() == HttpStatus.NO_CONTENT)
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
+        return new ResponseEntity<>(customResponse, errorCode.getStatus());
     }
 
     public static <T> CustomResponse of(T data) {
