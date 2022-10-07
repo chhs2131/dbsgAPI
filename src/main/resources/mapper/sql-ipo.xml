@@ -135,7 +135,7 @@
             ifnull(terminate_date, ipo_debut_date) DESC,
             ipo_start_date DESC,
             ipo.regist_date DESC
-        LIMIT 30;
+        LIMIT 100;
     </select>
 
     <select id="selectIpoCommentList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
