@@ -1,4 +1,4 @@
-package com.dbsgapi.dbsgapi.global.error;
+package com.dbsgapi.dbsgapi.global.response;
 
 
 import lombok.Builder;

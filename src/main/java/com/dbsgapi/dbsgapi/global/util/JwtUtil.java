@@ -2,8 +2,6 @@ package com.dbsgapi.dbsgapi.global.util;
 
 import com.dbsgapi.dbsgapi.api.login.service.CustomUserDetailsService;
 import com.dbsgapi.dbsgapi.global.configuration.properties.JwtProperty;
-import com.dbsgapi.dbsgapi.global.error.CustomException;
-import com.dbsgapi.dbsgapi.global.error.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

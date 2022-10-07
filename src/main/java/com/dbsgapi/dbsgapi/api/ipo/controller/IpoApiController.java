@@ -2,9 +2,13 @@ package com.dbsgapi.dbsgapi.api.ipo.controller;
 
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
-import com.dbsgapi.dbsgapi.global.error.CustomException;
+import com.dbsgapi.dbsgapi.global.response.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.dbsgapi.dbsgapi.global.error.ErrorCode.*;
+import static com.dbsgapi.dbsgapi.global.response.ErrorCode.*;
 
 @Slf4j
 @RestController
@@ -27,7 +31,7 @@ public class IpoApiController {
     private final IpoService ipoService;
 
     @GetMapping(value="")
-    @Operation(summary="IPO 목록을 반환", description="IPO 목록을 최근 등록된 순으로 반환합니다. (추후 페이징 방식으로 변경 예정)")
+    @Operation(summary="IPO 목록을 반환", description="IPO 목록을 최근 등록된 순으로 반환합니다.")
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @Parameter(description="페이지당 반환갯수") @RequestParam(required=false, defaultValue="100") int num,
