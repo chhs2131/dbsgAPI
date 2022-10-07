@@ -18,18 +18,8 @@ public class RestResponseHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         String classPath = returnType.getContainingClass().toString();
-        if(classPath.startsWith("class com.dbsgapi.dbsgapi.api")) {
+        if(classPath.startsWith("class com.dbsgapi.dbsgapi.api"))  // package상 api에 해당하는 것만 처리하도록 명시
             return true;
-        }
-
-//        log.debug("\n[ResponseBodyAdvice Supports]"
-//                + "\nPackagePath1: " + returnType.getContainingClass()
-//                + "\nPackagePath2: " + returnType.getExecutable().getDeclaringClass().toString()
-//                + "\nclassName: " + returnType.getExecutable().getName()
-//                + "\nParameterType: " + returnType.getParameterType()
-//                + "\nParameterName: " + returnType.getParameterName()
-//                + "\nDeclaredAnnotations: " + Arrays.toString(returnType.getExecutable().getDeclaredAnnotations())
-//        );
         return false;
     }
 
