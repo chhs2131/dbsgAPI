@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.controller;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import com.dbsgapi.dbsgapi.global.response.CustomException;
@@ -35,11 +36,25 @@ public class IpoApiController {
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @Parameter(description="페이지당 반환갯수") @RequestParam(required=false, defaultValue="100") int num,
-            @Parameter(description="검색 조건문 (임시) (ex: stock_name LIKE '%에스%')") @RequestParam(required=false, defaultValue="1=1") String queryString
-    ) throws Exception {
-        // todo 검색조건문(queryString) 현재 임시 사용중으로 client가 query형태를 알지 못해도 사용할 수 있도록 수정 필요.
+            @Parameter(description="타겟 상태") @RequestParam(required=false, defaultValue="ALL")IpoSequence state
+            ) throws Exception {
+        // state 변수를 queryString 변수로 변환
+        String queryString = "1=1";
+        if(state == IpoSequence.ALL)
+            queryString = "2=2";
+        else if(state == IpoSequence.TODAY)
+            queryString = "3=3";
+        else if(state == IpoSequence.BEFORE_IPO)
+            queryString = "4=4";
+        else if(state == IpoSequence.BEFORE_REFUND)
+            queryString = "5=5";
+        else if(state == IpoSequence.BEFORE_DEBUT)
+            queryString = "6=6";
+        log.info(queryString);
+
         List<IpoSummaryDto> listIpo = ipoService.selectIpos(queryString, page, num);
 
+        // 예외처리 및 결과반환
         if(listIpo.isEmpty())
             throw new CustomException(IPO_LIST_NOT_FOUND_EXCEPTION);
         return new ResponseEntity<>(listIpo, HttpStatus.OK);

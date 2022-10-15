@@ -9,7 +9,21 @@ import lombok.Getter;
  * ipo 공개를 단계별로 표현한 enum
  */
 public enum IpoSequence {
-    //TEST(1, "test"),
+    ALL,
+    TODAY,
+    BEFORE_FORECAST,
+    NOW_FORECAST,
+    AFTER_FORECAST,
+    BEFORE_IPO,
+    NOW_IPO,
+    AFTER_IPO,
+    BEFORE_REFUND,
+    NOW_REFUND,
+    AFTER_REFUND,
+    BEFORE_DEBUT,
+    NOW_DEBUT,
+    AFTER_DEBUT;
+    /*
     // 사용되지 않음
     상장예비_심사청구(0,"상장예비_심사청구"),
     심사청구_승인(1, "심사청구 승인"),
@@ -35,4 +49,5 @@ public enum IpoSequence {
     ;
     private int level;
     private String sequence;
+    */
 }
