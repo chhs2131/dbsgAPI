@@ -6,10 +6,6 @@ import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import com.dbsgapi.dbsgapi.global.response.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,20 +32,42 @@ public class IpoApiController {
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @Parameter(description="페이지당 반환갯수") @RequestParam(required=false, defaultValue="100") int num,
+            @Parameter(description="타겟 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate,
             @Parameter(description="타겟 상태") @RequestParam(required=false, defaultValue="ALL")IpoSequence state
             ) throws Exception {
         // state 변수를 queryString 변수로 변환
+        /*
+                (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
+                (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR
+                (ipo_start_date BETWEEN #{startDate} AND #{endDate}) OR
+                (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
+                (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
+                (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
+         */
+
         String queryString = "1=1";
+        String todayDate = "'" + targetDate.toString() + "'";
         if(state == IpoSequence.ALL)
-            queryString = "2=2";
+            queryString = "1=1";
         else if(state == IpoSequence.TODAY)
-            queryString = "3=3";
+            // 오늘 진행되는 일정을 보여준다. (금일 진행되는 수요예측, 공모청약, 환불, 상장)
+            queryString =
+                    todayDate + "= ipo_debut_date OR " +
+                    todayDate + "= ipo_refund_date OR " +
+                    todayDate + " BETWEEN ipo_forecast_start AND ipo_forecast_end OR " +
+                    todayDate + " BETWEEN ipo_start_date AND ipo_end_date";
+        else if(state == IpoSequence.BEFORE_FORECAST)
+            queryString = todayDate + "< ipo_forecast_start";
         else if(state == IpoSequence.BEFORE_IPO)
-            queryString = "4=4";
+            // 공모청약 예정인 종목을 보여준다.
+            queryString = todayDate + " BETWEEN ipo_forecast_end + 1 AND ipo_start_date - 1";
         else if(state == IpoSequence.BEFORE_REFUND)
-            queryString = "5=5";
+            // 환불 예정인 종목을 보여준다.
+            queryString = todayDate + " BETWEEN ipo_end_date + 1 AND ipo_refund_date - 1";
         else if(state == IpoSequence.BEFORE_DEBUT)
-            queryString = "6=6";
+            // 상장 예정인 종목을 보여준다.
+            queryString = todayDate + " BETWEEN ipo_refund_date + 1 AND ipo_debut_date - 1";
         log.info(queryString);
 
         List<IpoSummaryDto> listIpo = ipoService.selectIpos(queryString, page, num);
@@ -90,6 +108,7 @@ public class IpoApiController {
             @Parameter(description="조회 시작일자") String startDate,
             @Parameter(description="조회 종료일자") String endDate) throws Exception {
         //TODO 파라미터 반드시 입력해야되는지 확인
+        //TODO Date Parameter를 String이 아닌 LocalDate Type으로 받도록 설정
         List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
 
         if(ipoData.isEmpty())
