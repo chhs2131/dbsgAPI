@@ -32,33 +32,34 @@ public class IpoApiController {
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @Parameter(description="페이지당 반환갯수") @RequestParam(required=false, defaultValue="100") int num,
-            @Parameter(description="타겟 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
-            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate,
-            @Parameter(description="타겟 상태") @RequestParam(required=false, defaultValue="ALL")IpoSequence state
+            @Parameter(description="기준 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate refDate,
+            @Parameter(description="기준일 진행 단계") @RequestParam(required=false, defaultValue="ALL")IpoSequence state
             ) throws Exception {
         // state 변수를 queryString 변수로 변환
         String queryString;
-        String todayDate = "'" + targetDate.toString() + "'";
+        String targetDate = "'" + refDate.toString() + "'";
+
         if(state == IpoSequence.ALL)
             queryString = "1=1";
         else if(state == IpoSequence.TODAY)
             // 오늘 진행되는 일정을 보여준다. (금일 진행되는 수요예측, 공모청약, 환불, 상장)
             queryString =
-                    todayDate + "= ipo_debut_date OR " +
-                    todayDate + "= ipo_refund_date OR " +
-                    todayDate + " BETWEEN ipo_forecast_start AND ipo_forecast_end OR " +
-                    todayDate + " BETWEEN ipo_start_date AND ipo_end_date";
+                    targetDate + "= ipo_debut_date OR " +
+                    targetDate + "= ipo_refund_date OR " +
+                    targetDate + " BETWEEN ipo_forecast_start AND ipo_forecast_end OR " +
+                    targetDate + " BETWEEN ipo_start_date AND ipo_end_date";
         else if(state == IpoSequence.BEFORE_FORECAST)
-            queryString = todayDate + "< ipo_forecast_start";
-        else if(state == IpoSequence.BEFORE_IPO)
+            queryString = targetDate + "< ipo_forecast_start";
+        else if(state == IpoSequence.BEFORE_IPO || state == IpoSequence.AFTER_FORECAST)
             // 공모청약 예정인 종목을 보여준다.
-            queryString = todayDate + " BETWEEN ipo_forecast_end + 1 AND ipo_start_date - 1";
-        else if(state == IpoSequence.BEFORE_REFUND)
+            queryString = targetDate + " BETWEEN DATE_ADD(ipo_forecast_end, INTERVAL 1 DAY) AND DATE_SUB(ipo_start_date, INTERVAL 1 DAY)";
+        else if(state == IpoSequence.BEFORE_REFUND || state == IpoSequence.AFTER_IPO)
             // 환불 예정인 종목을 보여준다.
-            queryString = todayDate + " BETWEEN ipo_end_date + 1 AND ipo_refund_date - 1";
-        else if(state == IpoSequence.BEFORE_DEBUT)
+            queryString = targetDate + " BETWEEN DATE_ADD(ipo_end_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_refund_date, INTERVAL 1 DAY)";
+        else if(state == IpoSequence.BEFORE_DEBUT || state == IpoSequence.AFTER_REFUND)
             // 상장 예정인 종목을 보여준다.
-            queryString = todayDate + " BETWEEN ipo_refund_date + 1 AND ipo_debut_date - 1";
+            queryString = targetDate + " BETWEEN DATE_ADD(ipo_refund_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_debut_date, INTERVAL 1 DAY)";
         else
             throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
 
