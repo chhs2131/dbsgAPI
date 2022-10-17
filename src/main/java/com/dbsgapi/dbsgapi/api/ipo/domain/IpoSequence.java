@@ -11,6 +11,7 @@ import lombok.Getter;
 public enum IpoSequence {
     ALL,
     TODAY,
+    CANCEL,
     BEFORE_FORECAST,
     NOW_FORECAST,
     AFTER_FORECAST,

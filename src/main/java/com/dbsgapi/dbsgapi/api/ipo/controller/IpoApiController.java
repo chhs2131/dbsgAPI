@@ -43,8 +43,9 @@ public class IpoApiController {
         if(state == IpoSequence.ALL)
             queryString = "1=1";
         else if(state == IpoSequence.TODAY)
-            // 오늘 진행되는 일정을 보여준다. (금일 진행되는 수요예측, 공모청약, 환불, 상장)
+            // 오늘 진행되는 일정을 보여준다. (금일 진행되는 수요예측, 공모청약, 환불, 상장, 상장 철회)
             queryString =
+                    targetDate + "= ipo_cancel_date OR " +
                     targetDate + "= ipo_debut_date OR " +
                     targetDate + "= ipo_refund_date OR " +
                     targetDate + " BETWEEN ipo_forecast_start AND ipo_forecast_end OR " +
