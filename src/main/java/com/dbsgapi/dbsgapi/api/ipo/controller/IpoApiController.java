@@ -37,16 +37,7 @@ public class IpoApiController {
             @Parameter(description="타겟 상태") @RequestParam(required=false, defaultValue="ALL")IpoSequence state
             ) throws Exception {
         // state 변수를 queryString 변수로 변환
-        /*
-                (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
-                (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR
-                (ipo_start_date BETWEEN #{startDate} AND #{endDate}) OR
-                (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
-                (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
-                (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
-         */
-
-        String queryString = "1=1";
+        String queryString;
         String todayDate = "'" + targetDate.toString() + "'";
         if(state == IpoSequence.ALL)
             queryString = "1=1";
@@ -68,8 +59,10 @@ public class IpoApiController {
         else if(state == IpoSequence.BEFORE_DEBUT)
             // 상장 예정인 종목을 보여준다.
             queryString = todayDate + " BETWEEN ipo_refund_date + 1 AND ipo_debut_date - 1";
-        log.info(queryString);
+        else
+            throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
 
+        // IPO 목록 조회
         List<IpoSummaryDto> listIpo = ipoService.selectIpos(queryString, page, num);
 
         // 예외처리 및 결과반환
