@@ -51,6 +51,7 @@ public class IpoApiController {
                     targetDate + " BETWEEN ipo_forecast_start AND ipo_forecast_end OR " +
                     targetDate + " BETWEEN ipo_start_date AND ipo_end_date";
         else if(state == IpoSequence.BEFORE_FORECAST)
+            // 수요예측 예정인 종목을 보여준다.
             queryString = targetDate + "< ipo_forecast_start";
         else if(state == IpoSequence.BEFORE_IPO || state == IpoSequence.AFTER_FORECAST)
             // 공모청약 예정인 종목을 보여준다.
@@ -61,6 +62,9 @@ public class IpoApiController {
         else if(state == IpoSequence.BEFORE_DEBUT || state == IpoSequence.AFTER_REFUND)
             // 상장 예정인 종목을 보여준다.
             queryString = targetDate + " BETWEEN DATE_ADD(ipo_refund_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_debut_date, INTERVAL 1 DAY)";
+        else if(state == IpoSequence.AFTER_DEBUT)
+            // 상장 완료한 종목을 보여준다.
+            queryString = targetDate + ">= ipo_debut_date";
         else
             throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
 
