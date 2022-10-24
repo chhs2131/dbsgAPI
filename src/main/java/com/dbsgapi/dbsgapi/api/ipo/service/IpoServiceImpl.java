@@ -1,28 +1,31 @@
 package com.dbsgapi.dbsgapi.api.ipo.service;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoUnderwriterDto;
 import com.dbsgapi.dbsgapi.api.ipo.mapper.IpoMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IpoServiceImpl implements IpoService{
     private final IpoMapper ipoMapper;
 
     @Override
-    public List<IpoSummaryDto> selectIpos(String queryString, int page, int num) throws Exception {
-        // todo ipolist keyword 구분하는 구문 추가
+    public List<IpoSummaryDto> selectIpos(LocalDate targetDate, IpoSequence ipoSequence, int page, int num) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("limit", num);
         map.put("offset", page * num - num);
-        map.put("queryString", queryString);
+        map.put("targetDate", targetDate);
+        map.put("ipoSequence", ipoSequence.toString());
 
         // ipo list 조회 로직
         return ipoMapper.selectIpos(map);

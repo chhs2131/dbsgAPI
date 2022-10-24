@@ -38,7 +38,13 @@
         WHERE
               stock_exchange IS NOT NULL
               AND ipo_cancel_bool = 'N'
-              AND (${queryString})
+              <choose>
+                  <when test="ipoSequence == 'BEFORE_FORECAST'">
+                      AND #{targetDate} &lt; ipo.ipo_forecast_start
+                  </when>
+                  <otherwise>
+                  </otherwise>
+              </choose>
         ORDER BY
             (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
             ifnull(terminate_date, ipo_debut_date) DESC,
@@ -166,6 +172,7 @@
                change_log_json
         FROM 	ipo_comment
         WHERE 	ipo_index = #{ipoIndex} and enabled not like 'N'
+
         ORDER BY regist_date DESC
         LIMIT   100;
     </select>
