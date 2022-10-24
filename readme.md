@@ -7,6 +7,7 @@
 - 크롤링된 공모주 정보를 Client에게 Restful API로 전달 및 관리
 - 공모주 관련 플랫폼을 구축하는 것이 목표인 백엔드 프로젝트
 
+<br/>
 
 ### 💻 담당 업무
 
@@ -28,10 +29,12 @@
 - 담당 인원 : 3인
 - 크롤러: `Python3.9`, `BS4`, `PyMysql`
 
+<br/>
 
 ### 📆 개발 기간
 - 2021.11 ~ 2022.10 (진행중)
 
+<br/><br/><br/>
 
 
 ## 🛠 프로젝트 상세 정보
@@ -39,7 +42,7 @@
 해당 문서에서는 아래 그림의 `SpringBoot` 에 대해 다룹니다.
 ![img.png](readme_file/img.png)
 
-
+<br/>
 
 ### 🤔 주요 기능
 - IPO: URL 요청을 통해 공모주, 실권주, 스펙주에 청약관련 정보를 확인할 수 있습니다.
@@ -49,6 +52,7 @@
 - SwaggerLink : http://server.dbsg.co.kr:8080/swagger-ui/index.html
 ![img_1.png](readme_file/img_1.png)
 
+<br/>
 
 ### 📺 연동되는 Client
 - 아래 링크를 통해 서버API로부터 데이터를 받아 제공하는 Android App 정보를 확인할 수 있습니다. 
