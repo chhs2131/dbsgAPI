@@ -37,6 +37,7 @@
              ON ipo.ipo_index = under.ipo_index
         WHERE
               stock_exchange IS NOT NULL
+              AND ipo_cancel_bool = 'N'
               AND (${queryString})
         ORDER BY
             (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
