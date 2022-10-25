@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IpoService {
-    List<IpoSummaryDto> selectIpos(LocalDate targetDate, IpoSequence ipoSequence, int page, int num) throws Exception;
+    List<IpoSummaryDto> selectIpos(LocalDate targetDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws Exception;
     IpoDto selectIpo(long ipoIndex) throws Exception;
     List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
