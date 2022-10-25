@@ -77,6 +77,8 @@ public class JsonCommentConverter {
             return false;
         } else if (Objects.equals(String.valueOf(map.get(key)), "-1.0")) {
             return false;
+        } else if (Objects.equals(String.valueOf(map.get(key)), "N")) {
+            return false;
         }
         return true;
     }
@@ -101,6 +103,10 @@ public class JsonCommentConverter {
         assert map != null;
         String mapValue;
         if(!map.isEmpty()) {
+        // 0순위: 공모철회 관련 정보
+            if (mapVerify(map, "ipo_cancel_bool")) {
+                this.commentList.add("공모청약이 철회되었습니다.");
+            }
         // 1순위: 일정관련 정보들
             if (mapVerify(map, "ipo_start_date") && mapVerify(map, "ipo_end_date")) {
                 this.commentList.add("공모청약일이 변경되었습니다. (" +
