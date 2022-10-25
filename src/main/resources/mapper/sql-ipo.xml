@@ -15,6 +15,10 @@
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
                under.underwriter,
 
+               ipo_price_low,
+               ipo_price_high,
+               ipo_price,
+
                ipo_cancel_bool,
                DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date
         FROM ipo LEFT OUTER JOIN
