@@ -50,11 +50,13 @@
                     ORDER BY ipo_cancel_date DESC
                   </when>
                   <when test="ipoSequence == 'TODAY'">
-                      AND #{targetDate} = ipo_cancel_date
+                      AND
+                    ( #{targetDate} = ipo_cancel_date
                       OR #{targetDate} = ipo_debut_date
                       OR #{targetDate} = ipo_refund_date
                       OR #{targetDate} BETWEEN ipo_forecast_start AND ipo_forecast_end
                       OR #{targetDate} BETWEEN ipo_start_date AND ipo_end_date
+                    )
                     ORDER BY ipo_start_date ASC
                   </when>
                   <when test="ipoSequence == 'BEFORE_FORECAST'">
