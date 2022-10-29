@@ -52,7 +52,7 @@ public class IpoServiceImpl implements IpoService{
         // 쿼리문 요청, 조회
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoComment(ipoIndex);
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
-        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getComment()));
+        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
 
         return ipoCommentList;
     }
@@ -73,12 +73,12 @@ public class IpoServiceImpl implements IpoService{
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoCommentList(map);
 
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다. (null)
-        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getComment()));
+        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
 
         // 리스트에 신규상장이 있는지 한바퀴 둘러보고 보관하기
         Map<Long, IpoCommentDto> newRegisterCommentList = new HashMap<>();
         for(IpoCommentDto commentTemp : ipoCommentList) {
-            if("신규 등록되었습니다.".equals(commentTemp.getComment())) {
+            if("신규 등록되었습니다.".equals(commentTemp.getTitle())) {
                 newRegisterCommentList.put(commentTemp.getIpoIndex(), commentTemp);
             }
         }
