@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CommentLevel {
-    CANCEL(0, "청약이 철회되었습니다."),
+    IPO_CANCEL(0, "청약이 철회되었습니다."),
     NEW(1, "신규 등록되었습니다."),
     SCHEDULE(2, "일정이 변경되었습니다."),
     DYNAMIC(3, "공모 정보가 업데이트 되었습니다."),
