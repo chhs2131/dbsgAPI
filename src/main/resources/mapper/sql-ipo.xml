@@ -166,6 +166,7 @@
              ON ipo.ipo_index = under.ipo_index
         WHERE
             stock_exchange IS NOT NULL
+            AND ipo_cancel_bool = 'N'
             AND (
                 (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
                 (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR

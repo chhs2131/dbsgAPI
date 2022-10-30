@@ -12,6 +12,7 @@ public enum IpoSequence {
     ALL,
     TODAY,
     CANCEL,
+    SCHEDULE,
     BEFORE_FORECAST,
     NOW_FORECAST,
     AFTER_FORECAST,
