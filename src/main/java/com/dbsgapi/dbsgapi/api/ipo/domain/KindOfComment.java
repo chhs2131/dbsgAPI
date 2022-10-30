@@ -8,18 +8,18 @@ import static com.dbsgapi.dbsgapi.api.ipo.domain.CommentLevel.*;
 @Getter
 @AllArgsConstructor
 public enum KindOfComment {  // state
-    CANCEL(IPO_CANCEL, "공모청약이 철회되었습니다."),
-    CHANGED_IPO_DATE(SCHEDULE, "공모청약일이 변경되었습니다."),
-    //CHANGED_START_DATE(1, "공모청약 시작일이 변경되었습니다."),
-    //CHANGED_END_DATE(1, "공모청약 종료일이 변경되었습니다."),
+    CANCEL(IPO_CANCEL, "청약이 철회되었습니다."),
+    CHANGED_IPO_DATE(SCHEDULE, "청약일이 변경되었습니다."),
+    CHANGED_START_DATE(SCHEDULE, "청약 시작일이 변경되었습니다."),
+    CHANGED_END_DATE(SCHEDULE, "청약 종료일이 변경되었습니다."),
     CHANGED_REFUND_DATE(SCHEDULE, "대금 환불일이 변경되었습니다."),
     CHANGED_DEBUT_DATE(SCHEDULE, "상장일이 변경되었습니다."),
     CHANGED_FORECAST_DATE(SCHEDULE, "수요예측일이 변경되었습니다."),
-    //CHANGED_FORECAST_START(1, "수요예측 시작일이 변경되었습니다."),
-    //CHANGED_FORECAST_END(1, "수요예측 종료일이 변경되었습니다."),
+    CHANGED_FORECAST_START(SCHEDULE, "수요예측 시작일이 변경되었습니다."),
+    CHANGED_FORECAST_END(SCHEDULE, "수요예측 종료일이 변경되었습니다."),
     CHANGED_EX_DATE(SCHEDULE, "구주주 청약일이 변경되었습니다."),
-    //CHANGED_EX_START(1, "구주주 청약 시작일이 변경되었습니다."),
-    //CHANGED_EX_END(1, "구주주 청약 종료일이 변경되었습니다."),
+    CHANGED_EX_START(SCHEDULE, "구주주 청약 시작일이 변경되었습니다."),
+    CHANGED_EX_END(SCHEDULE, "구주주 청약 종료일이 변경되었습니다."),
 
     CHANGED_LOCK_UP_PERCENT(DYNAMIC, "의무보유확약 비율이 정정되었습니다."),
     SET_ACCEPTANCE_RATE(DYNAMIC, "수요 예측 결과가 발표되었습니다."),

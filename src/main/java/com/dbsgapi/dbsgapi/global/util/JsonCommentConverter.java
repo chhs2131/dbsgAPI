@@ -139,9 +139,9 @@ public class JsonCommentConverter {
         if (mapVerify(map, "ipo_start_date") && mapVerify(map, "ipo_end_date")) {
             appendComment(CHANGED_IPO_DATE, getMapValue(map, "ipo_start_date") + " ~ " + getMapValue(map, "ipo_end_date"));
         } else if (mapVerify(map, "ipo_start_date")) {
-            appendComment(CHANGED_IPO_DATE, getMapValue(map, "ipo_start_date"));
+            appendComment(CHANGED_START_DATE, getMapValue(map, "ipo_start_date"));
         } else if (mapVerify(map, "ipo_end_date")) {
-            appendComment(CHANGED_IPO_DATE, getMapValue(map, "ipo_end_date"));
+            appendComment(CHANGED_END_DATE, getMapValue(map, "ipo_end_date"));
         }
 
         if (mapVerify(map, "ipo_refund_date")) {
@@ -156,19 +156,19 @@ public class JsonCommentConverter {
         } else if (mapVerify(map, "ipo_forecast_start") && mapVerify(map, "ipo_forecast_date")) {
             appendComment(CHANGED_FORECAST_DATE, getMapValue(map, "ipo_forecast_start") + " ~ " + getMapValue(map, "ipo_forecast_date"));
         } else if (mapVerify(map, "ipo_forecast_start")) {
-            appendComment(CHANGED_FORECAST_DATE, getMapValue(map, "ipo_forecast_start"));
+            appendComment(CHANGED_FORECAST_START, getMapValue(map, "ipo_forecast_start"));
         } else if (mapVerify(map, "ipo_forecast_end")) {
-            appendComment(CHANGED_FORECAST_DATE, getMapValue(map, "ipo_forecast_end"));
+            appendComment(CHANGED_FORECAST_END, getMapValue(map, "ipo_forecast_end"));
         } else if (mapVerify(map, "ipo_forecast_date")) {  // 수요예측 종료일의 이전 컬럼명.
-            appendComment(CHANGED_FORECAST_DATE, getMapValue(map, "ipo_forecast_date"));
+            appendComment(CHANGED_FORECAST_END, getMapValue(map, "ipo_forecast_date"));
         }
 
         if (mapVerify(map, "ex_start_date") && mapVerify(map, "ex_end_date")) {
             appendComment(CHANGED_EX_DATE, getMapValue(map, "ex_start_date") + " ~ " + getMapValue(map, "ex_end_date"));
         } else if (mapVerify(map, "ex_start_date")) {
-            appendComment(CHANGED_EX_DATE, getMapValue(map, "ex_start_date"));
+            appendComment(CHANGED_EX_START, getMapValue(map, "ex_start_date"));
         } else if (mapVerify(map, "ex_end_date")) {
-            appendComment(CHANGED_EX_DATE, getMapValue(map, "ex_end_date"));
+            appendComment(CHANGED_EX_END, getMapValue(map, "ex_end_date"));
         }
 
         // 2순위: 공모 관련 변동 정보
