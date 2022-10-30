@@ -126,7 +126,6 @@ public class JsonCommentConverter {
     }
 
     private String commentIpo(String commentJson) {
-        // 해당하는값이 -1인 경우도 구분해줘야한다. -1은 값이 사라짐.
         Map<String, Object> map = jsonToMap(commentJson);
         assert map != null;
         if (map.isEmpty())  // comment 내용이 없을 경우 Blank String 을 반환한다.
@@ -221,23 +220,10 @@ public class JsonCommentConverter {
             appendComment(CHANGED_PURPOSE_OF_FUNDS, getMapValue(map, "purpose_of_funds"));
         }
 
-        // 가장 높은 우선순위에 있는 comment를 반환한다. ex) 공모가가 확정되었습니다. (1,200원) - 외 3건
-//        if (!commentList.isEmpty()) {
-//            int sizeOfList = commentList.size() - 1;  // 변경사항이 여러개일 경우 "외 n건"을 붙인다.
-//            if (sizeOfList == 0) {
-//                returnComment = commentList.get(0);
-//            } else {
-//                returnComment = commentList.get(0) + " - 외 " + String.valueOf(sizeOfList) + "건";
-//            }
-//        } else {
-//            returnComment = "";
-//        }
-
         return getTitle();
     }
 
     private String commentUnderwriter(String commentJson) {
-        String returnComment;
         // underwriter(주간사) json을 해석하고 그 내용을 String으로 반환합니다.
         Map<String, Object> map = jsonToMap(commentJson);
         assert map != null;
@@ -245,22 +231,22 @@ public class JsonCommentConverter {
             return "";
 
         if (mapVerify(map, "ind_can_max")) {
-            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_can_max")));
+            appendComment(CHANGED_UNDERWRITER_TOTAL, "최대 청약 수량: " + map.get("ind_can_max"));
         }
         if (mapVerify(map, "ind_can_min")) {
-            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_can_min")));
+            appendComment(CHANGED_UNDERWRITER_TOTAL, "최소 청약 수량: " + map.get("ind_can_min"));
         }
         if (mapVerify(map, "ind_total_max")) {
-            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_total_max")));
+            appendComment(CHANGED_UNDERWRITER_TOTAL, "전체 수량 최대: " + map.get("ind_total_max"));
         }
         if (mapVerify(map, "ind_total_min")) {
-            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_total_min")));
+            appendComment(CHANGED_UNDERWRITER_TOTAL, "전체 수량 최소: " + map.get("ind_total_min"));
         }
         if (mapVerify(map, "sub_min_quan")) {
-            appendComment(CHANGED_UNDERWRITER_MIN_QUAN, String.valueOf(map.get("sub_min_quan")));
+            appendComment(CHANGED_UNDERWRITER_MIN_QUAN, "최소 청약 수량: " + map.get("sub_min_quan"));
         }
         if (mapVerify(map, "sub_deposit_percent")) {
-            appendComment(CHANGED_UNDERWRITER_DEPOSIT_PERCENT, String.valueOf(map.get("sub_deoposit_percent")));
+            appendComment(CHANGED_UNDERWRITER_DEPOSIT_PERCENT, "증거금률: " + map.get("sub_deoposit_percent") + "%");
         }
 
         return getTitle();
