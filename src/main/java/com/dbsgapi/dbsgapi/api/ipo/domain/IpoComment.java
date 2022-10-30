@@ -6,12 +6,14 @@ import lombok.Getter;
 @Getter
 @Builder
 public class IpoComment {
-    private KindOfComment kind;
+    private CommentLevel type;
+    private String comment;
     private String detail;
 
     public static IpoComment makeNew(KindOfComment kind, String detail) {
         return IpoComment.builder()
-                .kind(kind)
+                .type(kind.getType())
+                .comment(kind.getComment())
                 .detail(detail)
                 .build();
     }
