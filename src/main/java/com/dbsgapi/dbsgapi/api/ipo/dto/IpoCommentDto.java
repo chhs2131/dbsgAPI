@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.dto;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.IpoComment;
 import com.dbsgapi.dbsgapi.global.util.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +22,7 @@ public class IpoCommentDto {
     @Schema(description ="제목", example = "공모 정보가 변경되었습니다.")
     private String title;
     @Schema(description ="내용(전체)", example = "List형식. [----가 변경되었습니다. ----가 변경되었습니다. 상장일이 변경되었습니다.]")
-    private List<String> commentList;
+    private List<IpoComment> commentList;
     @Schema(description ="등록일", example = "2022-01-01")
     private String registDate;
 
