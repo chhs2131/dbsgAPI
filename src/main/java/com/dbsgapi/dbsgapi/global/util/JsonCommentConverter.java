@@ -241,32 +241,29 @@ public class JsonCommentConverter {
         // underwriter(주간사) json을 해석하고 그 내용을 String으로 반환합니다.
         Map<String, Object> map = jsonToMap(commentJson);
         assert map != null;
-        if (!map.isEmpty()) {
-            if (mapVerify(map, "ind_can_max")) {
-                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
-                // return "ind_can_max" + String.valueOf(map.get("ind_can_max"));
-            } else if (mapVerify(map, "ind_can_min")) {
-                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
-                // return "ind_can_min" + String.valueOf(map.get("ind_can_min"));
-            } else if (mapVerify(map, "ind_total_max")) {
-                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
-                // return "ind_total_max" + String.valueOf(map.get("ind_total_max"));
-            } else if (mapVerify(map, "ind_total_min")) {
-                returnComment = "일반인 청약가능 수량이 변경되었습니다.";
-                // return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
-            } else if (mapVerify(map, "sub_min_quan")) {
-                returnComment = "일반인 최소 청약 수량이 변경되었습니다. (" + String.valueOf(map.get("sub_min_quan")) + "주)";
-                // return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
-            } else if (mapVerify(map, "sub_deposit_percent")) {
-                returnComment = "일반인 청약 증거금 비율이 변경되었습니다. (" + String.valueOf(map.get("sub_deposit_percent")) + "%)";
-                // return "ind_total_min" + String.valueOf(map.get("ind_total_min"));
-            } else {
-                returnComment = "";
-            }
-        } else {
-            returnComment = "";
+        if (map.isEmpty())
+            return "";
+
+        if (mapVerify(map, "ind_can_max")) {
+            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_can_max")));
         }
-        return returnComment;
+        if (mapVerify(map, "ind_can_min")) {
+            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_can_min")));
+        }
+        if (mapVerify(map, "ind_total_max")) {
+            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_total_max")));
+        }
+        if (mapVerify(map, "ind_total_min")) {
+            appendComment(CHANGED_UNDERWRITER_TOTAL, String.valueOf(map.get("ind_total_min")));
+        }
+        if (mapVerify(map, "sub_min_quan")) {
+            appendComment(CHANGED_UNDERWRITER_MIN_QUAN, String.valueOf(map.get("sub_min_quan")));
+        }
+        if (mapVerify(map, "sub_deposit_percent")) {
+            appendComment(CHANGED_UNDERWRITER_DEPOSIT_PERCENT, String.valueOf(map.get("sub_deoposit_percent")));
+        }
+
+        return getTitle();
     }
 
     private Map<String, Object> jsonToMap(String json) {
