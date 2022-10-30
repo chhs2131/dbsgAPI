@@ -37,9 +37,9 @@ public class IpoApiController {
             @Parameter(description="기준일 진행 단계") @RequestParam(required=false, defaultValue="ALL")IpoSequence state,
             @Parameter(description="정렬 (현재 사용되지 않음)") @RequestParam(required=false, defaultValue="asc")String sort,
             @Parameter(description="청약철회된 종목 반환여부") @RequestParam(required=false, defaultValue="false")Boolean withCancelItem,
-            @Parameter(description="기준 시작 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @Parameter(description="기준 시작 일자 (현재 사용되지 않음)") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @Parameter(description="기준 종료 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @Parameter(description="기준 종료 일자 (현재 사용되지 않음)") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
             ) throws Exception {
 
