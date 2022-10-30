@@ -57,7 +57,7 @@
                       OR #{targetDate} BETWEEN ipo_forecast_start AND ipo_forecast_end
                       OR #{targetDate} BETWEEN ipo_start_date AND ipo_end_date
                     )
-                    ORDER BY ipo_start_date ASC
+                    ORDER BY ipo_start_date DESC
                   </when>
                   <when test="ipoSequence == 'BEFORE_FORECAST'">
                       AND #{targetDate} &lt; ipo.ipo_forecast_start
