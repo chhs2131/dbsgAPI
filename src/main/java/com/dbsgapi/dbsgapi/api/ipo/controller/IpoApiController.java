@@ -36,7 +36,11 @@ public class IpoApiController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate,
             @Parameter(description="기준일 진행 단계") @RequestParam(required=false, defaultValue="ALL")IpoSequence state,
             @Parameter(description="정렬 (현재 사용되지 않음)") @RequestParam(required=false, defaultValue="asc")String sort,
-            @Parameter(description="청약철회된 종목 반환여부") @RequestParam(required=false, defaultValue="false")Boolean withCancelItem
+            @Parameter(description="청약철회된 종목 반환여부") @RequestParam(required=false, defaultValue="false")Boolean withCancelItem,
+            @Parameter(description="기준 시작 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @Parameter(description="기준 종료 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
             ) throws Exception {
 
         //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
@@ -46,7 +50,7 @@ public class IpoApiController {
             throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
 
         // IPO 목록 조회
-        List<IpoSummaryDto> listIpo = ipoService.selectIpos(targetDate, state, withCancelItem, page, num, sort);
+        List<IpoSummaryDto> listIpo = ipoService.selectIpos(targetDate, startDate, endDate, state, withCancelItem, page, num, sort);
 
         // 예외처리 및 결과반환
         if(listIpo.isEmpty())

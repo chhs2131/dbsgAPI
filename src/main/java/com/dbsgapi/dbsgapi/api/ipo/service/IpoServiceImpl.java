@@ -20,11 +20,13 @@ public class IpoServiceImpl implements IpoService{
     private final IpoMapper ipoMapper;
 
     @Override
-    public List<IpoSummaryDto> selectIpos(LocalDate targetDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws Exception {
+    public List<IpoSummaryDto> selectIpos(LocalDate targetDate, LocalDate startDate, LocalDate endDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("limit", num);
         map.put("offset", page * num - num);
         map.put("targetDate", targetDate);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
         map.put("ipoSequence", ipoSequence.toString());
         map.put("withCancelItem", withCancelItem);
         map.put("sort", sort);
