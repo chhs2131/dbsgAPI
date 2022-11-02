@@ -46,7 +46,7 @@ public class IpoApiController {
         //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
 
         // 아직 처리할 수 없는 state 예외처리
-        if(state == IpoSequence.NOW_IPO || state == IpoSequence.NOW_FORECAST || state == IpoSequence.NOW_DEBUT || state == IpoSequence.NOW_REFUND)
+        if(state == IpoSequence.NOW_IPO || state == IpoSequence.NOW_FORECAST || state == IpoSequence.NOW_DEBUT || state == IpoSequence.NOW_REFUND || state == IpoSequence.SCHEDULE)
             throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
 
         // IPO 목록 조회
@@ -58,9 +58,8 @@ public class IpoApiController {
         return new ResponseEntity<>(listIpo, HttpStatus.OK);
     }
 
-    // TODO 단일 조회 path mapping uri 변경 필요 detail <->
     @GetMapping(value="/{ipoIndex}")
-    @Operation(summary="단일 IPO 종목을 상세조회", description="ipoIndex에 해당하는 종목에 상세 정보를 반환합니다.")
+    @Operation(summary="단일 IPO 종목 상세조회", description="ipoIndex에 해당하는 종목에 상세 정보를 반환합니다.")
     public ResponseEntity<IpoDetailDto> getIpo(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
         IpoDetailDto ipoData = new IpoDetailDto();
         ipoData.setIpo(ipoService.selectIpo(ipoIndex));
@@ -72,7 +71,7 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
     
-    @GetMapping(value="/detail/{ipoIndex}")
+    @GetMapping(value="/{ipoIndex}/basic")
     @Operation(summary="IPO 기본정보 확인", description="해당 종목에 기본정보를 조회합니다.")
     public ResponseEntity<IpoDto> getIpoDetail(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
         IpoDto ipoData = ipoService.selectIpo(ipoIndex);
@@ -82,17 +81,23 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
-    @GetMapping(value="/schedule")
-    @Operation(summary="지정 기간내에 일정을 확인", description="지정한 기간내에 일정을 모두 확인합니다.")
-    public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
-            @Parameter(description="조회 시작일자") String startDate,
-            @Parameter(description="조회 종료일자") String endDate) throws Exception {
-        //TODO 파라미터 반드시 입력해야되는지 확인
-        //TODO Date Parameter를 String이 아닌 LocalDate Type으로 받도록 설정
-        List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
+    @GetMapping(value="/{ipoIndex}/underwriter")
+    @Operation(summary="IPO 주간사 정보 확인", description="해당 종목에 주간사 정보를 조회합니다.")
+    public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
+        List<IpoUnderwriterDto> ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
 
         if(ipoData.isEmpty())
-            throw new CustomException(IPO_SCHEDULE_NOT_FOUND_EXCEPTION);
+            throw new CustomException(IPO_UNDERWRITER_NOT_FOUND_EXCEPTION);
+        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/{ipoIndex}/comment")
+    @Operation(summary="특정 종목의 Comment 조회", description="특정 종목의 코멘트(히스토리)를 조회합니다.")
+    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
+        List<IpoCommentDto> ipoData = ipoService.selectIpoComment(ipoIndex);
+
+        if(ipoData.isEmpty())
+            throw new CustomException(IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION);
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
@@ -120,7 +125,7 @@ public class IpoApiController {
     }
 
     @GetMapping(value="/comment/{commentIndex}")
-    @Operation(summary="특정 Comment 확인", description="단일 comment를 조회합니다. commentIndex를 통해 조회합니다. (ipoIndex 즉, 종목번호 아님)")
+    @Operation(summary="특정 Comment 확인", description="단일 comment를 조회합니다.")
     public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) throws Exception {
         IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
 
@@ -129,13 +134,17 @@ public class IpoApiController {
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 
-    @GetMapping(value="/underwriter/{ipoIndex}")
-    @Operation(summary="IPO 주간사 정보 확인", description="해당 종목에 주간사 정보를 조회합니다.")
-    public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
-        List<IpoUnderwriterDto> ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
+    @GetMapping(value="/schedule")
+    @Operation(summary="지정 기간내에 일정을 확인", description="지정한 기간내에 일정을 모두 확인합니다.")
+    public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
+            @Parameter(description="조회 시작일자") String startDate,
+            @Parameter(description="조회 종료일자") String endDate) throws Exception {
+        //TODO 파라미터 반드시 입력해야되는지 확인
+        //TODO Date Parameter를 String이 아닌 LocalDate Type으로 받도록 설정
+        List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
 
         if(ipoData.isEmpty())
-            throw new CustomException(IPO_UNDERWRITER_NOT_FOUND_EXCEPTION);
+            throw new CustomException(IPO_SCHEDULE_NOT_FOUND_EXCEPTION);
         return new ResponseEntity<>(ipoData, HttpStatus.OK);
     }
 }
