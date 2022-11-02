@@ -1,28 +1,35 @@
 package com.dbsgapi.dbsgapi.api.ipo.service;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoSummaryDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoUnderwriterDto;
 import com.dbsgapi.dbsgapi.api.ipo.mapper.IpoMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IpoServiceImpl implements IpoService{
     private final IpoMapper ipoMapper;
 
     @Override
-    public List<IpoSummaryDto> selectIpos(String queryString, int page, int num) throws Exception {
-        // todo ipolist keyword 구분하는 구문 추가
+    public List<IpoSummaryDto> selectIpos(LocalDate targetDate, LocalDate startDate, LocalDate endDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("limit", num);
         map.put("offset", page * num - num);
-        map.put("queryString", queryString);
+        map.put("targetDate", targetDate);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("ipoSequence", ipoSequence.toString());
+        map.put("withCancelItem", withCancelItem);
+        map.put("sort", sort);
 
         // ipo list 조회 로직
         return ipoMapper.selectIpos(map);
@@ -47,7 +54,7 @@ public class IpoServiceImpl implements IpoService{
         // 쿼리문 요청, 조회
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoComment(ipoIndex);
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
-        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getComment()));
+        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
 
         return ipoCommentList;
     }
@@ -68,12 +75,12 @@ public class IpoServiceImpl implements IpoService{
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoCommentList(map);
 
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다. (null)
-        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getComment()));
+        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
 
         // 리스트에 신규상장이 있는지 한바퀴 둘러보고 보관하기
         Map<Long, IpoCommentDto> newRegisterCommentList = new HashMap<>();
         for(IpoCommentDto commentTemp : ipoCommentList) {
-            if("신규 등록되었습니다.".equals(commentTemp.getComment())) {
+            if("신규 등록되었습니다.".equals(commentTemp.getTitle())) {
                 newRegisterCommentList.put(commentTemp.getIpoIndex(), commentTemp);
             }
         }

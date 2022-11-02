@@ -15,6 +15,10 @@
                DATE_FORMAT(ipo_debut_date, '%Y-%m-%d') ipo_debut_date,
                under.underwriter,
 
+               ipo_price_low,
+               ipo_price_high,
+               ipo_price,
+
                ipo_cancel_bool,
                DATE_FORMAT(ipo_cancel_date, '%Y-%m-%d') ipo_cancel_date
         FROM ipo LEFT OUTER JOIN
@@ -36,13 +40,53 @@
              ) AS under
              ON ipo.ipo_index = under.ipo_index
         WHERE
-              stock_exchange IS NOT NULL AND
-              (${queryString})
-        ORDER BY
-            (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
-            ifnull(terminate_date, ipo_debut_date) DESC,
-            ipo_start_date DESC,
-            ipo.regist_date DESC
+              stock_exchange IS NOT NULL
+              <if test="!withCancelItem">
+                 AND ipo_cancel_bool = 'N'
+              </if>
+              <choose>
+                  <when test="ipoSequence == 'CANCEL'">
+                      AND ipo_cancel_bool = 'Y'
+                    ORDER BY ipo_cancel_date DESC
+                  </when>
+                  <when test="ipoSequence == 'TODAY'">
+                      AND
+                    ( #{targetDate} = ipo_cancel_date
+                      OR #{targetDate} = ipo_debut_date
+                      OR #{targetDate} = ipo_refund_date
+                      OR #{targetDate} BETWEEN ipo_forecast_start AND ipo_forecast_end
+                      OR #{targetDate} BETWEEN ipo_start_date AND ipo_end_date
+                    )
+                    ORDER BY ipo_start_date DESC
+                  </when>
+                  <when test="ipoSequence == 'BEFORE_FORECAST'">
+                      AND #{targetDate} &lt; ipo.ipo_forecast_start
+                    ORDER BY ipo_forecast_start ASC
+                  </when>
+                  <when test="ipoSequence == 'BEFORE_IPO' or ipoSequence == 'AFTER_FORECAST'">
+                      AND #{targetDate} BETWEEN DATE_ADD(IFNULL(ipo_forecast_end, regist_date), INTERVAL 1 DAY) AND DATE_SUB(ipo_start_date, INTERVAL 1 DAY)
+                    ORDER BY ipo_start_date ASC
+                  </when>
+                  <when test="ipoSequence == 'BEFORE_REFUND' or ipoSequence == 'AFTER_IPO'">
+                      AND #{targetDate} BETWEEN DATE_ADD(ipo_end_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_refund_date, INTERVAL 1 DAY)
+                    ORDER BY ipo_refund_date ASC
+                  </when>
+                  <when test="ipoSequence == 'BEFORE_DEBUT' or ipoSequence == 'AFTER_REFUND'">
+                      AND #{targetDate} BETWEEN DATE_ADD(ipo_refund_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_debut_date, INTERVAL 1 DAY)
+                    ORDER BY ipo_debut_date ASC
+                  </when>
+                  <when test="ipoSequence == 'AFTER_DEBUT'">
+                      AND #{targetDate} >= ipo_debut_date
+                    ORDER BY ipo_debut_date DESC
+                  </when>
+                  <otherwise>
+                    ORDER BY
+                        (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
+                        ifnull(terminate_date, ipo_debut_date) DESC,
+                        ipo_start_date DESC,
+                        ipo.regist_date DESC
+                  </otherwise>
+              </choose>
         LIMIT #{limit} OFFSET #{offset};
     </select>
 
@@ -122,6 +166,7 @@
              ON ipo.ipo_index = under.ipo_index
         WHERE
             stock_exchange IS NOT NULL
+            AND ipo_cancel_bool = 'N'
             AND (
                 (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
                 (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR
@@ -165,6 +210,7 @@
                change_log_json
         FROM 	ipo_comment
         WHERE 	ipo_index = #{ipoIndex} and enabled not like 'N'
+
         ORDER BY regist_date DESC
         LIMIT   100;
     </select>

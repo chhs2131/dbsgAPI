@@ -36,6 +36,12 @@ class JsonCommentConverterTest {
     }
 
     @Test
+    void ipoTestCancel() {
+        jcc.setCommentType("ipo");
+        jcc.setCommentJson("{\"ind_can_max\": 1, \"ind_can_min\": null, \"ind_total_max\": null, \"ind_total_min\": 1111, \"ipo_cancel_bool\": \"Y\"}");
+        assertEquals(jcc.getRecentComment(), "공모청약이 철회되었습니다.");
+    }
+    @Test
     void ipoTestSales() {
         jcc.setCommentType("ipo");
         jcc.setCommentJson("{\"sales\": 3043680004, \"profits\": 333, \"ipo_price\": null, \"par_value\": null, \"ipo_end_date\": null, \"ipo_price_low\": null, \"ipo_debut_date\": null, \"ipo_price_high\": null, \"ipo_start_date\": null, \"ipo_min_deposit\": null, \"ipo_refund_date\": null, \"lock_up_percent\": 34.27, \"ipo_forecast_date\": null, \"put_back_option_who\": null, \"number_of_ipo_shares\": 12345, \"put_back_option_price\": null, \"put_back_option_deadline\": null, \"ipo_institutional_acceptance_rate\": null}");

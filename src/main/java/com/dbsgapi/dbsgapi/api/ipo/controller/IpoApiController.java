@@ -1,14 +1,11 @@
 package com.dbsgapi.dbsgapi.api.ipo.controller;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import com.dbsgapi.dbsgapi.global.response.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +32,27 @@ public class IpoApiController {
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description="페이지 번호") @RequestParam(required=false, defaultValue="1") int page,
             @Parameter(description="페이지당 반환갯수") @RequestParam(required=false, defaultValue="100") int num,
-            @Parameter(description="검색 조건문 (임시) (ex: stock_name LIKE '%에스%')") @RequestParam(required=false, defaultValue="1=1") String queryString
-    ) throws Exception {
-        // todo 검색조건문(queryString) 현재 임시 사용중으로 client가 query형태를 알지 못해도 사용할 수 있도록 수정 필요.
-        List<IpoSummaryDto> listIpo = ipoService.selectIpos(queryString, page, num);
+            @Parameter(description="기준 일자") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate,
+            @Parameter(description="기준일 진행 단계") @RequestParam(required=false, defaultValue="ALL")IpoSequence state,
+            @Parameter(description="정렬 (현재 사용되지 않음)") @RequestParam(required=false, defaultValue="asc")String sort,
+            @Parameter(description="청약철회된 종목 반환여부") @RequestParam(required=false, defaultValue="false")Boolean withCancelItem,
+            @Parameter(description="기준 시작 일자 (현재 사용되지 않음)") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @Parameter(description="기준 종료 일자 (현재 사용되지 않음)") @RequestParam(required=false, defaultValue="#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
+            ) throws Exception {
 
+        //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
+
+        // 아직 처리할 수 없는 state 예외처리
+        if(state == IpoSequence.NOW_IPO || state == IpoSequence.NOW_FORECAST || state == IpoSequence.NOW_DEBUT || state == IpoSequence.NOW_REFUND)
+            throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
+
+        // IPO 목록 조회
+        List<IpoSummaryDto> listIpo = ipoService.selectIpos(targetDate, startDate, endDate, state, withCancelItem, page, num, sort);
+
+        // 예외처리 및 결과반환
         if(listIpo.isEmpty())
             throw new CustomException(IPO_LIST_NOT_FOUND_EXCEPTION);
         return new ResponseEntity<>(listIpo, HttpStatus.OK);
@@ -75,6 +88,7 @@ public class IpoApiController {
             @Parameter(description="조회 시작일자") String startDate,
             @Parameter(description="조회 종료일자") String endDate) throws Exception {
         //TODO 파라미터 반드시 입력해야되는지 확인
+        //TODO Date Parameter를 String이 아닌 LocalDate Type으로 받도록 설정
         List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
 
         if(ipoData.isEmpty())

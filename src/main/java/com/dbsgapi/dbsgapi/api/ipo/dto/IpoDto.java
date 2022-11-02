@@ -39,8 +39,8 @@ public class IpoDto {
     // 공모 정보
     private String purposeOfFunds;
     private long numberOfIpoShares;
-    private double lockUpPercent;
-    private double ipoInstitutionalAcceptanceRate;
+    private Double lockUpPercent;
+    private Double ipoInstitutionalAcceptanceRate;
     private int ipoPrice;
     private int ipoPriceLow;
     private int ipoPriceHigh;
