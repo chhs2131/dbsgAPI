@@ -5,14 +5,14 @@ import lombok.Data;
 
 import java.util.List;
 
-@Schema(description ="종목에 대한 상세 정보를 제공합니다.")
+@Schema(description = "종목에 대한 상세 정보를 제공합니다.")
 @Data
 public class IpoDetailDto {
-    @Schema(description ="IPO 기본정보")
+    @Schema(description = "IPO 기본정보")
     private IpoDto ipo;
-    @Schema(description ="주간사 정보")
+    @Schema(description = "주간사 정보")
     private List<IpoUnderwriterDto> underwriter;
-    @Schema(description ="코멘트(히스토리) 정보")
+    @Schema(description = "코멘트(히스토리) 정보")
     private List<IpoCommentDto> comment;
 }
 

@@ -3,9 +3,9 @@ package com.dbsgapi.dbsgapi.api.login.controller;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
+import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.login.service.KakaoService;
 import com.dbsgapi.dbsgapi.global.util.JwtUtil;
-import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,25 +25,25 @@ public class KakaoController {
     private final KakaoService kakaoService;
 
     //TODO login 관련도 /api/v1/login 쪽으로 분리 필요함
-    @GetMapping(value="/login/kakaoLoginUrl")
-    @Operation(summary="백엔드 테스트용", description="카카오 AuthCode 취득을 위한 URI 반환")
+    @GetMapping(value = "/login/kakaoLoginUrl")
+    @Operation(summary = "백엔드 테스트용", description = "카카오 AuthCode 취득을 위한 URI 반환")
     public String kakaoLoginUrl() {
         String kakaoLoginUrl = "https://kauth.kakao.com/oauth/authorize?client_id=e0b6130240281c4b18e88e405545754f&redirect_uri=http://server.dbsg.co.kr:8080/login/kakao&response_type=code";
         return kakaoLoginUrl;
     }
 
-    @GetMapping(value={"/login/kakao"})
-    @Operation(summary="카카오 OAuth2.0 (REST:AuthCode)", description="카카오 AuthCode를 전달하고, 서버의 계정정보값을 취득합니다."
+    @GetMapping(value = {"/login/kakao"})
+    @Operation(summary = "카카오 OAuth2.0 (REST:AuthCode)", description = "카카오 AuthCode를 전달하고, 서버의 계정정보값을 취득합니다."
             + "<br/>카카오 로그인시 RedirectURI를 해당으로 설정하여 진행합니다.<br/><br/>단, 카카오 보안규칙상 AuthCode는 일회용이므로 사용시 주의필요."
             + "<br/>Redirect URI 예시: https://kauth.kakao.com/oauth/authorize?client_id=a130d4bc5b0df2dd600ac87ffdda755a&redirect_uri=http://1.243.131.200:8080/login/kakao&response_type=code")
-    public MemberDto kakaoLogin(@Parameter(description="카카오에서 발급받은 인증코드(AuthCode)") String code) throws Exception {
+    public MemberDto kakaoLogin(@Parameter(description = "카카오에서 발급받은 인증코드(AuthCode)") String code) throws Exception {
         KakaoOAuthDto kakaoOAuthDto = kakaoService.getToken(code);  //kakao로부터 OAuth 정보를 받아옵니다.
         return getMemberDto(kakaoOAuthDto);
     }
 
-    @GetMapping(value={"/login/kakaoAccessToken"})
-    @Operation(summary="카카오 OAuth2.0 (Android:AccessToken)", description="카카오 AccessToken을 전달하고, 서버의 계정정보값을 취득합니다. (Target Client: Android)")
-    public MemberDto kakaoLoginAccessToken(@Parameter(description="카카오에서 발급받은 엑세스토큰") String accessToken) throws Exception {
+    @GetMapping(value = {"/login/kakaoAccessToken"})
+    @Operation(summary = "카카오 OAuth2.0 (Android:AccessToken)", description = "카카오 AccessToken을 전달하고, 서버의 계정정보값을 취득합니다. (Target Client: Android)")
+    public MemberDto kakaoLoginAccessToken(@Parameter(description = "카카오에서 발급받은 엑세스토큰") String accessToken) throws Exception {
         KakaoOAuthDto kakaoOAuthDto = new KakaoOAuthDto();
         kakaoOAuthDto.setAccessToken(accessToken);
         return getMemberDto(kakaoOAuthDto);
@@ -57,7 +57,7 @@ public class KakaoController {
         KakaoMemberDto kakaoMemberDto = kakaoService.selectKakaoMember(kakaoApiUserDto.getId());  //DB에 기등록된 사용자인지 확인합니다.
 
         MemberDto memberDto = new MemberDto();
-        if(kakaoMemberDto == null) { //DB에 등록되지 않았으면 신규등록합니다.
+        if (kakaoMemberDto == null) { //DB에 등록되지 않았으면 신규등록합니다.
             memberDto = kakaoService.insertKakaoMember(kakaoOAuthDto, kakaoApiUserDto);
         } else { //기존계정이 있는경우 정보를 불러옵니다.
             long userNo = kakaoMemberDto.getUserNo();
