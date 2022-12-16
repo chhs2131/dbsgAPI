@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.dto;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.StockExchange;
 import com.dbsgapi.dbsgapi.global.util.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +14,7 @@ public class IpoSummaryDto {
     @Schema(description ="종목명", example = "LG에너지솔루션")
     private String stockName;
     @Schema(description ="시장명", example = "코스피", allowableValues = {"코스피","코스닥","코넥스"}, required=true)
-    private String stockExchange;
+    private StockExchange stockExchange;
     @Schema(description ="유형구분", example = "공모주", allowableValues = {"공모주","실권주","스팩주"})
     private String stockKinds;
 
@@ -51,6 +52,14 @@ public class IpoSummaryDto {
     private String changeLogJson;
     @Schema(description ="최근 발행된 코멘트", example = "수요예측이 끝났습니다! 결과를 확인해보세요.")
     private String recentComment;
+
+    public void setStockExchange(String name) {
+        stockExchange = StockExchange.from(name);
+    }
+
+    public String getStockExchange() {
+        return stockExchange.getName();
+    }
 
     public String getRecentComment() { return this.recentComment; }
     public void setComment(String comment) {

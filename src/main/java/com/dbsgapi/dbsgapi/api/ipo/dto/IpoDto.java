@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.dto;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.StockExchange;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
@@ -13,7 +14,7 @@ public class IpoDto {
     // 기본 정보
     private long ipoIndex;
     private String stockName;
-    private String stockExchange;
+    private StockExchange stockExchange;
     private String stockKinds;
     private String stockCode;
     private String dartCode;
@@ -61,6 +62,14 @@ public class IpoDto {
         if(this.ipoPrice == 0 && this.stockKinds.equals("실권주")) {
             this.ipoPrice = this.ipoPriceHigh;
         }
+    }
+
+    public void setStockExchange(String stockExchange) {
+        this.stockExchange = StockExchange.from(stockExchange);
+    }
+
+    public String getStockExchange() {
+        return stockExchange.getName();
     }
 
     @JsonIgnore
