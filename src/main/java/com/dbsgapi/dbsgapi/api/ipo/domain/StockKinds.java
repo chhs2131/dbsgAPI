@@ -14,14 +14,40 @@ public enum StockKinds {
         this.name = name;
     }
 
+    public boolean isIpo() {
+        return this == IPO;
+    }
+
+    public boolean isForfeited() {
+        return this == FORFEITED;
+    }
+
+    public boolean isSpec() {
+        return this == SPEC;
+    }
+
+    public boolean isReit() {
+        return this == REIT;
+    }
+
     public static StockKinds from(String name) {
-        return Arrays.stream(StockKinds.values())
+        System.out.println("bbbbbbbbbbb" + name);
+        StockKinds s = Arrays.stream(StockKinds.values())
                 .filter(stockKinds -> stockKinds.getName().equals(name))
                 .findAny()
                 .orElse(null);
+        if (s != null) {
+            System.out.println("aaaaaaaaaaaaaa" + s.toString());
+        }
+        return s;
     }
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

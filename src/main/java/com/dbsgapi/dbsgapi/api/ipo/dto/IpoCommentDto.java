@@ -30,12 +30,13 @@ public class IpoCommentDto {
     private String logType;
     private String changeLogJson;
 
-    public String getStockKinds() {
-        return stockKinds.getName();
-    }
 
     public void setStockKinds(String stockKinds) {
         this.stockKinds = StockKinds.from(stockKinds);
+    }
+
+    public String getStockKinds() {
+        return stockKinds.getName();
     }
 
     @JsonIgnore
