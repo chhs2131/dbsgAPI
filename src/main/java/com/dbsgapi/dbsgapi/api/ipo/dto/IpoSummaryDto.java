@@ -1,6 +1,7 @@
 package com.dbsgapi.dbsgapi.api.ipo.dto;
 
 import com.dbsgapi.dbsgapi.api.ipo.domain.StockExchange;
+import com.dbsgapi.dbsgapi.api.ipo.domain.StockKinds;
 import com.dbsgapi.dbsgapi.global.util.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +17,7 @@ public class IpoSummaryDto {
     @Schema(description ="시장명", example = "코스피", allowableValues = {"코스피","코스닥","코넥스"}, required=true)
     private StockExchange stockExchange;
     @Schema(description ="유형구분", example = "공모주", allowableValues = {"공모주","실권주","스팩주"})
-    private String stockKinds;
+    private StockKinds stockKinds;
 
     @Schema(description ="수요예측 시작일", example = "2022-01-10")
     private String ipoForecastStart;
@@ -77,6 +78,14 @@ public class IpoSummaryDto {
             jcc.setCommentJson(this.changeLogJson);
             this.recentComment = jcc.getRecentComment();
         }
+    }
+
+    public void setStockKinds(String stockKinds) {
+        this.stockKinds = StockKinds.from(stockKinds);
+    }
+
+    public String getStockKinds() {
+        return stockKinds.getName();
     }
 
     @JsonIgnore

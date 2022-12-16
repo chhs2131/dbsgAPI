@@ -1,6 +1,7 @@
 package com.dbsgapi.dbsgapi.api.ipo.dto;
 
 import com.dbsgapi.dbsgapi.api.ipo.domain.StockExchange;
+import com.dbsgapi.dbsgapi.api.ipo.domain.StockKinds;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
@@ -15,7 +16,7 @@ public class IpoDto {
     private long ipoIndex;
     private String stockName;
     private StockExchange stockExchange;
-    private String stockKinds;
+    private StockKinds stockKinds;
     private String stockCode;
     private String dartCode;
     private String sectorCode;
@@ -70,6 +71,14 @@ public class IpoDto {
 
     public String getStockExchange() {
         return stockExchange.getName();
+    }
+
+    public void setStockKinds(String stockKinds) {
+        this.stockKinds = StockKinds.from(stockKinds);
+    }
+
+    public String getStockKinds() {
+        return stockKinds.getName();
     }
 
     @JsonIgnore

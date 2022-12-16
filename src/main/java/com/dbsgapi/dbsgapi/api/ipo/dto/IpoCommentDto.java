@@ -1,6 +1,7 @@
 package com.dbsgapi.dbsgapi.api.ipo.dto;
 
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoComment;
+import com.dbsgapi.dbsgapi.api.ipo.domain.StockKinds;
 import com.dbsgapi.dbsgapi.global.util.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,7 +19,7 @@ public class IpoCommentDto {
     @Schema(description ="종목명", example = "LG에너지솔루션")
     private String stockName;
     @Schema(description ="유형구분", example = "공모주", allowableValues = {"공모주","실권주","스팩주"})
-    private String stockKinds;
+    private StockKinds stockKinds;
     @Schema(description ="제목", example = "공모 정보가 변경되었습니다.")
     private String title;
     @Schema(description ="내용")
@@ -42,6 +43,15 @@ public class IpoCommentDto {
             this.commentList = jcc.getCommentList();
         }
     }
+
+    public void setStockKinds(String stockKinds) {
+        this.stockKinds = StockKinds.from(stockKinds);
+    }
+
+    public String getStockKinds() {
+        return stockKinds.getName();
+    }
+
     @JsonIgnore
     public String getLogType() {  // 외부에 값을 표출하진 않음 jsonIgnore
         return logType;
