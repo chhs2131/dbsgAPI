@@ -46,8 +46,7 @@ public class IpoApiController {
         //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
 
         // 아직 처리할 수 없는 state 예외처리
-        if(state == IpoSequence.NOW_IPO || state == IpoSequence.NOW_FORECAST || state == IpoSequence.NOW_DEBUT || state == IpoSequence.NOW_REFUND || state == IpoSequence.SCHEDULE)
-            throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
+        IpoSequence.validate(state);
 
         // IPO 목록 조회
         List<IpoSummaryDto> listIpo = ipoService.selectIpos(targetDate, startDate, endDate, state, withCancelItem, page, num, sort);
