@@ -1,18 +1,16 @@
 package com.dbsgapi.dbsgapi.global.configuration;
 
+import com.dbsgapi.dbsgapi.global.interceptor.LoggerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.nio.charset.Charset;
-
-import javax.servlet.Filter;
-
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import com.dbsgapi.dbsgapi.global.interceptor.LoggerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.servlet.Filter;
+import java.nio.charset.Charset;
 
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {

@@ -1,16 +1,15 @@
 package com.dbsgapi.dbsgapi.global.filter;
 
-import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
-import com.dbsgapi.dbsgapi.global.authentication.JwtAuthentication;
 import com.dbsgapi.dbsgapi.global.authentication.AnonymousAuthentication;
+import com.dbsgapi.dbsgapi.global.authentication.JwtAuthentication;
+import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.debug("JWT : " + token);
 
         // 유효한 토크인지 확인
-        if(StringUtils.hasText(token) && jwtUtil.validateToken(token)) {
+        if (StringUtils.hasText(token) && jwtUtil.validateToken(token)) {
             String userNo = jwtUtil.getUserno(token);
             String userRole = jwtUtil.getUserRole(token);
             MemberDto memberDto = new MemberDto();

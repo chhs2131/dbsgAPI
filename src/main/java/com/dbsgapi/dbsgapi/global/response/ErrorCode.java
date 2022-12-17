@@ -27,8 +27,7 @@ public enum ErrorCode {
     EXPIRED_JWT_EXCEPTION(FORBIDDEN, "J001", "만료된 JWT 토큰입니다."),
     UNSUPPORTED_JWT_EXCEPTION(BAD_REQUEST, "J002", "지원되지 않는 JWT 토큰입니다."),
     ILLEGAL_JWT_EXCEPTION(BAD_REQUEST, "J003", "JWT 토큰이 잘못되었습니다."),
-    NULL_POINTER_JWT_EXCEPTION(BAD_REQUEST, "J004", "토큰 값이 비어있습니다.")
-    ;
+    NULL_POINTER_JWT_EXCEPTION(BAD_REQUEST, "J004", "토큰 값이 비어있습니다.");
 
     private final HttpStatus status;
     private final String code;

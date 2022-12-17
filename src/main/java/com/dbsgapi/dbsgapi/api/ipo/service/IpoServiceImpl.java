@@ -11,12 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class IpoServiceImpl implements IpoService{
+public class IpoServiceImpl implements IpoService {
     private final IpoMapper ipoMapper;
 
     @Override
@@ -79,8 +81,8 @@ public class IpoServiceImpl implements IpoService{
 
         // 리스트에 신규상장이 있는지 한바퀴 둘러보고 보관하기
         Map<Long, IpoCommentDto> newRegisterCommentList = new HashMap<>();
-        for(IpoCommentDto commentTemp : ipoCommentList) {
-            if("신규 등록되었습니다.".equals(commentTemp.getTitle())) {
+        for (IpoCommentDto commentTemp : ipoCommentList) {
+            if ("신규 등록되었습니다.".equals(commentTemp.getTitle())) {
                 newRegisterCommentList.put(commentTemp.getIpoIndex(), commentTemp);
             }
         }

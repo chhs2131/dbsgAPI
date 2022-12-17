@@ -15,7 +15,7 @@
 
 - 담당 인원 : 1인
 - Spring API
-  - Spring: `SpringBoot2`, `Gradle`, `IntelliJ`, `Java8`, `lombok`
+  - Spring: `SpringBoot2.6.4`, `Gradle`, `IntelliJ`, `Java8`, `lombok`
   - DB: `Mybatis`, `Hikari`
   - API Document: `Swagger 2.9.2`
   - etc: `AOP (Transaction, LoggerAspect)`, `WebClient (HttpConnection)`
@@ -30,9 +30,6 @@
 - 크롤러: `Python3.9`, `BS4`, `PyMysql`
 
 <br/>
-
-### 📆 개발 기간
-- 2021.11 ~ 2022.10 (진행중)
 
 <br/><br/><br/>
 
@@ -55,10 +52,10 @@
 
 <br/>
 
-### 📺 연동되는 Client
+### 📺 Client App
 - 아래 링크를 통해 서버API로부터 데이터를 받아 제공하는 Android App 정보를 확인할 수 있습니다. 
 - https://github.com/psw9999/Gongmozootopia
-
+![img.png](readme_file/img_android_exam.png)
 
 <!--
 ### 고민한점
