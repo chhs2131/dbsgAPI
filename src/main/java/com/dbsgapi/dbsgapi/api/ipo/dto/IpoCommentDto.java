@@ -5,6 +5,7 @@ import com.dbsgapi.dbsgapi.api.ipo.domain.StockKinds;
 import com.dbsgapi.dbsgapi.global.util.JsonCommentConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class IpoCommentDto {
     @Schema(example = "72")
     private long ipoIndex;
     private String writer;
+    @NotNull(message = "반드시 있어야함")
     @Schema(description = "종목명", example = "LG에너지솔루션")
     private String stockName;
     @Schema(description = "유형구분", example = "공모주", allowableValues = {"공모주", "실권주", "스팩주"})
@@ -30,23 +32,8 @@ public class IpoCommentDto {
     private String logType;
     private String changeLogJson;
 
-
     public void setStockKinds(String stockKinds) {
         this.stockKinds = StockKinds.from(stockKinds);
-    }
-
-    public String getStockKinds() {
-        return stockKinds.getName();
-    }
-
-    @JsonIgnore
-    public String getLogType() {  // 외부에 값을 표출하진 않음 jsonIgnore
-        return logType;
-    }
-
-    @JsonIgnore
-    public String getChangeLogJson() {
-        return changeLogJson;
     }
 
     public void setChangeLogJson(String changeLogJson) {
@@ -61,5 +48,28 @@ public class IpoCommentDto {
             this.title = jcc.getRecentComment();
             this.commentList = jcc.getCommentList();
         }
+    }
+
+    public String getStockKinds() {
+        if (stockKinds == null) {
+            return null;
+        }
+        return stockKinds.getName();
+    }
+
+    @JsonIgnore
+    public String getLogType() {  // 외부에 값을 표출하진 않음 jsonIgnore
+        return logType;
+    }
+
+    @JsonIgnore
+    public String getChangeLogJson() {
+        return changeLogJson;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%d %s] %d - %s", ipoIndex, stockName, commentIndex,
+                title);
     }
 }

@@ -58,11 +58,6 @@ public class IpoSummaryDto {
         stockExchange = StockExchange.from(name);
     }
 
-
-//    public String getRecentComment() {
-//        return this.recentComment;
-//    }
-
     public void setStockKinds(String stockKinds) {
         this.stockKinds = StockKinds.from(stockKinds);
     }
@@ -86,11 +81,21 @@ public class IpoSummaryDto {
     }
 
     public String getStockExchange() {
+        if (isNull(stockExchange)) {
+            return null;
+        }
         return stockExchange.getName();
     }
 
     public String getStockKinds() {
+        if (isNull(stockKinds)) {
+            return null;
+        }
         return stockKinds.getName();
+    }
+
+    private boolean isNull(Object o) {
+        return o == null;
     }
 
     @JsonIgnore

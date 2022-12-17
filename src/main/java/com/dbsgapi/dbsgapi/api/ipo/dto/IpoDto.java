@@ -3,9 +3,11 @@ package com.dbsgapi.dbsgapi.api.ipo.dto;
 import com.dbsgapi.dbsgapi.api.ipo.domain.StockExchange;
 import com.dbsgapi.dbsgapi.api.ipo.domain.StockKinds;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class IpoDto {
     //TODO 각 항목들을 collection 형태로 분리하기 (https://pooney.tistory.com/39)
 
@@ -74,9 +76,10 @@ public class IpoDto {
         return stockExchange.getName();
     }
 
-
     public String getStockKinds() {
-        System.out.println("bbbbbbbbbbbbbbbbbb" + stockKinds.getName());
+        if (stockKinds == null) {
+            return null;
+        }
         return stockKinds.getName();
     }
 

@@ -31,15 +31,10 @@ public enum StockKinds {
     }
 
     public static StockKinds from(String name) {
-        System.out.println("bbbbbbbbbbb" + name);
-        StockKinds s = Arrays.stream(StockKinds.values())
+        return Arrays.stream(StockKinds.values())
                 .filter(stockKinds -> stockKinds.getName().equals(name))
                 .findAny()
                 .orElse(null);
-        if (s != null) {
-            System.out.println("aaaaaaaaaaaaaa" + s.toString());
-        }
-        return s;
     }
 
     public String getName() {
