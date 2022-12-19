@@ -10,17 +10,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IpoService {
-    List<IpoSummaryDto> selectIpos(LocalDate targetDate, LocalDate startDate, LocalDate endDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws Exception;
+    List<IpoSummaryDto> selectIpos(LocalDate targetDate, LocalDate startDate, LocalDate endDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws IllegalStateException;
 
-    IpoDto selectIpo(long ipoIndex) throws Exception;
+    IpoDto selectIpo(long ipoIndex) throws IllegalStateException;
 
-    List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
+    List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws IllegalStateException;
 
-    List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
+    List<IpoCommentDto> selectIpoComment(long ipoIndex) throws IllegalStateException;
 
-    IpoCommentDto selectIpoCommentIndex(long commentIndex) throws Exception;
+    IpoCommentDto selectIpoCommentIndex(long commentIndex) throws IllegalStateException;
 
-    List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws Exception;
+    List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws IllegalStateException;
 
-    List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws Exception;
+    List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws IllegalStateException;
 }

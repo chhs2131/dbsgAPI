@@ -41,7 +41,7 @@ public class IpoApiController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @Parameter(description = "기준 종료 일자 (현재 사용되지 않음)") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
-    ) throws Exception {
+    ) {
 
         //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
 
@@ -49,55 +49,59 @@ public class IpoApiController {
         IpoSequence.validate(state);
 
         // IPO 목록 조회
-        List<IpoSummaryDto> listIpo = ipoService.selectIpos(targetDate, startDate, endDate, state, withCancelItem, page, num, sort);
-
-        // 예외처리 및 결과반환
-        if (listIpo.isEmpty())
+        try {
+            List<IpoSummaryDto> listIpo = ipoService.selectIpos(targetDate, startDate, endDate, state, withCancelItem, page, num, sort);
+            return new ResponseEntity<>(listIpo, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_LIST_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(listIpo, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{ipoIndex}")
     @Operation(summary = "단일 IPO 종목 상세조회", description = "ipoIndex에 해당하는 종목에 상세 정보를 반환합니다.")
-    public ResponseEntity<IpoDetailDto> getIpo(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
+    public ResponseEntity<IpoDetailDto> getIpo(@PathVariable("ipoIndex") long ipoIndex) {
         IpoDetailDto ipoData = new IpoDetailDto();
-        ipoData.setIpo(ipoService.selectIpo(ipoIndex));
-        ipoData.setComment(ipoService.selectIpoComment(ipoIndex));
-        ipoData.setUnderwriter(ipoService.selectIpoUnderwriter(ipoIndex));
-
-        if (ipoData.getIpo() == null)
+        try {
+            ipoData.setIpo(ipoService.selectIpo(ipoIndex));
+            ipoData.setComment(ipoService.selectIpoComment(ipoIndex));
+            ipoData.setUnderwriter(ipoService.selectIpoUnderwriter(ipoIndex));
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_DETAIL_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{ipoIndex}/basic")
     @Operation(summary = "IPO 기본정보 확인", description = "해당 종목에 기본정보를 조회합니다.")
-    public ResponseEntity<IpoDto> getIpoDetail(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
-        IpoDto ipoData = ipoService.selectIpo(ipoIndex);
-
-        if (ipoData == null)
+    public ResponseEntity<IpoDto> getIpoDetail(@PathVariable("ipoIndex") long ipoIndex) {
+        try {
+            IpoDto ipoData = ipoService.selectIpo(ipoIndex);
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_DETAIL_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{ipoIndex}/underwriter")
     @Operation(summary = "IPO 주간사 정보 확인", description = "해당 종목에 주간사 정보를 조회합니다.")
-    public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
-        List<IpoUnderwriterDto> ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
-
-        if (ipoData.isEmpty())
+    public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) {
+        try {
+            List<IpoUnderwriterDto> ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_UNDERWRITER_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{ipoIndex}/comment")
     @Operation(summary = "특정 종목의 Comment 조회", description = "특정 종목의 코멘트(히스토리)를 조회합니다.")
-    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
-        List<IpoCommentDto> ipoData = ipoService.selectIpoComment(ipoIndex);
-
-        if (ipoData.isEmpty())
+    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@PathVariable("ipoIndex") long ipoIndex) {
+        try {
+            List<IpoCommentDto> ipoData = ipoService.selectIpoComment(ipoIndex);
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/comment")
@@ -108,42 +112,45 @@ public class IpoApiController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @Parameter(description = "조회 종료일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
-    ) throws Exception {
+    ) {
         List<IpoCommentDto> ipoData;
-        if (ipoIndex == 0) {  // 전체 조회
-            ipoData = ipoService.selectIpoCommentList(startDate, endDate);
-        } else if (ipoIndex > 0) {  // 특정 종목만 조회
-            ipoData = ipoService.selectIpoComment(ipoIndex);
-        } else {
-            throw new CustomException(IPO_COMMENT_WRONG_PARAMETER_EXCEPTION);
-        }
-
-        if (ipoData.isEmpty())
+        try {
+            if (ipoIndex == 0) {  // 전체 조회
+                ipoData = ipoService.selectIpoCommentList(startDate, endDate);
+            } else if (ipoIndex > 0) {  // 특정 종목만 조회
+                ipoData = ipoService.selectIpoComment(ipoIndex);
+            } else {
+                throw new CustomException(IPO_COMMENT_WRONG_PARAMETER_EXCEPTION);
+            }
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/comment/{commentIndex}")
     @Operation(summary = "특정 Comment 확인", description = "단일 comment를 조회합니다.")
-    public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) throws Exception {
-        IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
-
-        if (ipoData == null)
+    public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) {
+        try {
+            IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/schedule")
     @Operation(summary = "지정 기간내에 일정을 확인", description = "지정한 기간내에 일정을 모두 확인합니다.")
     public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
             @Parameter(description = "조회 시작일자") String startDate,
-            @Parameter(description = "조회 종료일자") String endDate) throws Exception {
+            @Parameter(description = "조회 종료일자") String endDate) {
         //TODO 파라미터 반드시 입력해야되는지 확인
         //TODO Date Parameter를 String이 아닌 LocalDate Type으로 받도록 설정
-        List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
-
-        if (ipoData.isEmpty())
+        try {
+            List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_SCHEDULE_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 }
