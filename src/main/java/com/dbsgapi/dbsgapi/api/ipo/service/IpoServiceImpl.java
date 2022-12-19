@@ -38,8 +38,8 @@ public class IpoServiceImpl implements IpoService {
     }
 
     @Override
-    public IpoDto selectIpo(long ipoIndex) throws Exception {
-        return ipoMapper.selectIpo(ipoIndex);
+    public IpoDto selectIpo(long ipoIndex) throws IllegalStateException {
+        return ipoMapper.selectIpo(ipoIndex).orElseThrow(IllegalStateException::new);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class IpoServiceImpl implements IpoService {
     }
 
     @Override
-    public IpoCommentDto selectIpoCommentIndex(long commentIndex) throws Exception {
-        return ipoMapper.selectIpoCommentIndex(commentIndex);
+    public IpoCommentDto selectIpoCommentIndex(long commentIndex) throws IllegalStateException {
+        return ipoMapper.selectIpoCommentIndex(commentIndex).orElseThrow(IllegalStateException::new);
     }
 
     @Override

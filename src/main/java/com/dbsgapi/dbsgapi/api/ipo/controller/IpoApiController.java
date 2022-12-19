@@ -72,12 +72,13 @@ public class IpoApiController {
 
     @GetMapping(value = "/{ipoIndex}/basic")
     @Operation(summary = "IPO 기본정보 확인", description = "해당 종목에 기본정보를 조회합니다.")
-    public ResponseEntity<IpoDto> getIpoDetail(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
-        IpoDto ipoData = ipoService.selectIpo(ipoIndex);
-
-        if (ipoData == null)
+    public ResponseEntity<IpoDto> getIpoDetail(@PathVariable("ipoIndex") long ipoIndex) {
+        try {
+            IpoDto ipoData = ipoService.selectIpo(ipoIndex);
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_DETAIL_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{ipoIndex}/underwriter")
@@ -125,12 +126,13 @@ public class IpoApiController {
 
     @GetMapping(value = "/comment/{commentIndex}")
     @Operation(summary = "특정 Comment 확인", description = "단일 comment를 조회합니다.")
-    public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) throws Exception {
-        IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
-
-        if (ipoData == null)
+    public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) {
+        try {
+            IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
+            return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_NOT_FOUND_EXCEPTION);
-        return new ResponseEntity<>(ipoData, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/schedule")

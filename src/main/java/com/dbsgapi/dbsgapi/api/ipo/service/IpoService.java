@@ -12,13 +12,13 @@ import java.util.List;
 public interface IpoService {
     List<IpoSummaryDto> selectIpos(LocalDate targetDate, LocalDate startDate, LocalDate endDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws Exception;
 
-    IpoDto selectIpo(long ipoIndex) throws Exception;
+    IpoDto selectIpo(long ipoIndex) throws IllegalStateException;
 
     List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws Exception;
 
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception;
 
-    IpoCommentDto selectIpoCommentIndex(long commentIndex) throws Exception;
+    IpoCommentDto selectIpoCommentIndex(long commentIndex) throws IllegalStateException;
 
     List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws Exception;
 
