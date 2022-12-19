@@ -41,7 +41,7 @@ public class IpoApiController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @Parameter(description = "기준 종료 일자 (현재 사용되지 않음)") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
-    ) throws Exception {
+    ) {
 
         //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
 
@@ -59,7 +59,7 @@ public class IpoApiController {
 
     @GetMapping(value = "/{ipoIndex}")
     @Operation(summary = "단일 IPO 종목 상세조회", description = "ipoIndex에 해당하는 종목에 상세 정보를 반환합니다.")
-    public ResponseEntity<IpoDetailDto> getIpo(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
+    public ResponseEntity<IpoDetailDto> getIpo(@PathVariable("ipoIndex") long ipoIndex) {
         IpoDetailDto ipoData = new IpoDetailDto();
         try {
             ipoData.setIpo(ipoService.selectIpo(ipoIndex));
@@ -84,7 +84,7 @@ public class IpoApiController {
 
     @GetMapping(value = "/{ipoIndex}/underwriter")
     @Operation(summary = "IPO 주간사 정보 확인", description = "해당 종목에 주간사 정보를 조회합니다.")
-    public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
+    public ResponseEntity<List<IpoUnderwriterDto>> getIpoUnderwriter(@PathVariable("ipoIndex") long ipoIndex) {
         try {
             List<IpoUnderwriterDto> ipoData = ipoService.selectIpoUnderwriter(ipoIndex);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
@@ -95,7 +95,7 @@ public class IpoApiController {
 
     @GetMapping(value = "/{ipoIndex}/comment")
     @Operation(summary = "특정 종목의 Comment 조회", description = "특정 종목의 코멘트(히스토리)를 조회합니다.")
-    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@PathVariable("ipoIndex") long ipoIndex) throws Exception {
+    public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@PathVariable("ipoIndex") long ipoIndex) {
         try {
             List<IpoCommentDto> ipoData = ipoService.selectIpoComment(ipoIndex);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
@@ -112,7 +112,7 @@ public class IpoApiController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @Parameter(description = "조회 종료일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
-    ) throws Exception {
+    ) {
         List<IpoCommentDto> ipoData;
         try {
             if (ipoIndex == 0) {  // 전체 조회
@@ -143,7 +143,7 @@ public class IpoApiController {
     @Operation(summary = "지정 기간내에 일정을 확인", description = "지정한 기간내에 일정을 모두 확인합니다.")
     public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
             @Parameter(description = "조회 시작일자") String startDate,
-            @Parameter(description = "조회 종료일자") String endDate) throws Exception {
+            @Parameter(description = "조회 종료일자") String endDate) {
         //TODO 파라미터 반드시 입력해야되는지 확인
         //TODO Date Parameter를 String이 아닌 LocalDate Type으로 받도록 설정
         try {
