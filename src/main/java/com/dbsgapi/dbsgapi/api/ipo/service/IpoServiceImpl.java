@@ -34,7 +34,7 @@ public class IpoServiceImpl implements IpoService {
         map.put("sort", sort);
 
         // ipo list 조회 로직
-        return ipoMapper.selectIpos(map);
+        return ifPresent(ipoMapper.selectIpos(map));
     }
 
     @Override
@@ -48,17 +48,16 @@ public class IpoServiceImpl implements IpoService {
         // map.put 전에 날짜형태가 맞는지 확인하고, 정상적으로 데이터가 입력되었는지 확인하는 Verify 로직 필요.
         map.put("startDate", startDate);
         map.put("endDate", endDate);
-        return ipoMapper.selectIpoScheduleList(map);
+        return ifPresent(ipoMapper.selectIpoScheduleList(map));
     }
 
     @Override
     public List<IpoCommentDto> selectIpoComment(long ipoIndex) throws Exception {
-        // 쿼리문 요청, 조회
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoComment(ipoIndex);
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
         ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
 
-        return ipoCommentList;
+        return ifPresent(ipoCommentList);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class IpoServiceImpl implements IpoService {
         // 당일 신규 등록된 종목의 경우 해당일에 다른 코멘트들은 제외한다.
         ipoCommentList.removeIf(ipoComment -> commentIsNew(ipoComment, newRegisterCommentList));
 
-        return ipoCommentList;
+        return ifPresent(ipoCommentList);
     }
 
     private boolean commentIsNew(IpoCommentDto ipoComment, Map<Long, IpoCommentDto> newRegisterCommentList) {
@@ -113,5 +112,23 @@ public class IpoServiceImpl implements IpoService {
     @Override
     public List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws Exception {
         return ipoMapper.selectIpoUnderwriter(ipoIndex);
+    }
+
+    private <T> List<T> ifPresent(List<T> targetList) {
+        validateListNull(targetList);
+        validateListEmpty(targetList);
+        return targetList;
+    }
+
+    private <T> void validateListNull(List<T> targetList) {
+        if (targetList == null) {
+            throw new IllegalStateException();
+        }
+    }
+
+    private <T> void validateListEmpty(List<T> targetList) {
+        if (targetList.isEmpty()) {
+            throw new IllegalStateException();
+        }
     }
 }
