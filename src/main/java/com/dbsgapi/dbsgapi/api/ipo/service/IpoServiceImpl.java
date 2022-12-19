@@ -111,7 +111,7 @@ public class IpoServiceImpl implements IpoService {
 
     @Override
     public List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws IllegalStateException {
-        return ipoMapper.selectIpoUnderwriter(ipoIndex);
+        return ifPresent(ipoMapper.selectIpoUnderwriter(ipoIndex));
     }
 
     private <T> List<T> ifPresent(List<T> targetList) {
