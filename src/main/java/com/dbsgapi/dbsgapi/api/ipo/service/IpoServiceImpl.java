@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.service;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.IpoPaging;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoDto;
@@ -22,18 +23,8 @@ public class IpoServiceImpl implements IpoService {
     private final IpoMapper ipoMapper;
 
     @Override
-    public List<IpoSummaryDto> selectIpos(LocalDate targetDate, LocalDate startDate, LocalDate endDate, IpoSequence ipoSequence, Boolean withCancelItem, int page, int num, String sort) throws IllegalStateException {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("limit", num);
-        map.put("offset", page * num - num);
-        map.put("targetDate", targetDate);
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
-        map.put("ipoSequence", ipoSequence.toString());
-        map.put("withCancelItem", withCancelItem);
-        map.put("sort", sort);
-
-        // ipo list 조회 로직
+    public List<IpoSummaryDto> selectIpos(IpoPaging ipoPaging) throws IllegalStateException {
+        Map<String, Object> map = ipoPaging.toMap();
         return ifPresent(ipoMapper.selectIpos(map));
     }
 

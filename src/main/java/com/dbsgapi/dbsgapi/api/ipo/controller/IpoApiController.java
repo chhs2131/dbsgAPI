@@ -1,6 +1,8 @@
 package com.dbsgapi.dbsgapi.api.ipo.controller;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.IpoPaging;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
+import com.dbsgapi.dbsgapi.api.ipo.domain.Sort;
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import com.dbsgapi.dbsgapi.global.response.CustomException;
@@ -44,13 +46,14 @@ public class IpoApiController {
     ) {
 
         //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
+        IpoPaging ipoPaging = new IpoPaging(page, num, state, targetDate, startDate, endDate, withCancelItem, Sort.from(sort));
 
         // 아직 처리할 수 없는 state 예외처리
         IpoSequence.validate(state);
 
         // IPO 목록 조회
         try {
-            List<IpoSummaryDto> listIpo = ipoService.selectIpos(targetDate, startDate, endDate, state, withCancelItem, page, num, sort);
+            List<IpoSummaryDto> listIpo = ipoService.selectIpos(ipoPaging);
             return new ResponseEntity<>(listIpo, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_LIST_NOT_FOUND_EXCEPTION);
