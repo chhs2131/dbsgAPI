@@ -72,7 +72,7 @@ public class IpoPaging {
         map.put("endDate", endDate);
         map.put("ipoSequence", ipoSequence.toString());
         map.put("withCancelItem", withCancelItem);
-        map.put("sort", sort.getValue());
+        map.put("sort", sort.getName());
 
         return map;
     }
