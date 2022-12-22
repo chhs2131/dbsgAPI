@@ -60,4 +60,8 @@ public enum IpoSequence {
                     throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
                 });
     }
+
+    public String getSequenceName() {
+        return this.name();
+    }
 }

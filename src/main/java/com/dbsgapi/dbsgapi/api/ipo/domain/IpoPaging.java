@@ -56,13 +56,6 @@ public class IpoPaging {
         }
     }
 
-//    private void validateDateUniqueness(LocalDate startDate, LocalDate endDate, LocalDate targetDate) {
-//        if (targetDate.isEqual(startDate) && targetDate.isEqual(endDate)) {
-//            return;
-//        }
-//        throw new  IllegalArgumentException("targetDate is not unique");
-//    }
-
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("limit", numberOfArticles);
@@ -70,7 +63,7 @@ public class IpoPaging {
         map.put("targetDate", startDate);
         map.put("startDate", startDate);
         map.put("endDate", endDate);
-        map.put("ipoSequence", ipoSequence.toString());
+        map.put("ipoSequence", ipoSequence.getSequenceName());
         map.put("withCancelItem", withCancelItem);
         map.put("sort", sort.getName());
 
