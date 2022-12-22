@@ -8,6 +8,7 @@ public class IpoPaging {
     private final int pageNumber;
     private final int numberOfArticles;
     private final IpoSequence ipoSequence;
+    private final DatePeriod datePeriod;
     private final LocalDate startDate;  // targetDate
     private final LocalDate endDate;
     private final boolean withCancelItem;
@@ -18,6 +19,8 @@ public class IpoPaging {
         this.pageNumber = pageNumber;
         this.numberOfArticles = numberOfArticles;
         this.ipoSequence = ipoSequence;
+
+        this.datePeriod = DatePeriod.from(startDate, endDate);
         this.startDate = startDate;
         this.endDate = endDate;
         this.withCancelItem = withCancelItem;
@@ -29,6 +32,8 @@ public class IpoPaging {
         this.pageNumber = pageNumber;
         this.numberOfArticles = numberOfArticles;
         this.ipoSequence = ipoSequence;
+
+        this.datePeriod = DatePeriod.from(targetDate);
         this.startDate = targetDate;
         this.endDate = targetDate;
         this.withCancelItem = withCancelItem;
@@ -40,20 +45,12 @@ public class IpoPaging {
         this.pageNumber = pageNumber;
         this.numberOfArticles = numberOfArticles;
         this.ipoSequence = ipoSequence;
+
+        this.datePeriod = DatePeriod.from(targetDate, startDate, endDate);
         this.startDate = startDate;
         this.endDate = endDate;
         this.withCancelItem = withCancelItem;
         this.sort = sort;
-    }
-
-    private void validateDates(LocalDate startDate, LocalDate endDate, LocalDate targetDate) {
-        validateDateRange(startDate, endDate);
-    }
-
-    private void validateDateRange(LocalDate startDate, LocalDate endDate) {
-        if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("startDate must be before endDate");
-        }
     }
 
     public Map<String, Object> toMap() {

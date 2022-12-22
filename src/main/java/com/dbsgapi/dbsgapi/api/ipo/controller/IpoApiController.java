@@ -34,29 +34,28 @@ public class IpoApiController {
     public ResponseEntity<List<IpoSummaryDto>> getIpoList(
             @Parameter(description = "페이지 번호") @RequestParam(required = false, defaultValue = "1") int page,
             @Parameter(description = "페이지당 반환갯수") @RequestParam(required = false, defaultValue = "100") int num,
-            @Parameter(description = "기준 일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
+            @Parameter(description = "기준 일자 (deprecated)") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate,
             @Parameter(description = "기준일 진행 단계") @RequestParam(required = false, defaultValue = "ALL") IpoSequence state,
             @Parameter(description = "정렬 (현재 사용되지 않음)") @RequestParam(required = false, defaultValue = "asc") String sort,
             @Parameter(description = "청약철회된 종목 반환여부") @RequestParam(required = false, defaultValue = "false") Boolean withCancelItem,
-            @Parameter(description = "기준 시작 일자 (현재 사용되지 않음)") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
+            @Parameter(description = "기준 시작 일자") @RequestParam(required = false)
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @Parameter(description = "기준 종료 일자 (현재 사용되지 않음)") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
+            @Parameter(description = "기준 종료 일자") @RequestParam(required = false)
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
-
-        //TODO 추후 페이징 관련 dto 를 만들어서 서비스에 넘기기
-        IpoPaging ipoPaging = new IpoPaging(page, num, state, targetDate, startDate, endDate, withCancelItem, Sort.from(sort));
-
-        // 아직 처리할 수 없는 state 예외처리
-        IpoSequence.validate(state);
-
-        // IPO 목록 조회
         try {
+            IpoPaging ipoPaging = new IpoPaging(page, num, state, targetDate, startDate, endDate, withCancelItem,
+                    Sort.from(sort));
+            IpoSequence.validate(state);  // 아직 처리할 수 없는 sequence 예외처리
+
+            // IPO 목록 조회
             List<IpoSummaryDto> listIpo = ipoService.selectIpos(ipoPaging);
             return new ResponseEntity<>(listIpo, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_LIST_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException e) {
+            throw new CustomException(IPO_ILLEGAL_ARGUMENT_EXCEPTION);
         }
     }
 
