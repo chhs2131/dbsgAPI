@@ -54,6 +54,14 @@ public class DatePeriod {
         throw new IllegalArgumentException("잘못된 기간 값이 입력되었습니다.");
     }
 
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
     @Override
     public String toString() {
         return "기간: " + startDate.toString() + " ~ " + endDate.toString();

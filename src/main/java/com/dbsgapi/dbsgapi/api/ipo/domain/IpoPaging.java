@@ -9,8 +9,6 @@ public class IpoPaging {
     private final int numberOfArticles;
     private final IpoSequence ipoSequence;
     private final DatePeriod datePeriod;
-    private final LocalDate startDate;  // targetDate
-    private final LocalDate endDate;
     private final boolean withCancelItem;
     private final Sort sort;
 
@@ -19,10 +17,7 @@ public class IpoPaging {
         this.pageNumber = pageNumber;
         this.numberOfArticles = numberOfArticles;
         this.ipoSequence = ipoSequence;
-
         this.datePeriod = DatePeriod.from(startDate, endDate);
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.withCancelItem = withCancelItem;
         this.sort = sort;
     }
@@ -32,10 +27,7 @@ public class IpoPaging {
         this.pageNumber = pageNumber;
         this.numberOfArticles = numberOfArticles;
         this.ipoSequence = ipoSequence;
-
         this.datePeriod = DatePeriod.from(targetDate);
-        this.startDate = targetDate;
-        this.endDate = targetDate;
         this.withCancelItem = withCancelItem;
         this.sort = sort;
     }
@@ -45,10 +37,7 @@ public class IpoPaging {
         this.pageNumber = pageNumber;
         this.numberOfArticles = numberOfArticles;
         this.ipoSequence = ipoSequence;
-
         this.datePeriod = DatePeriod.from(targetDate, startDate, endDate);
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.withCancelItem = withCancelItem;
         this.sort = sort;
     }
@@ -57,9 +46,9 @@ public class IpoPaging {
         Map<String, Object> map = new HashMap<>();
         map.put("limit", numberOfArticles);
         map.put("offset", pageNumber * numberOfArticles - numberOfArticles);
-        map.put("targetDate", startDate);
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
+        map.put("targetDate", datePeriod.getStartDate());
+        map.put("startDate", datePeriod.getStartDate());
+        map.put("endDate", datePeriod.getEndDate());
         map.put("ipoSequence", ipoSequence.getSequenceName());
         map.put("withCancelItem", withCancelItem);
         map.put("sort", sort.getName());
