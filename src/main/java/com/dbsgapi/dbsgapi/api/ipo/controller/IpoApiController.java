@@ -109,21 +109,13 @@ public class IpoApiController {
     @GetMapping(value = "/comment")
     @Operation(summary = "IPO Comment 조회", description = "코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(
-            @Parameter(description = "특정 ipoIndex만 조회") @RequestParam(required = false, defaultValue = "0") int ipoIndex,
             @Parameter(description = "조회 시작일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now().minusDays(14)}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @Parameter(description = "조회 종료일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
-        List<IpoCommentDto> ipoData;
         try {
-            if (ipoIndex == 0) {  // 전체 조회
-                ipoData = ipoService.selectIpoCommentList(startDate, endDate);
-            } else if (ipoIndex > 0) {  // 특정 종목만 조회
-                ipoData = ipoService.selectIpoComment(ipoIndex);
-            } else {
-                throw new CustomException(IPO_COMMENT_WRONG_PARAMETER_EXCEPTION);
-            }
+            List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList(startDate, endDate);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION);
