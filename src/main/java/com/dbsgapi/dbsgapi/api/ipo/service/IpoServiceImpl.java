@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.service;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.DatePeriod;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoPaging;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto;
@@ -34,11 +35,8 @@ public class IpoServiceImpl implements IpoService {
     }
 
     @Override
-    public List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws IllegalStateException {
-        Map<String, String> map = new HashMap<String, String>();
-        // map.put 전에 날짜형태가 맞는지 확인하고, 정상적으로 데이터가 입력되었는지 확인하는 Verify 로직 필요.
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
+    public List<IpoSummaryDto> selectIpoScheduleList(DatePeriod datePeriod) throws IllegalStateException {
+        Map<String, Object> map = datePeriod.toMap();
         return ifPresent(ipoMapper.selectIpoScheduleList(map));
     }
 
@@ -57,13 +55,9 @@ public class IpoServiceImpl implements IpoService {
     }
 
     @Override
-    public List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws IllegalStateException {
-        // map.put 전에 각 데이터가 0이 아닌지 확인하는 Verify 로직 필요.
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("startDate", startDate.toString());
-        map.put("endDate", endDate.toString());
-
+    public List<IpoCommentDto> selectIpoCommentList(DatePeriod datePeriod) throws IllegalStateException {
         // 쿼리문 요청, 조회
+        Map<String, Object> map = datePeriod.toMap();
         List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoCommentList(map);
 
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다. (null)

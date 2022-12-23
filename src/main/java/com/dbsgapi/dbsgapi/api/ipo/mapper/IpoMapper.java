@@ -16,13 +16,13 @@ public interface IpoMapper {
 
     Optional<IpoDto> selectIpo(long ipoIndex);
 
-    List<IpoSummaryDto> selectIpoScheduleList(Map<String, String> map);
+    List<IpoSummaryDto> selectIpoScheduleList(Map<String, Object> map);
 
     List<IpoCommentDto> selectIpoComment(long ipoIndex);
 
     Optional<IpoCommentDto> selectIpoCommentIndex(long commentIndex);
 
-    List<IpoCommentDto> selectIpoCommentList(Map<String, String> map);
+    List<IpoCommentDto> selectIpoCommentList(Map<String, Object> map);
 
     List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex);
 }

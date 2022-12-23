@@ -1,6 +1,8 @@
 package com.dbsgapi.dbsgapi.api.ipo.domain;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DatePeriod {
     private final LocalDate startDate;
@@ -52,6 +54,14 @@ public class DatePeriod {
             return new DatePeriod(targetDate, targetDate);
         }
         throw new IllegalArgumentException("잘못된 기간 값이 입력되었습니다.");
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("startDate", getStartDate());
+        map.put("endDate", getEndDate());
+
+        return map;
     }
 
     public LocalDate getStartDate() {

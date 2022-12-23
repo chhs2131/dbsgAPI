@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.controller;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.DatePeriod;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoPaging;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.domain.Sort;
@@ -115,10 +116,13 @@ public class IpoApiController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
         try {
-            List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList(startDate, endDate);
+            DatePeriod datePeriod = DatePeriod.from(startDate, endDate);
+            List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList(datePeriod);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException e) {
+            throw new CustomException(IPO_ILLEGAL_ARGUMENT_EXCEPTION);
         }
     }
 
@@ -136,15 +140,18 @@ public class IpoApiController {
     @GetMapping(value = "/schedule")
     @Operation(summary = "지정 기간내에 일정을 확인", description = "지정한 기간내에 일정을 모두 확인합니다.")
     public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
-            @Parameter(description = "조회 시작일자") String startDate,
-            @Parameter(description = "조회 종료일자") String endDate) {
-        //TODO 파라미터 반드시 입력해야되는지 확인
-        //TODO Date Parameter를 String이 아닌 LocalDate Type으로 받도록 설정
+            @Parameter(description = "조회 시작일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now().minusDays(14)}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @Parameter(description = "조회 종료일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         try {
-            List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(startDate, endDate);
+            DatePeriod datePeriod = DatePeriod.from(startDate, endDate);
+            List<IpoSummaryDto> ipoData = ipoService.selectIpoScheduleList(datePeriod);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_SCHEDULE_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException e) {
+            throw new CustomException(IPO_ILLEGAL_ARGUMENT_EXCEPTION);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.dbsgapi.dbsgapi.api.ipo.service;
 
+import com.dbsgapi.dbsgapi.api.ipo.domain.DatePeriod;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoPaging;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto;
@@ -15,13 +16,13 @@ public interface IpoService {
 
     IpoDto selectIpo(long ipoIndex) throws IllegalStateException;
 
-    List<IpoSummaryDto> selectIpoScheduleList(String startDate, String endDate) throws IllegalStateException;
+    List<IpoSummaryDto> selectIpoScheduleList(DatePeriod datePeriod) throws IllegalStateException;
 
     List<IpoCommentDto> selectIpoComment(long ipoIndex) throws IllegalStateException;
 
     IpoCommentDto selectIpoCommentIndex(long commentIndex) throws IllegalStateException;
 
-    List<IpoCommentDto> selectIpoCommentList(LocalDate startDate, LocalDate endDate) throws IllegalStateException;
+    List<IpoCommentDto> selectIpoCommentList(DatePeriod datePeriod) throws IllegalStateException;
 
     List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws IllegalStateException;
 }
