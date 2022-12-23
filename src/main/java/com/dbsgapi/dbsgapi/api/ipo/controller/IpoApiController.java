@@ -110,7 +110,7 @@ public class IpoApiController {
     @Operation(summary = "IPO Comment 조회", description = "코멘트(히스토리)를 조회합니다. 이 때, 최근 코멘트가 앞쪽 페이지에 위치합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(
             @Parameter(description = "특정 ipoIndex만 조회") @RequestParam(required = false, defaultValue = "0") int ipoIndex,
-            @Parameter(description = "조회 시작일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now().minusDays(7)}")
+            @Parameter(description = "조회 시작일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now().minusDays(14)}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @Parameter(description = "조회 종료일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
