@@ -2,7 +2,7 @@ package com.dbsgapi.dbsgapi.api.ipo.service;
 
 import com.dbsgapi.dbsgapi.api.ipo.domain.DatePeriod;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto;
-import com.dbsgapi.dbsgapi.api.ipo.mapper.IpoMapper;
+import com.dbsgapi.dbsgapi.api.ipo.mapper.CommentMapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-    private final IpoMapper ipoMapper;
+    private final CommentMapper commentMapper;
 
     @Override
     public List<IpoCommentDto> selectIpoComment(long ipoIndex) throws IllegalStateException {
-        List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoComment(ipoIndex);
+        List<IpoCommentDto> ipoCommentList = commentMapper.selectIpoComment(ipoIndex);
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
         ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
 
@@ -27,14 +27,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public IpoCommentDto selectIpoCommentIndex(long commentIndex) throws IllegalStateException {
-        return ipoMapper.selectIpoCommentIndex(commentIndex).orElseThrow(IllegalStateException::new);
+        return commentMapper.selectIpoCommentIndex(commentIndex).orElseThrow(IllegalStateException::new);
     }
 
     @Override
     public List<IpoCommentDto> selectIpoCommentList(DatePeriod datePeriod) throws IllegalStateException {
         // 쿼리문 요청, 조회
         Map<String, Object> map = datePeriod.toMap();
-        List<IpoCommentDto> ipoCommentList = ipoMapper.selectIpoCommentList(map);
+        List<IpoCommentDto> ipoCommentList = commentMapper.selectIpoCommentList(map);
 
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다. (null)
         ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));

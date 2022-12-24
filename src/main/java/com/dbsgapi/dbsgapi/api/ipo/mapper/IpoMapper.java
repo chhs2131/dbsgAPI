@@ -18,11 +18,5 @@ public interface IpoMapper {
 
     List<IpoSummaryDto> selectIpoScheduleList(Map<String, Object> map);
 
-    List<IpoCommentDto> selectIpoComment(long ipoIndex);
-
-    Optional<IpoCommentDto> selectIpoCommentIndex(long commentIndex);
-
-    List<IpoCommentDto> selectIpoCommentList(Map<String, Object> map);
-
     List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex);
 }
