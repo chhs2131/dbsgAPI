@@ -18,11 +18,5 @@ public interface IpoService {
 
     List<IpoSummaryDto> selectIpoScheduleList(DatePeriod datePeriod) throws IllegalStateException;
 
-    List<IpoCommentDto> selectIpoComment(long ipoIndex) throws IllegalStateException;
-
-    IpoCommentDto selectIpoCommentIndex(long commentIndex) throws IllegalStateException;
-
-    List<IpoCommentDto> selectIpoCommentList(DatePeriod datePeriod) throws IllegalStateException;
-
     List<IpoUnderwriterDto> selectIpoUnderwriter(long ipoIndex) throws IllegalStateException;
 }

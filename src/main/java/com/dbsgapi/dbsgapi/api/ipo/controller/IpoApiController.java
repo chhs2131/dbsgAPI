@@ -5,6 +5,7 @@ import com.dbsgapi.dbsgapi.api.ipo.domain.IpoPaging;
 import com.dbsgapi.dbsgapi.api.ipo.domain.IpoSequence;
 import com.dbsgapi.dbsgapi.api.ipo.domain.Sort;
 import com.dbsgapi.dbsgapi.api.ipo.dto.*;
+import com.dbsgapi.dbsgapi.api.ipo.service.CommentService;
 import com.dbsgapi.dbsgapi.api.ipo.service.IpoService;
 import com.dbsgapi.dbsgapi.global.response.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +30,7 @@ import static com.dbsgapi.dbsgapi.global.response.ErrorCode.*;
 @RequestMapping("/api/v1/ipo")
 public class IpoApiController {
     private final IpoService ipoService;
+    private final CommentService commentService;
 
     @GetMapping(value = "")
     @Operation(summary = "IPO 목록을 반환", description = "IPO 목록을 최근 등록된 순으로 반환합니다.")
@@ -66,7 +68,7 @@ public class IpoApiController {
         IpoDetailDto ipoData = new IpoDetailDto();
         try {
             ipoData.setIpo(ipoService.selectIpo(ipoIndex));
-            ipoData.setComment(ipoService.selectIpoComment(ipoIndex));
+            ipoData.setComment(commentService.selectIpoComment(ipoIndex));
             ipoData.setUnderwriter(ipoService.selectIpoUnderwriter(ipoIndex));
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
         } catch (IllegalStateException e) {
@@ -100,7 +102,7 @@ public class IpoApiController {
     @Operation(summary = "특정 종목의 Comment 조회", description = "특정 종목의 코멘트(히스토리)를 조회합니다.")
     public ResponseEntity<List<IpoCommentDto>> getIpoCommentList(@PathVariable("ipoIndex") long ipoIndex) {
         try {
-            List<IpoCommentDto> ipoData = ipoService.selectIpoComment(ipoIndex);
+            List<IpoCommentDto> ipoData = commentService.selectIpoComment(ipoIndex);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION);
@@ -117,7 +119,7 @@ public class IpoApiController {
     ) {
         try {
             DatePeriod datePeriod = DatePeriod.from(startDate, endDate);
-            List<IpoCommentDto> ipoData = ipoService.selectIpoCommentList(datePeriod);
+            List<IpoCommentDto> ipoData = commentService.selectIpoCommentList(datePeriod);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_LIST_NOT_FOUND_EXCEPTION);
@@ -130,7 +132,7 @@ public class IpoApiController {
     @Operation(summary = "특정 Comment 확인", description = "단일 comment를 조회합니다.")
     public ResponseEntity<IpoCommentDto> getIpoComment(@PathVariable("commentIndex") long commentIndex) {
         try {
-            IpoCommentDto ipoData = ipoService.selectIpoCommentIndex(commentIndex);
+            IpoCommentDto ipoData = commentService.selectIpoCommentIndex(commentIndex);
             return new ResponseEntity<>(ipoData, HttpStatus.OK);
         } catch (IllegalStateException e) {
             throw new CustomException(IPO_COMMENT_NOT_FOUND_EXCEPTION);
