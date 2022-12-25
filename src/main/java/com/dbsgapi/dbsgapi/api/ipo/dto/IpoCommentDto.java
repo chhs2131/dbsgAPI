@@ -32,6 +32,10 @@ public class IpoCommentDto {
     private String logType;
     private String changeLogJson;
 
+    public void setComment(String comment) {
+        title = comment;
+    }
+
     public void setStockKinds(String stockKinds) {
         this.stockKinds = StockKinds.from(stockKinds);
     }
@@ -69,7 +73,6 @@ public class IpoCommentDto {
 
     @Override
     public String toString() {
-        return String.format("[%d %s] %d - %s", ipoIndex, stockName, commentIndex,
-                title);
+        return String.format("[%d %s] %d - %s", ipoIndex, stockName, commentIndex, title);
     }
 }
