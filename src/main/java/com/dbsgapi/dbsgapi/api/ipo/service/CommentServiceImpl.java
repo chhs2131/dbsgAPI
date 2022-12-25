@@ -31,6 +31,7 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.selectIpoCommentIndex(commentIndex).orElseThrow(IllegalStateException::new);
     }
 
+    //TODO 고민점: 신규상장일 경우, 해당일에 다른 코멘트들에 내용을 신규상장쪽으로 이전하고, 이전당한 코멘트는 제거?
     @Override
     public List<IpoCommentDto> selectIpoCommentList(DatePeriod datePeriod) throws IllegalStateException {
         // 쿼리문 요청, 조회
@@ -38,16 +39,16 @@ public class CommentServiceImpl implements CommentService {
         List<IpoCommentDto> ipoComments = commentMapper.selectIpoCommentList(map);
         removeEmptyComment(ipoComments);
 
+        // 신규등록을 나타내는 코멘트들을 분리합니다.
         List<IpoCommentDto> newRegisterComments = ipoComments.stream()
                 .filter(comment -> NEW_REGISTER_COMMENT.equals(comment.getTitle()))
                 .collect(Collectors.toList());
-        System.out.println(newRegisterComments.toString());
 
+        // 신규등록일에 추가된 다른 코멘트들을 제거합니다.
         ipoComments = ipoComments.stream()
                 .filter(comment -> !isCommentInComments(comment, newRegisterComments))
                 .collect(Collectors.toList());
 
-        //TODO 고민점: 신규상장일 경우, 해당일에 다른 코멘트들에 내용을 신규상장쪽으로 이전하고, 이전당한 코멘트는 제거?
         return ifPresent(ipoComments);
     }
 
@@ -60,13 +61,13 @@ public class CommentServiceImpl implements CommentService {
         if (comment1 == null || comment2 == null) {
             return false;
         }
-        if (comment1.getCommentIndex() == comment2.getCommentIndex()) { // 신규상장
+        if (comment1.getCommentIndex() == comment2.getCommentIndex()) { // 신규등록 문구는 제외
             return false;
         }
-        if (comment1.getIpoIndex() != comment2.getIpoIndex()) {  // 동일종목
+        if (comment1.getIpoIndex() != comment2.getIpoIndex()) {  // 동일 종목
             return false;
         }
-        if (!comment1.getRegistDate().equals(comment2.getRegistDate())) {  // 같은 등록일
+        if (!comment1.getRegistDate().equals(comment2.getRegistDate())) {  // 같은 코멘트 등록일
             return false;
         }
         return true;
