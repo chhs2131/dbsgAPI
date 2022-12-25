@@ -20,10 +20,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<IpoCommentDto> selectIpoComment(long ipoIndex) throws IllegalStateException {
-        List<IpoCommentDto> ipoCommentList = commentMapper.selectIpoComment(ipoIndex);
-        removeEmptyComment(ipoCommentList);
+        List<IpoCommentDto> ipoComments = commentMapper.selectIpoComment(ipoIndex);
+        removeEmptyComment(ipoComments);
 
-        return ifPresent(ipoCommentList);
+        return ifPresent(ipoComments);
     }
 
     @Override
@@ -35,20 +35,20 @@ public class CommentServiceImpl implements CommentService {
     public List<IpoCommentDto> selectIpoCommentList(DatePeriod datePeriod) throws IllegalStateException {
         // 쿼리문 요청, 조회
         Map<String, Object> map = datePeriod.toMap();
-        List<IpoCommentDto> ipoCommentList = commentMapper.selectIpoCommentList(map);
-        removeEmptyComment(ipoCommentList);
+        List<IpoCommentDto> ipoComments = commentMapper.selectIpoCommentList(map);
+        removeEmptyComment(ipoComments);
 
-        List<IpoCommentDto> newRegisterComments = ipoCommentList.stream()
+        List<IpoCommentDto> newRegisterComments = ipoComments.stream()
                 .filter(comment -> NEW_REGISTER_COMMENT.equals(comment.getTitle()))
                 .collect(Collectors.toList());
         System.out.println(newRegisterComments.toString());
 
-        ipoCommentList = ipoCommentList.stream()
+        ipoComments = ipoComments.stream()
                 .filter(comment -> !isCommentInComments(comment, newRegisterComments))
                 .collect(Collectors.toList());
 
         //TODO 고민점: 신규상장일 경우, 해당일에 다른 코멘트들에 내용을 신규상장쪽으로 이전하고, 이전당한 코멘트는 제거?
-        return ifPresent(ipoCommentList);
+        return ifPresent(ipoComments);
     }
 
     private static boolean isCommentInComments(IpoCommentDto comment, List<IpoCommentDto> newRegisterComments) {
@@ -72,9 +72,9 @@ public class CommentServiceImpl implements CommentService {
         return true;
     }
 
-    private static void removeEmptyComment(List<IpoCommentDto> ipoCommentList) {
+    private static void removeEmptyComment(List<IpoCommentDto> ipoComments) {
         // 결과 중 내용이 없는 코멘트가 있는 경우 제거한다.
-        ipoCommentList.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
+        ipoComments.removeIf(ipoComment -> "".equals(ipoComment.getTitle()));
     }
 
     private <T> List<T> ifPresent(List<T> targetList) {
