@@ -51,13 +51,20 @@
                   </when>
                   <when test="ipoSequence == 'TODAY'">
                       AND
-                    ( #{targetDate} = ipo_cancel_date
-                      OR #{targetDate} = ipo_debut_date
-                      OR #{targetDate} = ipo_refund_date
-                      OR #{targetDate} BETWEEN ipo_forecast_start AND ipo_forecast_end
-                      OR #{targetDate} BETWEEN ipo_start_date AND ipo_end_date
-                    )
-                    ORDER BY ipo_start_date DESC
+                      (
+                      (ipo_cancel_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_start_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
+                      )
+                      ORDER BY
+                          (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
+                          ifnull(terminate_date, ipo_debut_date) DESC,
+                          ipo_start_date DESC,
+                          ipo.regist_date DESC
                   </when>
                   <when test="ipoSequence == 'BEFORE_FORECAST'">
                       AND #{targetDate} &lt; ipo.ipo_forecast_start
