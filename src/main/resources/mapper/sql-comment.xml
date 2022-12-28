@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dbsgapi.dbsgapi.api.ipo.mapper.CommentMapper">
+    <select id="selectIpoCommentList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
+        SELECT ipo_comment.comment_index,
+               ipo_comment.ipo_index,
+               ipo.stock_name,
+               IF(INSTR(ipo.stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, ipo.stock_kinds, '스팩주') AS stock_kinds,
+               ipo_comment.comment,
+               ipo_comment.writer,
+               date_format(ipo_comment.regist_date, '%Y-%m-%d') regist_date,
+               ipo_comment.log_type,
+               ipo_comment.change_log_json
+        FROM ipo_comment
+                 LEFT JOIN ipo ON ipo_comment.ipo_index = ipo.ipo_index
+        WHERE ipo_comment.regist_date BETWEEN #{startDate} and #{endDate}
+        ORDER BY comment_index DESC
+        LIMIT 200;
+    </select>
+
+    <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
+        SELECT comment_index,
+               ipo_index,
+               comment,
+               writer,
+               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
+               log_type,
+               change_log_json
+        FROM 	ipo_comment
+        WHERE 	ipo_index = #{ipoIndex} and enabled not like 'N'
+
+        ORDER BY regist_date DESC
+        LIMIT   100;
+    </select>
+
+    <select id="selectIpoCommentIndex" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
+        SELECT comment_index,
+               ipo_index,
+               comment,
+               writer,
+               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
+               log_type,
+               change_log_json
+        FROM 	ipo_comment
+        WHERE 	comment_index = #{commentIndex} and enabled not like 'N';
+    </select>
+</mapper>

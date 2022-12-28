@@ -52,12 +52,16 @@ public enum IpoSequence {
         validateSupported(ipoSequence);
     }
 
-    public static void validateSupported(IpoSequence ipoSequence) {
+    private static void validateSupported(IpoSequence ipoSequence) {
         notSupported.stream()
                 .filter(notSupportedSequence -> notSupportedSequence.equals(ipoSequence))
                 .findAny()
                 .ifPresent(e -> {
                     throw new CustomException(IPO_LIST_NOT_SUPPORTED_STATE);
                 });
+    }
+
+    public String getSequenceName() {
+        return this.name();
     }
 }

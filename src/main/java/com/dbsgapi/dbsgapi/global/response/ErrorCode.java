@@ -13,6 +13,7 @@ public enum ErrorCode {
     TEST_EXCEPTION(NOT_FOUND, "T000", "yeah"),
 
     // ipo
+    IPO_ILLEGAL_ARGUMENT_EXCEPTION(BAD_REQUEST, "IG000", "입력된 조건에 문제가 있습니다."),
     IPO_LIST_NOT_FOUND_EXCEPTION(NO_CONTENT, "II000", "조건에 맞는 조회 결과가 없습니다."),
     IPO_LIST_NOT_SUPPORTED_STATE(NOT_IMPLEMENTED, "II002", "지원되지 않는 state parameter 입니다."),
     IPO_DETAIL_NOT_FOUND_EXCEPTION(NOT_FOUND, "II001", "해당하는 결과가 없습니다."),
