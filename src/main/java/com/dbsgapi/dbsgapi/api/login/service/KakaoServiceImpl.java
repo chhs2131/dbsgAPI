@@ -1,12 +1,12 @@
 package com.dbsgapi.dbsgapi.api.login.service;
 
-import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
-import com.dbsgapi.dbsgapi.global.util.HttpConnection;
-import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto;
 import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
+import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.login.mapper.KakaoMapper;
+import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
+import com.dbsgapi.dbsgapi.global.util.HttpConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,10 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class KakaoServiceImpl implements KakaoService{
-    private KakaoMapper loginMapper;
+public class KakaoServiceImpl implements KakaoService {
     private final SocialProperty socialProperty;
-
     HttpConnection httpConnection = new HttpConnection();
+    private KakaoMapper loginMapper;
 
     public KakaoOAuthDto getToken(String authCode) throws Exception {
         // 변수 선언
@@ -50,7 +49,7 @@ public class KakaoServiceImpl implements KakaoService{
         KakaoApiUserDto kakaoApiUserDto = new KakaoApiUserDto();
         String apiUrl = socialProperty.getKakao().getProfile().getPath() + "?property_keys=%5B%22id%22%5D";
 
-        Map<String,String> header = new HashMap<String,String>();
+        Map<String, String> header = new HashMap<String, String>();
         header.put("Authorization", accessToken);
 
         // HTTP 통신

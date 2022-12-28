@@ -61,7 +61,7 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        if (userNo != 0  && isAuthenticated)
+        if (userNo != 0 && isAuthenticated)
             return Long.toString(userNo);
         return null;
     }

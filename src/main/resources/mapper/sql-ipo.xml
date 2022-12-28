@@ -49,34 +49,41 @@
                       AND ipo_cancel_bool = 'Y'
                     ORDER BY ipo_cancel_date DESC
                   </when>
-                  <when test="ipoSequence == 'TODAY'">
+                  <when test="ipoSequence == 'TODAY' or ipoSequence == 'SCHEDULE'">
                       AND
-                    ( #{targetDate} = ipo_cancel_date
-                      OR #{targetDate} = ipo_debut_date
-                      OR #{targetDate} = ipo_refund_date
-                      OR #{targetDate} BETWEEN ipo_forecast_start AND ipo_forecast_end
-                      OR #{targetDate} BETWEEN ipo_start_date AND ipo_end_date
-                    )
-                    ORDER BY ipo_start_date DESC
+                      (
+                      (ipo_cancel_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_forecast_start BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_forecast_end BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_start_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_end_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_refund_date BETWEEN #{startDate} AND #{endDate}) OR
+                      (ipo_debut_date BETWEEN #{startDate} AND #{endDate})
+                      )
+                      ORDER BY
+                          (ifnull(terminate_date, ipo_debut_date) IS NULL) DESC,
+                          ifnull(terminate_date, ipo_debut_date) DESC,
+                          ipo_start_date DESC,
+                          ipo.regist_date DESC
                   </when>
                   <when test="ipoSequence == 'BEFORE_FORECAST'">
-                      AND #{targetDate} &lt; ipo.ipo_forecast_start
+                      AND #{endDate} &lt; ipo.ipo_forecast_start
                     ORDER BY ipo_forecast_start ASC
                   </when>
                   <when test="ipoSequence == 'BEFORE_IPO' or ipoSequence == 'AFTER_FORECAST'">
-                      AND #{targetDate} BETWEEN DATE_ADD(IFNULL(ipo_forecast_end, regist_date), INTERVAL 1 DAY) AND DATE_SUB(ipo_start_date, INTERVAL 1 DAY)
+                      AND #{endDate} BETWEEN DATE_ADD(IFNULL(ipo_forecast_end, regist_date), INTERVAL 1 DAY) AND DATE_SUB(ipo_start_date, INTERVAL 1 DAY)
                     ORDER BY ipo_start_date ASC
                   </when>
                   <when test="ipoSequence == 'BEFORE_REFUND' or ipoSequence == 'AFTER_IPO'">
-                      AND #{targetDate} BETWEEN DATE_ADD(ipo_end_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_refund_date, INTERVAL 1 DAY)
+                      AND #{endDate} BETWEEN DATE_ADD(ipo_end_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_refund_date, INTERVAL 1 DAY)
                     ORDER BY ipo_refund_date ASC
                   </when>
                   <when test="ipoSequence == 'BEFORE_DEBUT' or ipoSequence == 'AFTER_REFUND'">
-                      AND #{targetDate} BETWEEN DATE_ADD(ipo_refund_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_debut_date, INTERVAL 1 DAY)
+                      AND #{endDate} BETWEEN DATE_ADD(ipo_refund_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_debut_date, INTERVAL 1 DAY)
                     ORDER BY ipo_debut_date ASC
                   </when>
                   <when test="ipoSequence == 'AFTER_DEBUT'">
-                      AND #{targetDate} >= ipo_debut_date
+                      AND #{startDate} >= ipo_debut_date
                     ORDER BY ipo_debut_date DESC
                   </when>
                   <otherwise>
@@ -181,50 +188,6 @@
             ipo_start_date DESC,
             ipo.regist_date DESC
         LIMIT 100;
-    </select>
-
-    <select id="selectIpoCommentList" parameterType="Map" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
-        SELECT ipo_comment.comment_index,
-               ipo_comment.ipo_index,
-               ipo.stock_name,
-               IF(INSTR(ipo.stock_name,'스팩')=0 AND INSTR(stock_name, '기업인수목적')=0, ipo.stock_kinds, '스팩주') AS stock_kinds,
-               ipo_comment.comment,
-               ipo_comment.writer,
-               date_format(ipo_comment.regist_date, '%Y-%m-%d') regist_date,
-               ipo_comment.log_type,
-               ipo_comment.change_log_json
-        FROM ipo_comment
-                 LEFT JOIN ipo ON ipo_comment.ipo_index = ipo.ipo_index
-        WHERE ipo_comment.regist_date BETWEEN #{startDate} and #{endDate}
-        ORDER BY comment_index DESC
-        LIMIT 200;
-    </select>
-
-    <select id="selectIpoComment" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
-        SELECT comment_index,
-               ipo_index,
-               comment,
-               writer,
-               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
-               log_type,
-               change_log_json
-        FROM 	ipo_comment
-        WHERE 	ipo_index = #{ipoIndex} and enabled not like 'N'
-
-        ORDER BY regist_date DESC
-        LIMIT   100;
-    </select>
-
-    <select id="selectIpoCommentIndex" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto">
-        SELECT comment_index,
-               ipo_index,
-               comment,
-               writer,
-               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
-               log_type,
-               change_log_json
-        FROM 	ipo_comment
-        WHERE 	comment_index = #{commentIndex} and enabled not like 'N';
     </select>
 
     <select id="selectIpoUnderwriter" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.ipo.dto.IpoUnderwriterDto">

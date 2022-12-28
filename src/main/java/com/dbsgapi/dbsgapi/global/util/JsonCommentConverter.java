@@ -5,7 +5,6 @@ import com.dbsgapi.dbsgapi.api.ipo.domain.IpoComment;
 import com.dbsgapi.dbsgapi.api.ipo.domain.KindOfComment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.dbsgapi.dbsgapi.api.ipo.domain.CommentLevel.IPO_CANCEL;
 import static com.dbsgapi.dbsgapi.api.ipo.domain.KindOfComment.*;
 
 @Slf4j
@@ -111,7 +109,7 @@ public class JsonCommentConverter {
 
     private void setFinalTitle(CommentLevel title) {
         // title이 아직 설정되지 않은 경우에만 설정한다.
-        if(this.title == null)
+        if (this.title == null)
             this.title = title;
     }
 
