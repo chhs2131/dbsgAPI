@@ -40,7 +40,7 @@ public class IpoApiController {
             @Parameter(description = "기준 일자 (deprecated)") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate,
             @Parameter(description = "기준일 진행 단계") @RequestParam(required = false, defaultValue = "ALL") IpoSequence state,
-            @Parameter(description = "정렬 (현재 사용되지 않음)") @RequestParam(required = false, defaultValue = "asc") String sort,
+            @Parameter(description = "정렬 (미래에 사용될 예정)") @RequestParam(required = false, defaultValue = "asc") String sort,
             @Parameter(description = "청약철회된 종목 반환여부") @RequestParam(required = false, defaultValue = "false") Boolean withCancelItem,
             @Parameter(description = "기준 시작 일자") @RequestParam(required = false)
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -140,7 +140,7 @@ public class IpoApiController {
     }
 
     @GetMapping(value = "/schedule")
-    @Operation(summary = "지정 기간내에 일정을 확인", description = "지정한 기간내에 일정을 모두 확인합니다.")
+    @Operation(summary = "지정 기간내에 일정을 확인 (deprecated)", description = "지정한 기간내에 일정을 모두 확인합니다. /api/v1/ipo 기능과 통합되었습니다.")
     public ResponseEntity<List<IpoSummaryDto>> getScheduleList(
             @Parameter(description = "조회 시작일자") @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now().minusDays(14)}")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
