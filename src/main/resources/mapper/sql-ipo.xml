@@ -67,23 +67,23 @@
                           ipo.regist_date DESC
                   </when>
                   <when test="ipoSequence == 'BEFORE_FORECAST'">
-                      AND #{targetDate} &lt; ipo.ipo_forecast_start
+                      AND #{endDate} &lt; ipo.ipo_forecast_start
                     ORDER BY ipo_forecast_start ASC
                   </when>
                   <when test="ipoSequence == 'BEFORE_IPO' or ipoSequence == 'AFTER_FORECAST'">
-                      AND #{targetDate} BETWEEN DATE_ADD(IFNULL(ipo_forecast_end, regist_date), INTERVAL 1 DAY) AND DATE_SUB(ipo_start_date, INTERVAL 1 DAY)
+                      AND #{endDate} BETWEEN DATE_ADD(IFNULL(ipo_forecast_end, regist_date), INTERVAL 1 DAY) AND DATE_SUB(ipo_start_date, INTERVAL 1 DAY)
                     ORDER BY ipo_start_date ASC
                   </when>
                   <when test="ipoSequence == 'BEFORE_REFUND' or ipoSequence == 'AFTER_IPO'">
-                      AND #{targetDate} BETWEEN DATE_ADD(ipo_end_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_refund_date, INTERVAL 1 DAY)
+                      AND #{endDate} BETWEEN DATE_ADD(ipo_end_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_refund_date, INTERVAL 1 DAY)
                     ORDER BY ipo_refund_date ASC
                   </when>
                   <when test="ipoSequence == 'BEFORE_DEBUT' or ipoSequence == 'AFTER_REFUND'">
-                      AND #{targetDate} BETWEEN DATE_ADD(ipo_refund_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_debut_date, INTERVAL 1 DAY)
+                      AND #{endDate} BETWEEN DATE_ADD(ipo_refund_date, INTERVAL 1 DAY) AND DATE_SUB(ipo_debut_date, INTERVAL 1 DAY)
                     ORDER BY ipo_debut_date ASC
                   </when>
                   <when test="ipoSequence == 'AFTER_DEBUT'">
-                      AND #{targetDate} >= ipo_debut_date
+                      AND #{startDate} >= ipo_debut_date
                     ORDER BY ipo_debut_date DESC
                   </when>
                   <otherwise>

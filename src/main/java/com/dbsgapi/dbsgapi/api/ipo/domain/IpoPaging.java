@@ -46,7 +46,6 @@ public class IpoPaging {
         Map<String, Object> map = new HashMap<>();
         map.put("limit", numberOfArticles);
         map.put("offset", pageNumber * numberOfArticles - numberOfArticles);
-        map.put("targetDate", datePeriod.getStartDate());
         map.put("startDate", datePeriod.getStartDate());
         map.put("endDate", datePeriod.getEndDate());
         map.put("ipoSequence", ipoSequence.getSequenceName());
