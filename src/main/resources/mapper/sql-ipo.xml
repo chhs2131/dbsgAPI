@@ -49,7 +49,7 @@
                       AND ipo_cancel_bool = 'Y'
                     ORDER BY ipo_cancel_date DESC
                   </when>
-                  <when test="ipoSequence == 'TODAY'">
+                  <when test="ipoSequence == 'TODAY' or ipoSequence == 'SCHEDULE'">
                       AND
                       (
                       (ipo_cancel_date BETWEEN #{startDate} AND #{endDate}) OR

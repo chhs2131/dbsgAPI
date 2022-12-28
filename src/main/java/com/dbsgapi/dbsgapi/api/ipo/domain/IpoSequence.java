@@ -43,7 +43,7 @@ public enum IpoSequence {
     BEFORE_DEBUT(8, "상장 진행 이전"),
     NOW_DEBUT(9, "금일 상장 진행"),
     AFTER_DEBUT(10, "상장완료");
-    private static final List<IpoSequence> notSupported = Arrays.asList(NOW_IPO, NOW_FORECAST, NOW_DEBUT, NOW_REFUND, SCHEDULE);
+    private static final List<IpoSequence> notSupported = Arrays.asList(NOW_IPO, NOW_FORECAST, NOW_DEBUT, NOW_REFUND);
 
     private int level;
     private String sequence;
