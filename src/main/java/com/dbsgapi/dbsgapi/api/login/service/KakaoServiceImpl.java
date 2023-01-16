@@ -6,7 +6,7 @@ import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.login.mapper.KakaoMapper;
 import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
-import com.dbsgapi.dbsgapi.global.util.HttpConnection;
+import com.dbsgapi.dbsgapi.api.login.util.HttpConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

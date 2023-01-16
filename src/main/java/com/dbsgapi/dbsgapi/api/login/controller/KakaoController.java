@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "카카오 계정", description = "카카오 OAuth 로그인을 위한 API")
+@Tag(name = "카카오 계정", description = "카카오 OAuth 로그인을 위한 API (deprecated)")
 public class KakaoController {
     private final JwtUtil jwtUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;

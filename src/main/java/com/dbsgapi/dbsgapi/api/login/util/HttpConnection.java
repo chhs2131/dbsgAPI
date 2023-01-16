@@ -1,4 +1,4 @@
-package com.dbsgapi.dbsgapi.global.util;
+package com.dbsgapi.dbsgapi.api.login.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
