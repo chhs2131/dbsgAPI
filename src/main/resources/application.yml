@@ -36,9 +36,10 @@ jwt:
 # social
 social:
   kakao:
-    login:
-      path: https://kauth.kakao.com/oauth/token
+    baseUrl: https://kapi.kakao.com
+    token:
+      path: /v1/user/access_token_info
       method: GET
     profile:
-      path: https://kapi.kakao.com/v2/user/me
+      path: /v2/user/me
       method: GET
