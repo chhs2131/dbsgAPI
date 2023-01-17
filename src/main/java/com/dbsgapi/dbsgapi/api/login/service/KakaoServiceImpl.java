@@ -28,7 +28,7 @@ public class KakaoServiceImpl implements KakaoService {
         String accessToken = "no_data";
         String redirectUri = "http://server.dbsg.co.kr:8080/login/kakao";
 
-        String apiUrl = socialProperty.getKakao().getLogin().getPath() + "?" +
+        String apiUrl = "https://kauth.kakao.com/oauth/token?" +
                 "grant_type=authorization_code&" +
                 "client_id=" + socialProperty.getKakao().getKey() +
                 "&redirect_uri=" + redirectUri +
