@@ -25,6 +25,13 @@ public class AuthController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PostMapping("/oauth/kakaoProfile")
+    public ResponseEntity<KakaoProfileDto> oauthProfileTestKakao(@RequestParam String kakaoAccessToken) {
+        KakaoProfileDto result = kakaoOauthService.getProfile(kakaoAccessToken);
+        System.out.println(result);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PostMapping("/oauth/kakao")
     public ResponseEntity<KakaoProfileDto> oauthLoginKakao(@RequestParam String kakaoAccessToken) {
         KakaoProfileDto result = kakaoOauthService.getProfile(kakaoAccessToken);

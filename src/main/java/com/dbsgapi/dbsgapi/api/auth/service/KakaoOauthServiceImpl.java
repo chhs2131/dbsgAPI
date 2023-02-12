@@ -2,6 +2,7 @@ package com.dbsgapi.dbsgapi.api.auth.service;
 
 import com.dbsgapi.dbsgapi.api.auth.dto.KakaoProfileDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.KakaoTokenInfoDto;
+import com.dbsgapi.dbsgapi.api.auth.mapper.AuthMapper;
 import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
 import io.netty.handler.codec.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class KakaoOauthServiceImpl implements KakaoOauthService {
     private final SocialProperty socialProperty;
+    private final AuthMapper authMapper;
 
     @Override
     public KakaoTokenInfoDto getTokenInformation(String kakaoAccessToken) {
