@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class KakaoProfileDto {
     @JsonProperty("id")
-    private int id;
+    private Long id;
     @JsonProperty("connected_at")
     private String connectedAt;
 

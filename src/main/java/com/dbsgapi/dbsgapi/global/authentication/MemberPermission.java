@@ -2,9 +2,11 @@ package com.dbsgapi.dbsgapi.global.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
+@Slf4j
 @Getter
 @AllArgsConstructor
 public enum MemberPermission {
@@ -15,11 +17,17 @@ public enum MemberPermission {
     private int id;
     private String name;
 
-
     public static MemberPermission from(String name) {
         return Arrays.stream(MemberPermission.values())
                 .filter(permission -> permission.getName().equals(name))
                 .findAny()
-                .orElse(null);  //TODO orElseThrow 사용
+                .orElseThrow(() -> new IllegalArgumentException("매칭X MemberPermission name " + name));
+    }
+
+    public static MemberPermission from(int id) {
+        return Arrays.stream(MemberPermission.values())
+                .filter(permission -> permission.getId() == id)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("매칭X MemberPermission id " + id));
     }
 }

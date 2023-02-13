@@ -1,7 +1,9 @@
 package com.dbsgapi.dbsgapi.global.authentication;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum OauthType {
     KAKAO(1, "kakao", ""),
