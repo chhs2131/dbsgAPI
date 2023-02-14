@@ -16,6 +16,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -65,13 +67,7 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
         String path = socialProperty.getKakao().getToken().getPath();
         HttpMethod method = HttpMethod.valueOf(socialProperty.getKakao().getToken().getMethod());
 
-        Mono<KakaoTokenInfoDto> mono = WebClient.create()
-                .method(method)
-                .uri(baseUrl + path)
-                .header("Authorization", "Bearer " + kakaoAccessToken)
-                .retrieve()
-                .bodyToMono(KakaoTokenInfoDto.class);
-
+        Mono<KakaoTokenInfoDto> mono = getKakaoMono(method, baseUrl, path, kakaoAccessToken, KakaoTokenInfoDto.class);
         return mono.block();
     }
 
@@ -79,14 +75,33 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
         String baseUrl = socialProperty.getKakao().getBaseUrl();
         String path = socialProperty.getKakao().getProfile().getPath();
         HttpMethod method = HttpMethod.valueOf(socialProperty.getKakao().getProfile().getMethod());
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + kakaoAccessToken);
 
-        Mono<KakaoProfileDto> mono = WebClient.create()
+        Mono<KakaoProfileDto> mono = getKakaoMono(method, baseUrl, path, headers, KakaoProfileDto.class);
+        return mono.block();
+    }
+
+    private static <T> Mono<T> getKakaoMono(HttpMethod method, String baseUrl, String path, String kakaoAccessToken, Class<T> dtoType) {
+        return WebClient.create()
                 .method(method)
                 .uri(baseUrl + path)
                 .header("Authorization", "Bearer " + kakaoAccessToken)
                 .retrieve()
-                .bodyToMono(KakaoProfileDto.class);
+                .bodyToMono(dtoType);
+    }
 
-        return mono.block();
+    private static <T> Mono<T> getKakaoMono(HttpMethod method, String baseUrl, String path, Map<String, String> headers, Class<T> dtoType) {
+        WebClient.Builder builder = WebClient.builder()
+                .baseUrl(baseUrl);
+
+        WebClient.RequestHeadersSpec<?> requestHeadersSpec = builder.build()
+                .method(method)
+                .uri(path);
+
+        headers.forEach(requestHeadersSpec::header);
+
+        return requestHeadersSpec.retrieve()
+                .bodyToMono(dtoType);
     }
 }
