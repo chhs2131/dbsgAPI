@@ -8,9 +8,9 @@ import com.dbsgapi.dbsgapi.api.auth.mapper.AuthMapper;
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.authentication.OauthType;
 import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
-import io.netty.handler.codec.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -63,10 +63,10 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
     private KakaoTokenInfoDto getTokenInformation(String kakaoAccessToken) {
         String baseUrl = socialProperty.getKakao().getBaseUrl();
         String path = socialProperty.getKakao().getToken().getPath();
-        String method = socialProperty.getKakao().getToken().getMethod();
+        HttpMethod method = HttpMethod.valueOf(socialProperty.getKakao().getToken().getMethod());
 
         Mono<KakaoTokenInfoDto> mono = WebClient.create()
-                .get()
+                .method(method)
                 .uri(baseUrl + path)
                 .header("Authorization", "Bearer " + kakaoAccessToken)
                 .retrieve()
@@ -78,10 +78,10 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
     private KakaoProfileDto getProfile(String kakaoAccessToken) {
         String baseUrl = socialProperty.getKakao().getBaseUrl();
         String path = socialProperty.getKakao().getProfile().getPath();
-        String method = socialProperty.getKakao().getProfile().getMethod();
+        HttpMethod method = HttpMethod.valueOf(socialProperty.getKakao().getProfile().getMethod());
 
         Mono<KakaoProfileDto> mono = WebClient.create()
-                .get()
+                .method(method)
                 .uri(baseUrl + path)
                 .header("Authorization", "Bearer " + kakaoAccessToken)
                 .retrieve()

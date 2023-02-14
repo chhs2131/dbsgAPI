@@ -3,6 +3,7 @@ package com.dbsgapi.dbsgapi.api.member.controller;
 import com.dbsgapi.dbsgapi.api.member.dto.MemberFavoriteDto;
 import com.dbsgapi.dbsgapi.api.member.service.MemberService;
 import com.dbsgapi.dbsgapi.global.util.SecurityUtil;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Hidden
+@Deprecated
 @Slf4j
 @RestController
 @RequiredArgsConstructor

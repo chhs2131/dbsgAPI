@@ -6,6 +6,7 @@ import com.dbsgapi.dbsgapi.api.login.dto.KakaoOAuthDto;
 import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.login.service.KakaoService;
 import com.dbsgapi.dbsgapi.global.util.JwtUtil;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Hidden
+@Deprecated
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "카카오 계정", description = "카카오 OAuth 로그인을 위한 API (deprecated)")
