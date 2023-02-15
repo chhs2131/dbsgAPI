@@ -15,10 +15,11 @@
 
 - 담당 인원 : 1인
 - Spring API
-  - Spring: `SpringBoot2.6.4`, `Gradle`, `IntelliJ`, `Java8`, `lombok`
+  - Spring: `SpringBoot2.6.4`, `Gradle`, `Java8`, `lombok`
+  - Security: `security`, `jjwt`
   - DB: `Mybatis`, `Hikari`
-  - API Document: `Swagger 2.9.2`
-  - etc: `AOP (Transaction, LoggerAspect)`, `WebClient (HttpConnection)`
+  - API Document: `springdoc-openapi-ui(Swagger)`
+  - etc: `AOP (Transaction, LoggerAspect)`, `WebClient(webFlux)`
 - Database: `MariaDB`
 - ServerComputer: `Google Compute Engine`, `CentOS Linux release 8.4.2105`
 - dev Tool: `HeidiSQL DataGrip`, `putty winscp`, `Postman Swagger-UI`
@@ -28,6 +29,7 @@
 
 - 담당 인원 : 3인
 - 크롤러: `Python3.9`, `BS4`, `PyMysql`
+- `Linux`, `Debian`, `crontab`
 
 <br/>
 
