@@ -188,6 +188,14 @@ public final class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("user_role", String.class);
     }
 
+    public String getUuid(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("uuid", String.class);
+    }
+
+    public String getPermission(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("permission", String.class);
+    }
+
     // 발생가능예외
     //    UnsupportedJwtException : 예상하는 형식과 다른 형식이거나 구성의 JWT일 때
     //    MalformedJwtException : JWT가 올바르게 구서오디지 않았을 때
