@@ -24,7 +24,7 @@ springdoc:
   paths-to-match: /api/v1/ipo/**, /api/v1/auth/**
 swagger:
   title: 공모주토피아 API
-  version: v0.5.0
+  version: v0.5.1
   description: 주식알리미 서비스에 사용되는 API 명세입니다. 전체 response는 공통반환 클래스의 body 내부에 들어가게 됩니다. <br/> <a href='https://www.notion.so/9c74d32d5e9846d698757d8b23cb0108?v=065595755f7645028e0a191479d986fa'>서버 변동사항 정리</a><br/> <a href='https://github.com/chhs2131/dbsgAPI'>소스코드 변동내역(Github)</a>
 
 # jwt
