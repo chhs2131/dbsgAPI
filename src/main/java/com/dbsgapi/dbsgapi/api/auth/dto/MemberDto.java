@@ -30,4 +30,8 @@ public class MemberDto {
     public String getMemberPermission() {
         return memberPermission.getName();
     }
+
+    public MemberPermission getMemberPermissionType() {
+        return memberPermission;
+    }
 }

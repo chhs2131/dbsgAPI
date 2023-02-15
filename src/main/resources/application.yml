@@ -29,7 +29,7 @@ swagger:
 
 # jwt
 jwt:
-  token-valid-time: 1800000  # 1달
+  token-valid-time: 1800000  # 단위: s
   authorities-key: auth
   header: Bearer
 

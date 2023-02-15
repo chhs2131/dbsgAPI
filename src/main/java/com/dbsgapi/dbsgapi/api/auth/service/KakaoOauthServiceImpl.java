@@ -5,9 +5,11 @@ import com.dbsgapi.dbsgapi.api.auth.dto.KakaoTokenInfoDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.MemberOauthAccountDto;
 import com.dbsgapi.dbsgapi.api.auth.mapper.AuthMapper;
+import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.authentication.OauthType;
 import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
+import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -26,9 +28,10 @@ import java.util.UUID;
 public class KakaoOauthServiceImpl implements KakaoOauthService {
     private final SocialProperty socialProperty;
     private final AuthMapper authMapper;
+    private final JwtUtil jwtUtil;
 
     @Override
-    public MemberDto login(String kakaoAccessToken) {
+    public AuthResponse login(String kakaoAccessToken) {
         KakaoProfileDto kakaoProfile = getProfile(kakaoAccessToken);
         if (kakaoProfile == null) {
             throw new IllegalArgumentException("유효하지않은 KakaoAccessToken 입니다.");
@@ -59,7 +62,8 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
             authMapper.createOauthAccount(oauthAccount);
             log.debug("=>>> {}", oauthAccount.toString());
         }
-        return member;
+
+        return jwtUtil.createAuthResponse(member.getUuid(), member.getMemberPermissionType());
     }
 
     private KakaoTokenInfoDto getTokenInformation(String kakaoAccessToken) {

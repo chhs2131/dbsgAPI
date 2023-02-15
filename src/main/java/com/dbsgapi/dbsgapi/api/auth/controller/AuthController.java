@@ -4,6 +4,7 @@ import com.dbsgapi.dbsgapi.api.auth.dto.KakaoProfileDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.KakaoTokenInfoDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.auth.service.KakaoOauthService;
+import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,9 @@ public class AuthController {
     private final KakaoOauthService kakaoOauthService;
 
     @PostMapping("/oauth/kakao")
-    public ResponseEntity<MemberDto> oauthLoginKakao(@RequestParam String kakaoAccessToken) {
-        MemberDto result = kakaoOauthService.login(kakaoAccessToken);
+    public ResponseEntity<AuthResponse> oauthLoginKakao(@RequestParam String kakaoAccessToken) {
+        AuthResponse result = kakaoOauthService.login(kakaoAccessToken);
+        System.out.println(result.toString());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
