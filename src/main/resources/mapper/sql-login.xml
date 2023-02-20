@@ -23,49 +23,4 @@
                       oauth_type = #{oauthType}
               );
     </select>
-
-    <select id="selectKakaoMember" parameterType="String" resultType="com.dbsgapi.dbsgapi.api.login.dto.KakaoMemberDto">
-        SELECT kakao_uid,
-               user_no,
-               access_token,
-               refresh_token,
-               DATE_FORMAT(regist_date, '%Y-%m-%d') regist_date,
-               DATE_FORMAT(refresh_date, '%Y-%m-%d') refresh_date,
-               expires_in,
-               refresh_token_expires_in
-        FROM members_kakao
-        WHERE kakao_uid = #{kakaoUid}
-    </select>
-
-    <select id="selectMember" parameterType="Long" resultType="com.dbsgapi.dbsgapi.api.login.dto.MemberDto">
-        SELECT 	user_no,
-                  role_name,
-                  enabled,
-                  regist_date
-        FROM 	members
-        WHERE 	user_no = #{userNo}
-    </select>
-
-    <insert id="insertMember" parameterType="com.dbsgapi.dbsgapi.api.login.dto.MemberDto"
-            useGeneratedKeys="true" keyColumn="user_no" keyProperty="userNo" >
-        INSERT INTO members
-            (regist_date)
-        VALUES (
-                   NOW()
-               )
-    </insert>
-    <insert id="insertKakaoMember" parameterType="com.dbsgapi.dbsgapi.api.login.dto.KakaoApiUserDto">
-        INSERT INTO members_kakao
-        (	kakao_uid,
-             user_no,
-             access_token,
-             refresh_token,
-             regist_date )
-        VALUES (#{kakaoUid},
-                #{userNo},
-                #{accessToken},
-                #{refreshToken},
-                NOW()
-               )
-    </insert>
 </mapper>

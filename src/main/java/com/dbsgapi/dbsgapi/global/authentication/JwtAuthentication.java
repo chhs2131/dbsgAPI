@@ -1,8 +1,6 @@
 package com.dbsgapi.dbsgapi.global.authentication;
 
-import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

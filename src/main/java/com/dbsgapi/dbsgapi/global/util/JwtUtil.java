@@ -1,6 +1,5 @@
 package com.dbsgapi.dbsgapi.global.util;
 
-import com.dbsgapi.dbsgapi.api.login.service.CustomUserDetailsService;
 import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.configuration.properties.JwtProperty;
@@ -26,7 +25,6 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public final class JwtUtil {
-    private CustomUserDetailsService customUserDetailsService;
     final JwtProperty jwtProperty;
 
     private final String AUTHORITIES_KEY;
@@ -118,23 +116,6 @@ public final class JwtUtil {
             return "[bad jws] " + compactJws +
                     "\n[Error] " + e;
         }
-    }
-
-    //토큰에서 인증정보 조회
-    public Authentication getAuthentication(String token) {
-        String userPk = this.getUserPk(token);
-        String userNo = this.getUserno(token);
-
-//        Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get(AUTHORITIES_KEY).toString().split(","))
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
-
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userNo);
-        //User principal = new User(userNo, "", authorities);
-        //return new UsernamePasswordAuthenticationToken(userNo, "", userDetails.getAuthorities());
-        return new UsernamePasswordAuthenticationToken(userNo, "", userDetails.getAuthorities());
-        //return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     //Request Header에서 Token값 가져오기
