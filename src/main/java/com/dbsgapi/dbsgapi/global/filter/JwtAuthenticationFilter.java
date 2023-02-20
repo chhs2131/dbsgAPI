@@ -1,6 +1,5 @@
 package com.dbsgapi.dbsgapi.global.filter;
 
-import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.global.authentication.AnonymousAuthentication;
 import com.dbsgapi.dbsgapi.global.authentication.JwtAuthentication;
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
