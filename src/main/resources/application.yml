@@ -21,7 +21,7 @@ Mybatis:
 springdoc:
   swagger-ui:
     path: /doc
-  paths-to-match: /api/v1/ipo/**, /api/v1/auth/**
+  paths-to-match: /api/v1/ipo/**, /api/v1/auth/**, /api/v1/member/**
 swagger:
   title: 공모주토피아 API
   version: v0.5.2

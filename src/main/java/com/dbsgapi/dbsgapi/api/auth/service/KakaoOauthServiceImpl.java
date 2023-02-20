@@ -2,9 +2,10 @@ package com.dbsgapi.dbsgapi.api.auth.service;
 
 import com.dbsgapi.dbsgapi.api.auth.dto.KakaoProfileDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.KakaoTokenInfoDto;
-import com.dbsgapi.dbsgapi.api.auth.dto.MemberDto;
+import com.dbsgapi.dbsgapi.api.member.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.MemberOauthAccountDto;
 import com.dbsgapi.dbsgapi.api.auth.mapper.AuthMapper;
+import com.dbsgapi.dbsgapi.api.member.mapper.MemberMapper;
 import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.authentication.OauthType;
@@ -28,6 +29,7 @@ import java.util.UUID;
 public class KakaoOauthServiceImpl implements KakaoOauthService {
     private final SocialProperty socialProperty;
     private final AuthMapper authMapper;
+    private final MemberMapper memberMapper;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -49,7 +51,7 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
                     .name("RANDOM_NAME" + LocalDateTime.now())
                     .registDatetime(LocalDateTime.now())
                     .build();
-            authMapper.createMember(member);
+            memberMapper.createMember(member);
             log.debug("=>>> {}", member.toString());
 
             // Oauth 정보 등록

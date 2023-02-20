@@ -1,8 +1,5 @@
 package com.dbsgapi.dbsgapi.api.auth.controller;
 
-import com.dbsgapi.dbsgapi.api.auth.dto.KakaoProfileDto;
-import com.dbsgapi.dbsgapi.api.auth.dto.KakaoTokenInfoDto;
-import com.dbsgapi.dbsgapi.api.auth.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.auth.service.KakaoOauthService;
 import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
 import io.swagger.v3.oas.annotations.Hidden;

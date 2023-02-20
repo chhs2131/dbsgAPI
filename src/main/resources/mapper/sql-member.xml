@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dbsgapi.dbsgapi.api.member.mapper.MemberMapper">
+    <insert id="createMember" parameterType="com.dbsgapi.dbsgapi.api.member.dto.MemberDto">
+        INSERT INTO member (uuid, member_permission, name, regist_datetime)
+        VALUES (#{uuid}, #{memberPermission}, #{name}, NOW());
+    </insert>
+
+    <select id="getMemberByUuid" parameterType="String" resultType="com.dbsgapi.dbsgapi.api.member.dto.MemberDto">
+        SELECT uuid, member_permission, name, regist_datetime, update_datetime
+        FROM member
+        WHERE uuid = #{uuid}
+    </select>
+</mapper>

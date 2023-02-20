@@ -1,6 +1,7 @@
-package com.dbsgapi.dbsgapi.api.auth.dto;
+package com.dbsgapi.dbsgapi.api.member.dto;
 
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class MemberDto {
         return memberPermission.getName();
     }
 
+    @JsonIgnore
     public MemberPermission getMemberPermissionType() {
         return memberPermission;
     }

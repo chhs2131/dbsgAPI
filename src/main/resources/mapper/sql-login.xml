@@ -2,17 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dbsgapi.dbsgapi.api.auth.mapper.AuthMapper">
-    <insert id="createMember" parameterType="com.dbsgapi.dbsgapi.api.auth.dto.MemberDto">
-        INSERT INTO member (uuid, member_permission, name, regist_datetime)
-        VALUES (#{uuid}, #{memberPermission}, #{name}, NOW());
-    </insert>
-
     <insert id="createOauthAccount" parameterType="com.dbsgapi.dbsgapi.api.auth.dto.MemberOauthAccountDto">
         INSERT INTO member_oauth_account (oauth_id, oauth_type, member_uuid, regist_datetime)
         VALUES (#{oauthId}, #{oauthType}, #{memberUuid}, NOW());
     </insert>
 
-    <select id="getMemberByOauthAccount" parameterType="com.dbsgapi.dbsgapi.api.auth.dto.MemberOauthAccountDto" resultType="com.dbsgapi.dbsgapi.api.auth.dto.MemberDto">
+    <select id="getMemberByOauthAccount" parameterType="com.dbsgapi.dbsgapi.api.auth.dto.MemberOauthAccountDto" resultType="com.dbsgapi.dbsgapi.api.member.dto.MemberDto">
         SELECT *
         FROM member
         WHERE uuid IN
