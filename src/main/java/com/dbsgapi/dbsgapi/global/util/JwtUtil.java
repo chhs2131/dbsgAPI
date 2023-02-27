@@ -1,6 +1,7 @@
 package com.dbsgapi.dbsgapi.global.util;
 
-import com.dbsgapi.dbsgapi.api.login.service.CustomUserDetailsService;
+import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
+import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.configuration.properties.JwtProperty;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -15,13 +16,15 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public final class JwtUtil {
-    private CustomUserDetailsService customUserDetailsService;
     final JwtProperty jwtProperty;
 
     private final String AUTHORITIES_KEY;
@@ -45,39 +48,14 @@ public final class JwtUtil {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    /*
-    public String createJws(Authentication authentication) throws Exception {
-        Date now = new Date();
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
-        Claims claims = Jwts.claims().setSubject(authentication.getName());
-        claims.put("user_no", authentication.getPrincipal());
-        claims.put(AUTHORITIES_KEY, authorities);
-
-        String jws = Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)헤더타입 지정
-                .setClaims(claims) // setClaims는 기존 PAYLOAD에 덮어쓰기된다. (즉, 뒤쪽에 놓게되면 이전내용이 무시됨)
-                .setIssuer("dbsg_api") // (2)토큰발급자 설정
-                .setIssuedAt(now) // (3)발급시간 설정(date)
-                .setExpiration(new Date(now.getTime() + tokenValidTime)) // (4)만료시간 설정
-                //.claim("id", "아이디") // (5)비공개 클레임 설정
-                //.claim("email", "ajufresh@gmail.com")
-                .signWith(key, SignatureAlgorithm.HS256) // (6)해상 알고리즘 및 시크릿KEY 지정
-                .compact(); // 설정값을 바탕으로 JWT를 압축 (JWS형식)
-
-        return jws;
-    }
-    */
-
+    @Deprecated
     public String createJws(String user_no) throws Exception {
         Date now = new Date();
         Claims claims = Jwts.claims().setSubject("userPk");
         claims.put("user_no", user_no);
         claims.put("user_role", "USER");
 
-        String jws = Jwts.builder()
+        return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)헤더타입 지정
                 .setClaims(claims) // setClaims는 기존 PAYLOAD에 덮어쓰기된다. (즉, 뒤쪽에 놓게되면 이전내용이 무시됨)
                 .setIssuer("dbsg_api") // (2)토큰발급자 설정
@@ -87,11 +65,34 @@ public final class JwtUtil {
                 //.claim("email", "ajufresh@gmail.com")
                 .signWith(key, SignatureAlgorithm.HS256) // (6)해상 알고리즘 및 시크릿KEY 지정
                 .compact(); // 설정값을 바탕으로 JWT를 압축 (JWS형식)
-
-        return jws;
     }
 
+    public AuthResponse createAuthResponse(String uuid, MemberPermission permission) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiration = now.plusSeconds(tokenValidTime);
+        Claims claims = Jwts.claims().setSubject("user");
+        claims.put("uuid", uuid);
+        claims.put("permission", permission.getName());
 
+        String jws = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)헤더타입 지정
+                .setClaims(claims) // setClaims는 기존 PAYLOAD에 덮어쓰기된다. (즉, 뒤쪽에 놓게되면 이전내용이 무시됨)
+                .setIssuer("dbsg") // (2)토큰발급자 설정
+                .setIssuedAt(localDateTimeToDate(now))// (3)발급시간 설정(date)
+                .setExpiration(localDateTimeToDate(expiration)) // (4)만료시간 설정
+                //.claim("id", "아이디") // (5)비공개 클레임 설정
+                //.claim("email", "ajufresh@gmail.com")
+                .signWith(key, SignatureAlgorithm.HS256) // (6)해상 알고리즘 및 시크릿KEY 지정
+                .compact(); // 설정값을 바탕으로 JWT를 압축 (JWS형식)
+
+        return new AuthResponse(jws, expiration);
+    }
+
+    private static Date localDateTimeToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    @Deprecated
     public String accessJws(String compactJws) throws Exception {
         //test 전용, 이후에는 Filter를 통해 security와 연동하여 검증예정.
         try {
@@ -115,23 +116,6 @@ public final class JwtUtil {
             return "[bad jws] " + compactJws +
                     "\n[Error] " + e;
         }
-    }
-
-    //토큰에서 인증정보 조회
-    public Authentication getAuthentication(String token) {
-        String userPk = this.getUserPk(token);
-        String userNo = this.getUserno(token);
-
-//        Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get(AUTHORITIES_KEY).toString().split(","))
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
-
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userNo);
-        //User principal = new User(userNo, "", authorities);
-        //return new UsernamePasswordAuthenticationToken(userNo, "", userDetails.getAuthorities());
-        return new UsernamePasswordAuthenticationToken(userNo, "", userDetails.getAuthorities());
-        //return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     //Request Header에서 Token값 가져오기
@@ -183,6 +167,14 @@ public final class JwtUtil {
 
     public String getUserRole(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("user_role", String.class);
+    }
+
+    public String getUuid(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("uuid", String.class);
+    }
+
+    public String getPermission(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("permission", String.class);
     }
 
     // 발생가능예외

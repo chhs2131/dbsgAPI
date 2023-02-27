@@ -16,7 +16,8 @@ public class SocialProperty {
     @RequiredArgsConstructor
     public static final class socialApi {
         private final String key;
-        private final apiUri login;
+        private final String baseUrl;
+        private final apiUri token;
         private final apiUri profile;
     }
 

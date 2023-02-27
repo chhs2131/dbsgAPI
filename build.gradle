@@ -18,7 +18,7 @@ plugins {
 }
 
 group = 'com.dbsgAPI'
-version = '0.4.1-SNAPSHOT'
+version = '0.5.2-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 configurations {
@@ -34,6 +34,7 @@ repositories {
 dependencies {
     //웹
     implementation 'org.springframework.boot:spring-boot-starter-web:2.6.2'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     //데이터베이스
     implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.6.2'
