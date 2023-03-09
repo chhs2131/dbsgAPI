@@ -49,8 +49,7 @@
   - Schedule: 지정된 기간에 청약 일정이 있었는지 확인할 수 있습니다. (예. 오늘, 이번주, 지난달 등)
   - Comment: 각 종목에 정보가 변화된 기록을 확인할 수 있습니다.
 - SwaggerLink : http://server.dbsg.co.kr:8080/swagger-ui/index.html
-![image](https://user-images.githubusercontent.com/10378777/199421203-2ff4fbfa-ab3e-41ad-af3f-ce7c2ab07b83.png)
-
+![image](https://user-images.githubusercontent.com/10378777/223958261-832ce4fd-a0cb-4c4d-a88b-d1d50e4f14c7.png)
 
 <br/>
 
