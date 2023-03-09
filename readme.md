@@ -56,6 +56,8 @@
   - Underwriter: 청약을 진행하는 주간사 정보와 최대 청약 개수를 확인할 수 있습니다.
   - Schedule: 지정된 기간에 청약 일정이 있었는지 확인할 수 있습니다. (예. 오늘, 이번주, 지난달 등)
   - Comment: 각 종목에 정보가 변화된 기록을 확인할 수 있습니다.
+- AUTH: 카카오 OAuth2.0로 로그인 및 신규가입합니다. 
+  - 추후 개인별 즐겨찾기, 보유 증권사 목록 등의 정보를 서버에서 관리하여 플랫폼간 연결성을 높일 예정입니다.
 - SwaggerLink : http://server.dbsg.co.kr:8080/swagger-ui/index.html
 ![image](https://user-images.githubusercontent.com/10378777/223958261-832ce4fd-a0cb-4c4d-a88b-d1d50e4f14c7.png)
 
