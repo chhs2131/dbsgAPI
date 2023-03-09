@@ -28,7 +28,7 @@
 **공모주 데이터 크롤링**
 
 - 담당 인원 : 3인
-- 크롤러: `Python3.9`, `BS4`, `PyMysql`
+- 크롤러: `Python3.7`, `BS4`, `PyMysql`
 - `Linux`, `Debian`, `crontab`
 
 <br/>
