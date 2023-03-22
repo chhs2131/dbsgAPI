@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dbsgapi.dbsgapi.global.response.ErrorCode.IPO_LIST_NOT_SUPPORTED_STATE;
+import static com.dbsgapi.dbsgapi.global.response.GeneralErrorCode.IPO_LIST_NOT_SUPPORTED_STATE;
 
 @Getter
 @AllArgsConstructor
