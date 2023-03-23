@@ -1,13 +1,19 @@
 package com.dbsgapi.dbsgapi.api.auth.exception;
 
+import com.dbsgapi.dbsgapi.api.auth.dto.KakaoErrorDto;
 import com.dbsgapi.dbsgapi.global.response.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+
+import java.util.Arrays;
 
 import static org.springframework.http.HttpStatus.*;
 
 @Getter
+@ToString
 @AllArgsConstructor
 public enum KakaoApiErrorCode implements ErrorCode {
     // General
@@ -38,8 +44,19 @@ public enum KakaoApiErrorCode implements ErrorCode {
     LOGIN_NO_CHILD_ERROR(UNAUTHORIZED, "-401", "14세 미만 사용자는 호츨 할 수 없게 설정되어있습니다.")
     ;
 
-
     private final HttpStatus status;
     private final String code;
     private final String message;
+
+    public static KakaoApiErrorCode from(KakaoErrorDto kakaoErrorDto) {
+        String code = String.valueOf(kakaoErrorDto.getCode());
+        return from(code);
+    }
+
+    public static KakaoApiErrorCode from(String code) {
+        return Arrays.stream(KakaoApiErrorCode.values())
+                .filter(kakaoApiErrorCode -> kakaoApiErrorCode.getCode().equals(code))
+                .findAny()
+                .orElseThrow(() -> new IllegalStateException("지원x"));
+    }
 }

@@ -1,7 +1,10 @@
 package com.dbsgapi.dbsgapi.api.auth.service;
 
+import com.dbsgapi.dbsgapi.api.auth.dto.KakaoErrorDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.KakaoProfileDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.KakaoTokenInfoDto;
+import com.dbsgapi.dbsgapi.api.auth.exception.KakaoApiErrorCode;
+import com.dbsgapi.dbsgapi.api.auth.exception.KakaoApiException;
 import com.dbsgapi.dbsgapi.api.member.dto.MemberDto;
 import com.dbsgapi.dbsgapi.api.auth.dto.MemberOauthAccountDto;
 import com.dbsgapi.dbsgapi.api.auth.mapper.AuthMapper;
@@ -14,6 +17,7 @@ import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -108,6 +112,14 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
         headers.forEach(requestHeadersSpec::header);
 
         return requestHeadersSpec.retrieve()
-                .bodyToMono(dtoType);
+                .onStatus(HttpStatus::is4xxClientError, response ->
+                        response.bodyToMono(KakaoErrorDto.class)
+                                .flatMap(errorDto -> Mono.error(new KakaoApiException(KakaoApiErrorCode.from(errorDto))))
+                )
+                .onStatus(HttpStatus::is5xxServerError, response -> {
+                    throw new KakaoApiException(KakaoApiErrorCode.SYSTEM_CHECK_ERROR);
+                })
+                .bodyToMono(dtoType)
+                ;
     }
 }
