@@ -119,7 +119,6 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
                 .onStatus(HttpStatus::is5xxServerError, response -> {
                     throw new KakaoApiException(KakaoApiErrorCode.SYSTEM_CHECK_ERROR);
                 })
-                .bodyToMono(dtoType)
-                ;
+                .bodyToMono(dtoType);
     }
 }
