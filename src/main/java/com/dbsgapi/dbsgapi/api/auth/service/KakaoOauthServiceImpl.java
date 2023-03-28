@@ -16,6 +16,7 @@ import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
 import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -86,7 +87,7 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
         String path = socialProperty.getKakao().getProfile().getPath();
         HttpMethod method = socialProperty.getKakao().getProfile().getMethod();
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + kakaoAccessToken);
+        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
 
         Mono<KakaoProfileDto> mono = getKakaoMono(method, baseUrl, path, headers, KakaoProfileDto.class);
         return mono.block();
@@ -96,7 +97,7 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
         return WebClient.create()
                 .method(method)
                 .uri(baseUrl + path)
-                .header("Authorization", "Bearer " + kakaoAccessToken)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken)
                 .retrieve()
                 .bodyToMono(dtoType);
     }
