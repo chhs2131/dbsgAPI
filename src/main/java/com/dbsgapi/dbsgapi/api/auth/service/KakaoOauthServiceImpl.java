@@ -13,6 +13,7 @@ import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.authentication.OauthType;
 import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
+import com.dbsgapi.dbsgapi.global.configuration.properties.type.ApiRequest;
 import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,40 +76,39 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
 
     private KakaoTokenInfoDto getTokenInformation(String kakaoAccessToken) {
         String baseUrl = socialProperty.getKakao().getBaseUrl();
-        String path = socialProperty.getKakao().getToken().getPath();
-        HttpMethod method = socialProperty.getKakao().getToken().getMethod();
+        ApiRequest apiRequest = socialProperty.getKakao().getToken();
 
-        Mono<KakaoTokenInfoDto> mono = getKakaoMono(method, baseUrl, path, kakaoAccessToken, KakaoTokenInfoDto.class);
+        Mono<KakaoTokenInfoDto> mono = getKakaoMono(baseUrl, apiRequest, kakaoAccessToken, KakaoTokenInfoDto.class);
         return mono.block();
     }
 
     private KakaoProfileDto getProfile(String kakaoAccessToken) {
         String baseUrl = socialProperty.getKakao().getBaseUrl();
-        String path = socialProperty.getKakao().getProfile().getPath();
-        HttpMethod method = socialProperty.getKakao().getProfile().getMethod();
+        ApiRequest apiRequest = socialProperty.getKakao().getProfile();
+
         Map<String, String> headers = new HashMap<>();
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
 
-        Mono<KakaoProfileDto> mono = getKakaoMono(method, baseUrl, path, headers, KakaoProfileDto.class);
+        Mono<KakaoProfileDto> mono = getKakaoMono(baseUrl, apiRequest, headers, KakaoProfileDto.class);
         return mono.block();
     }
 
-    private static <T> Mono<T> getKakaoMono(HttpMethod method, String baseUrl, String path, String kakaoAccessToken, Class<T> dtoType) {
+    private static <T> Mono<T> getKakaoMono(String baseUrl, ApiRequest apiRequest, String kakaoAccessToken, Class<T> dtoType) {
         return WebClient.create()
-                .method(method)
-                .uri(baseUrl + path)
+                .method(apiRequest.getMethod())
+                .uri(baseUrl + apiRequest.getPath())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken)
                 .retrieve()
                 .bodyToMono(dtoType);
     }
 
-    private static <T> Mono<T> getKakaoMono(HttpMethod method, String baseUrl, String path, Map<String, String> headers, Class<T> dtoType) {
+    private static <T> Mono<T> getKakaoMono(String baseUrl, ApiRequest apiRequest, Map<String, String> headers, Class<T> dtoType) {
         WebClient.Builder builder = WebClient.builder()
                 .baseUrl(baseUrl);
 
         WebClient.RequestHeadersSpec<?> requestHeadersSpec = builder.build()
-                .method(method)
-                .uri(path);
+                .method(apiRequest.getMethod())
+                .uri(apiRequest.getPath());
 
         headers.forEach(requestHeadersSpec::header);
 
