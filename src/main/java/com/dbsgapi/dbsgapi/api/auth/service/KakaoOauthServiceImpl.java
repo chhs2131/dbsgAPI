@@ -16,21 +16,18 @@ import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
 import com.dbsgapi.dbsgapi.global.configuration.properties.type.ApiProvider;
 import com.dbsgapi.dbsgapi.global.configuration.properties.type.ApiRequest;
 import com.dbsgapi.dbsgapi.global.infra.api.kakao.KakaoApiProvider;
-import com.dbsgapi.dbsgapi.global.infra.api.kakao.KakaoApiWebClient;
+import com.dbsgapi.dbsgapi.global.infra.api.kakao.KakaoApiService;
 import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import com.dbsgapi.dbsgapi.global.util.WebClientUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -38,8 +35,7 @@ import java.util.function.Consumer;
 @Service
 @RequiredArgsConstructor
 public class KakaoOauthServiceImpl implements KakaoOauthService {
-    private final KakaoApiWebClient webClientUtil;
-    private final SocialProperty socialProperty;
+    private final KakaoApiService kakaoApiService;
     private final AuthMapper authMapper;
     private final MemberMapper memberMapper;
     private final JwtUtil jwtUtil;
@@ -81,40 +77,10 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
     }
 
     private KakaoTokenInfoDto getTokenInformation(String kakaoAccessToken) {
-        KakaoApiProvider apiProvider = socialProperty.getKakao();
-        ApiRequest apiRequest = apiProvider.getToken();
-
-        Consumer<HttpHeaders> headersConsumer = headers -> {
-            headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
-        };
-
-        Mono<KakaoTokenInfoDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoTokenInfoDto.class, headersConsumer);
-        return mono.block();
+        return kakaoApiService.getTokenInformation(kakaoAccessToken).block();
     }
 
     private KakaoProfileDto getProfile(String kakaoAccessToken) {
-        KakaoApiProvider apiProvider = socialProperty.getKakao();
-        ApiRequest apiRequest = apiProvider.getProfile();
-
-        Consumer<HttpHeaders> headersConsumer = headers -> {
-            headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
-        };
-
-        Mono<KakaoProfileDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoProfileDto.class, headersConsumer);
-        return mono.block();
-    }
-
-    private <T> Mono<T> getKakaoMono(ApiProvider apiProvider, ApiRequest apiRequest, Class<T> dtoType, Consumer<HttpHeaders> headers) {
-        WebClient.RequestHeadersSpec<?> requestHeadersSpec = webClientUtil.newRequestWebClient(apiProvider, apiRequest, headers);
-
-        return requestHeadersSpec.retrieve()
-                .onStatus(HttpStatus::is4xxClientError, response ->
-                        response.bodyToMono(KakaoErrorDto.class)
-                                .flatMap(errorDto -> Mono.error(new KakaoApiException(KakaoApiErrorCode.from(errorDto))))
-                )
-                .onStatus(HttpStatus::is5xxServerError, response -> {
-                    throw new KakaoApiException(KakaoApiErrorCode.SYSTEM_CHECK_ERROR);
-                })
-                .bodyToMono(dtoType);
+        return kakaoApiService.getProfile(kakaoAccessToken).block();
     }
 }
