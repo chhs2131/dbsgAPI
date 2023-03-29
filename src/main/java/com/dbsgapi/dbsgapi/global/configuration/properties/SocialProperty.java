@@ -1,5 +1,8 @@
 package com.dbsgapi.dbsgapi.global.configuration.properties;
 
+import com.dbsgapi.dbsgapi.global.configuration.properties.type.ApiProvider;
+import com.dbsgapi.dbsgapi.global.configuration.properties.type.ApiRequest;
+import com.dbsgapi.dbsgapi.global.infra.api.kakao.KakaoApiProvider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,20 +13,5 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConstructorBinding
 @ConfigurationProperties(prefix = "social")
 public class SocialProperty {
-    private final socialApi kakao;
-
-    @Getter
-    @RequiredArgsConstructor
-    public static final class socialApi {
-        private final String key;
-        private final apiUri login;
-        private final apiUri profile;
-    }
-
-    @Getter
-    @RequiredArgsConstructor
-    public static final class apiUri {
-        private final String path;
-        private final String method;
-    }
+    private final KakaoApiProvider kakao;
 }

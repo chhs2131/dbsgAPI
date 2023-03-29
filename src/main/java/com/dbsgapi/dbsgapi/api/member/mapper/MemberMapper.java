@@ -1,17 +1,15 @@
 package com.dbsgapi.dbsgapi.api.member.mapper;
 
-import com.dbsgapi.dbsgapi.api.member.dto.MemberFavoriteDto;
+import com.dbsgapi.dbsgapi.api.member.dto.MemberDto;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface MemberMapper {
-    List<MemberFavoriteDto> selectFavorites(long userNo) throws Exception;
-
-    MemberFavoriteDto selectFavorite(MemberFavoriteDto memberFavoriteDto) throws Exception;
-
-    void insertFavorite(MemberFavoriteDto memberFavoriteDto) throws Exception;
-
-    void deleteFavorite(MemberFavoriteDto memberFavoriteDto) throws Exception;
+    void createMember(MemberDto member);
+    Optional<MemberDto> getMemberByUuid(String uuid);
+    void updateMember(MemberDto member);
+    void deleteMember(MemberDto member);
+    void deleteMemberByUuid(String uuid);
 }

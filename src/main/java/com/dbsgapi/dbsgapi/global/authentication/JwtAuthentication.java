@@ -1,34 +1,28 @@
 package com.dbsgapi.dbsgapi.global.authentication;
 
-import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.Collections;
 
 @Slf4j
+@AllArgsConstructor
 public class JwtAuthentication implements Authentication {
-
     private final String token;
-    private long userNo = 0;
-    private String role;
+    private final String uuid;
+    private final MemberPermission permission;
     private boolean isAuthenticated;
-
-    public JwtAuthentication(MemberDto dto) {
-        this.token = dto.getJwt();
-        this.userNo = dto.getUserNo();
-        this.role = dto.getRoleName();
-        this.isAuthenticated = true;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         log.debug("Getting authorities");
         if (isAuthenticated) {
-            return Collections.singletonList(new SimpleGrantedAuthority(role));
+            return Collections.singletonList(new SimpleGrantedAuthority(permission.getName()));
         }
         //return Collections.singletonList(new SimpleGrantedAuthority(Role.ANONYMOUS.getValue()));
         return Collections.singletonList(new SimpleGrantedAuthority("ANONYMOUS"));
@@ -61,8 +55,8 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        if (userNo != 0 && isAuthenticated)
-            return Long.toString(userNo);
+        if (StringUtils.hasText(uuid) && isAuthenticated)
+            return uuid;
         return null;
     }
 }

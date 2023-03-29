@@ -1,8 +1,8 @@
 package com.dbsgapi.dbsgapi.global.filter;
 
-import com.dbsgapi.dbsgapi.api.login.dto.MemberDto;
 import com.dbsgapi.dbsgapi.global.authentication.AnonymousAuthentication;
 import com.dbsgapi.dbsgapi.global.authentication.JwtAuthentication;
+import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,18 +30,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestUri = (request).getRequestURI();
         String token = jwtUtil.validateHeader(authHeader);
 
-        log.debug("authHeader : " + authHeader);
-        log.debug("JWT : " + token);
-
         // 유효한 토크인지 확인
         if (StringUtils.hasText(token) && jwtUtil.validateToken(token)) {
-            String userNo = jwtUtil.getUserno(token);
-            String userRole = jwtUtil.getUserRole(token);
-            MemberDto memberDto = new MemberDto();
-            memberDto.setForJwt(userNo, userRole, token);
+            String uuid = jwtUtil.getUuid(token);
+            MemberPermission permission = MemberPermission.from(jwtUtil.getPermission(token));
+            //TODO Permission에 대한 검증이 필요할까?
 
             // SecurityContext 에 Authentication 객체를 저장
-            this.setAuthentication(memberDto);
+            this.setAuthentication(token, uuid, permission);
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다. URI: {}", SecurityContextHolder.getContext().getAuthentication().getName(), requestUri);
         } else {
             this.setAnonymousAuthentication();
@@ -51,11 +47,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthentication(MemberDto dto) {
-        if (!dto.getJwt().isEmpty()) {
-            JwtAuthentication authentication = new JwtAuthentication(dto);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+    private static void setAuthentication(String token, String uuid, MemberPermission permission) {
+        JwtAuthentication authentication = new JwtAuthentication(token, uuid, permission, true);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private void setAnonymousAuthentication() {

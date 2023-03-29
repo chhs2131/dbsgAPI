@@ -3,12 +3,16 @@ package com.dbsgapi.dbsgapi.api.ipo.service;
 import com.dbsgapi.dbsgapi.api.ipo.domain.DatePeriod;
 import com.dbsgapi.dbsgapi.api.ipo.dto.IpoCommentDto;
 import com.dbsgapi.dbsgapi.api.ipo.mapper.CommentMapper;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,7 +53,27 @@ public class CommentServiceImpl implements CommentService {
                 .filter(comment -> !isCommentInComments(comment, newRegisterComments))
                 .collect(Collectors.toList());
 
-        return ifPresent(ipoComments);
+        // 같은 ipoIndex, registDate를 가진 IpoCommentDto를 합친다.
+        return groupByIpoCommentDtoIpoIndexAndRegistDate(ipoComments, newRegisterComments);
+    }
+
+    private static List<IpoCommentDto> groupByIpoCommentDtoIpoIndexAndRegistDate(List<IpoCommentDto> ipoComments, List<IpoCommentDto> newRegisterComments) {
+        Map<String, IpoCommentDto> ipoCommentMap = new LinkedHashMap<>();
+        for (IpoCommentDto dto : ipoComments) {
+            String key = dto.getIpoIndex() + "-" + dto.getRegistDate();
+            if (!ipoCommentMap.containsKey(key)) {
+                ipoCommentMap.put(key, dto);
+            } else {
+                IpoCommentDto existingDto = ipoCommentMap.get(key);
+                existingDto.getCommentList().addAll(dto.getCommentList());
+            }
+        }
+
+        // List로 만든다.
+        ipoCommentMap.putAll(newRegisterComments.stream()
+                .collect(Collectors.toMap(dto -> dto.getIpoIndex() + "-" + dto.getRegistDate(), Function.identity())));
+        List<IpoCommentDto> result = new ArrayList<>(ipoCommentMap.values());
+        return result;
     }
 
     private static boolean isCommentInComments(IpoCommentDto comment, List<IpoCommentDto> newRegisterComments) {
