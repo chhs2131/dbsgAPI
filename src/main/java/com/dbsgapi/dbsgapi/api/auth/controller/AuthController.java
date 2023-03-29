@@ -1,7 +1,9 @@
 package com.dbsgapi.dbsgapi.api.auth.controller;
 
+import com.dbsgapi.dbsgapi.api.auth.exception.KakaoApiException;
 import com.dbsgapi.dbsgapi.api.auth.service.KakaoOauthService;
 import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
+import com.dbsgapi.dbsgapi.global.response.CustomException;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +23,13 @@ public class AuthController {
 
     @PostMapping("/oauth/kakao")
     public ResponseEntity<AuthResponse> oauthLoginKakao(@RequestParam String kakaoAccessToken) {
-        AuthResponse result = kakaoOauthService.login(kakaoAccessToken);
-        System.out.println(result.toString());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            AuthResponse result = kakaoOauthService.login(kakaoAccessToken);
+            System.out.println(result.toString());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (KakaoApiException e) {
+            throw new CustomException(e.getKakaoApiErrorCode());
+        }
     }
 
     @Hidden

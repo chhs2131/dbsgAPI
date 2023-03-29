@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.dbsgapi.dbsgapi.global.response.ErrorCode.*;
+import static com.dbsgapi.dbsgapi.api.ipo.exception.IpoErrorCode.*;
 
 @Slf4j
 @RestController
