@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Slf4j
 @Service
@@ -83,10 +84,11 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
         KakaoApiProvider apiProvider = socialProperty.getKakao();
         ApiRequest apiRequest = apiProvider.getToken();
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
+        Consumer<HttpHeaders> headersConsumer = headers -> {
+            headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
+        };
 
-        Mono<KakaoTokenInfoDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoTokenInfoDto.class, headers);
+        Mono<KakaoTokenInfoDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoTokenInfoDto.class, headersConsumer);
         return mono.block();
     }
 
@@ -94,18 +96,16 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
         KakaoApiProvider apiProvider = socialProperty.getKakao();
         ApiRequest apiRequest = apiProvider.getProfile();
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
+        Consumer<HttpHeaders> headersConsumer = headers -> {
+            headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
+        };
 
-        Mono<KakaoProfileDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoProfileDto.class, headers);
+        Mono<KakaoProfileDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoProfileDto.class, headersConsumer);
         return mono.block();
     }
 
-    private <T> Mono<T> getKakaoMono(ApiProvider apiProvider, ApiRequest apiRequest, Class<T> dtoType, Map<String, String> headers) {
-        WebClient.RequestHeadersSpec<?> requestHeadersSpec = webClientUtil.newRequestWebClient(apiProvider, apiRequest);
-        if (headers != null) {
-            headers.forEach(requestHeadersSpec::header);
-        }
+    private <T> Mono<T> getKakaoMono(ApiProvider apiProvider, ApiRequest apiRequest, Class<T> dtoType, Consumer<HttpHeaders> headers) {
+        WebClient.RequestHeadersSpec<?> requestHeadersSpec = webClientUtil.newRequestWebClient(apiProvider, apiRequest, headers);
 
         return requestHeadersSpec.retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response ->

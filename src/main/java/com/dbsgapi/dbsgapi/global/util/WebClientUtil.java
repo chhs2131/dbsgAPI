@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.function.Consumer;
+
 @Component
 public class WebClientUtil {
     private static final WebClient webClient = WebClient.builder()
@@ -19,11 +21,11 @@ public class WebClientUtil {
                 .build();
     }
 
-    public WebClient.RequestBodySpec newRequestWebClient(ApiProvider apiProvider, ApiRequest apiRequest) {
+    public WebClient.RequestBodySpec newRequestWebClient(ApiProvider apiProvider, ApiRequest apiRequest, Consumer<HttpHeaders> headers) {
         return newBaseWebClient(apiProvider)
                 .method(apiRequest.getMethod())
-                .uri(apiRequest.getPath());
-                //.headers();
+                .uri(apiRequest.getPath())
+                .headers(headers);
     }
 
     public static void newResponseWebClient(ApiProvider apiProvider, ApiRequest apiRequest) {
