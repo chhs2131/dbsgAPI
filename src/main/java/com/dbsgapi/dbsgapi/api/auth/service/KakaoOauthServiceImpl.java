@@ -13,8 +13,12 @@ import com.dbsgapi.dbsgapi.global.authentication.AuthResponse;
 import com.dbsgapi.dbsgapi.global.authentication.MemberPermission;
 import com.dbsgapi.dbsgapi.global.authentication.OauthType;
 import com.dbsgapi.dbsgapi.global.configuration.properties.SocialProperty;
+import com.dbsgapi.dbsgapi.global.configuration.properties.type.ApiProvider;
 import com.dbsgapi.dbsgapi.global.configuration.properties.type.ApiRequest;
+import com.dbsgapi.dbsgapi.global.infra.api.kakao.KakaoApiProvider;
+import com.dbsgapi.dbsgapi.global.infra.api.kakao.KakaoApiWebClient;
 import com.dbsgapi.dbsgapi.global.util.JwtUtil;
+import com.dbsgapi.dbsgapi.global.util.WebClientUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +37,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class KakaoOauthServiceImpl implements KakaoOauthService {
+    private final KakaoApiWebClient webClientUtil;
     private final SocialProperty socialProperty;
     private final AuthMapper authMapper;
     private final MemberMapper memberMapper;
@@ -75,42 +80,32 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
     }
 
     private KakaoTokenInfoDto getTokenInformation(String kakaoAccessToken) {
-        String baseUrl = socialProperty.getKakao().getBaseUrl();
-        ApiRequest apiRequest = socialProperty.getKakao().getToken();
-
-        Mono<KakaoTokenInfoDto> mono = getKakaoMono(baseUrl, apiRequest, kakaoAccessToken, KakaoTokenInfoDto.class);
-        return mono.block();
-    }
-
-    private KakaoProfileDto getProfile(String kakaoAccessToken) {
-        String baseUrl = socialProperty.getKakao().getBaseUrl();
-        ApiRequest apiRequest = socialProperty.getKakao().getProfile();
+        KakaoApiProvider apiProvider = socialProperty.getKakao();
+        ApiRequest apiRequest = apiProvider.getToken();
 
         Map<String, String> headers = new HashMap<>();
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
 
-        Mono<KakaoProfileDto> mono = getKakaoMono(baseUrl, apiRequest, headers, KakaoProfileDto.class);
+        Mono<KakaoTokenInfoDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoTokenInfoDto.class, headers);
         return mono.block();
     }
 
-    private static <T> Mono<T> getKakaoMono(String baseUrl, ApiRequest apiRequest, String kakaoAccessToken, Class<T> dtoType) {
-        return WebClient.create()
-                .method(apiRequest.getMethod())
-                .uri(baseUrl + apiRequest.getPath())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken)
-                .retrieve()
-                .bodyToMono(dtoType);
+    private KakaoProfileDto getProfile(String kakaoAccessToken) {
+        KakaoApiProvider apiProvider = socialProperty.getKakao();
+        ApiRequest apiRequest = apiProvider.getProfile();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken);
+
+        Mono<KakaoProfileDto> mono = getKakaoMono(apiProvider, apiRequest, KakaoProfileDto.class, headers);
+        return mono.block();
     }
 
-    private static <T> Mono<T> getKakaoMono(String baseUrl, ApiRequest apiRequest, Map<String, String> headers, Class<T> dtoType) {
-        WebClient.Builder builder = WebClient.builder()
-                .baseUrl(baseUrl);
-
-        WebClient.RequestHeadersSpec<?> requestHeadersSpec = builder.build()
-                .method(apiRequest.getMethod())
-                .uri(apiRequest.getPath());
-
-        headers.forEach(requestHeadersSpec::header);
+    private <T> Mono<T> getKakaoMono(ApiProvider apiProvider, ApiRequest apiRequest, Class<T> dtoType, Map<String, String> headers) {
+        WebClient.RequestHeadersSpec<?> requestHeadersSpec = webClientUtil.newRequestWebClient(apiProvider, apiRequest);
+        if (headers != null) {
+            headers.forEach(requestHeadersSpec::header);
+        }
 
         return requestHeadersSpec.retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response ->
